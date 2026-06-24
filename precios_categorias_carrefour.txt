@@ -1,0 +1,260 @@
+# Categorias descubiertas automaticamente
+# Total: 124 categorias
+# Revisar y filtrar segun los 37 productos de la CCV-37.
+
+
+# === ALMACÉN (41) ===
+# Aceites y vinagres > Aceites comunes
+https://www.carrefour.com.ar/almacen/aceites-y-vinagres/aceites-comunes
+# Aceites y vinagres > Aceites de oliva
+https://www.carrefour.com.ar/almacen/aceites-y-vinagres/aceites-de-oliva
+# Aceites y vinagres > Aceites especiales
+https://www.carrefour.com.ar/almacen/aceites-y-vinagres/aceites-especiales
+# Aceites y vinagres > Aceites en aerosol
+https://www.carrefour.com.ar/almacen/aceites-y-vinagres/aceites-en-aerosol
+# Aceites y vinagres > Vinagres, acetos y limón
+https://www.carrefour.com.ar/almacen/aceites-y-vinagres/vinagres-acetos-y-limon
+# Pastas secas > Fideos largos
+https://www.carrefour.com.ar/almacen/pastas-secas/fideos-largos
+# Pastas secas > Fideos guiseros y para sopas
+https://www.carrefour.com.ar/almacen/pastas-secas/fideos-guiseros-y-para-sopas
+# Pastas secas > Pastas secas rellenas y listas
+https://www.carrefour.com.ar/almacen/pastas-secas/pastas-secas-rellenas-y-listas
+# Arroz y legumbres > Arroz
+https://www.carrefour.com.ar/almacen/arroz-y-legumbres/arroz
+# Arroz y legumbres > Legumbres
+https://www.carrefour.com.ar/almacen/arroz-y-legumbres/legumbres
+# Arroz y legumbres > Semillas
+https://www.carrefour.com.ar/almacen/arroz-y-legumbres/semillas
+# Harinas > Harinas comunes y leudantes
+https://www.carrefour.com.ar/almacen/harinas/harinas-comunes-y-leudantes
+# Harinas > Premezclas saladas
+https://www.carrefour.com.ar/almacen/harinas/premezclas-saladas
+# Harinas > Polentas
+https://www.carrefour.com.ar/almacen/harinas/polentas
+# Harinas > Avena
+https://www.carrefour.com.ar/almacen/harinas/avena
+# Harinas > Otras harinas
+https://www.carrefour.com.ar/almacen/harinas/otras-harinas
+# Harinas > Pan rallado y rebozadores
+https://www.carrefour.com.ar/almacen/harinas/pan-rallado-y-rebozadores
+# Enlatados y Conservas > Conservas de pescado
+https://www.carrefour.com.ar/almacen/enlatados-y-conservas/conservas-de-pescado
+# Enlatados y Conservas > Conservas y salsas de tomate
+https://www.carrefour.com.ar/almacen/enlatados-y-conservas/conservas-y-salsas-de-tomate
+# Enlatados y Conservas > Conservas de legumbres y vegetales
+https://www.carrefour.com.ar/almacen/enlatados-y-conservas/conservas-de-legumbres-y-vegetales
+# Enlatados y Conservas > Aceitunas y encurtidos
+https://www.carrefour.com.ar/almacen/enlatados-y-conservas/aceitunas-y-encurtidos
+# Enlatados y Conservas > Conservas de frutas
+https://www.carrefour.com.ar/almacen/enlatados-y-conservas/conservas-de-frutas
+# Enlatados y Conservas > Picadillos y paté
+https://www.carrefour.com.ar/almacen/enlatados-y-conservas/picadillos-y-pate
+# Sal, aderezos y saborizadores > Sal
+https://www.carrefour.com.ar/almacen/sal-aderezos-y-saborizadores/sal
+# Sal, aderezos y saborizadores > Salsas y aderezos
+https://www.carrefour.com.ar/almacen/sal-aderezos-y-saborizadores/salsas-y-aderezos
+# Sal, aderezos y saborizadores > Hierbas secas y especias
+https://www.carrefour.com.ar/almacen/sal-aderezos-y-saborizadores/hierbas-secas-y-especias
+# Sal, aderezos y saborizadores > Saborizadores
+https://www.carrefour.com.ar/almacen/sal-aderezos-y-saborizadores/saborizadores
+# Caldos, sopas y puré > Caldos
+https://www.carrefour.com.ar/almacen/caldos-sopas-y-pure/caldos
+# Caldos, sopas y puré > Sopas
+https://www.carrefour.com.ar/almacen/caldos-sopas-y-pure/sopas
+# Caldos, sopas y puré > Purés instantáneos
+https://www.carrefour.com.ar/almacen/caldos-sopas-y-pure/pures-instantaneos
+# Repostería y postres > Premezclas de bizcochuelos
+https://www.carrefour.com.ar/almacen/reposteria-y-postres/premezclas-de-bizcochuelos
+# Repostería y postres > Coberturas, rellenos y salsas
+https://www.carrefour.com.ar/almacen/reposteria-y-postres/coberturas-rellenos-y-salsas
+# Repostería y postres > Complementos
+https://www.carrefour.com.ar/almacen/reposteria-y-postres/complementos
+# Repostería y postres > Gelatinas en polvo
+https://www.carrefour.com.ar/almacen/reposteria-y-postres/gelatinas-en-polvo
+# Repostería y postres > Postres y flanes en polvo
+https://www.carrefour.com.ar/almacen/reposteria-y-postres/postres-y-flanes-en-polvo
+# Repostería y postres > Tapas de alfajores y merengues
+https://www.carrefour.com.ar/almacen/reposteria-y-postres/tapas-de-alfajores-y-merengues
+# Snacks > Papas fritas y snacks de maíz
+https://www.carrefour.com.ar/almacen/snacks/papas-fritas-y-snacks-de-maiz
+# Snacks > Nachos, maní y palitos
+https://www.carrefour.com.ar/almacen/snacks/nachos-mani-y-palitos
+# Snacks > Otros snacks salados
+https://www.carrefour.com.ar/almacen/snacks/otros-snacks-salados
+# Snacks > Pochoclos
+https://www.carrefour.com.ar/almacen/snacks/pochoclos
+# Comidas instantáneas
+https://www.carrefour.com.ar/almacen/comidas-instantaneas
+
+# === DESAYUNO Y MERIENDA (30) ===
+# Golosinas y chocolates > Chocolates
+https://www.carrefour.com.ar/desayuno-y-merienda/golosinas-y-chocolates/chocolates
+# Golosinas y chocolates > Alfajores
+https://www.carrefour.com.ar/desayuno-y-merienda/golosinas-y-chocolates/alfajores
+# Golosinas y chocolates > Caramelos, gomitas y chupetines
+https://www.carrefour.com.ar/desayuno-y-merienda/golosinas-y-chocolates/caramelos-gomitas-y-chupetines
+# Golosinas y chocolates > Chicles
+https://www.carrefour.com.ar/desayuno-y-merienda/golosinas-y-chocolates/chicles
+# Golosinas y chocolates > Bocaditos, confites y turrones
+https://www.carrefour.com.ar/desayuno-y-merienda/golosinas-y-chocolates/bocaditos-confites-y-turrones
+# Galletitas bizcochitos y tostadas > Galletitas dulces
+https://www.carrefour.com.ar/desayuno-y-merienda/galletitas-bizcochitos-y-tostadas/galletitas-dulces
+# Galletitas bizcochitos y tostadas > Bizcochitos
+https://www.carrefour.com.ar/desayuno-y-merienda/galletitas-bizcochitos-y-tostadas/bizcochitos
+# Galletitas bizcochitos y tostadas > Galletitas de agua
+https://www.carrefour.com.ar/desayuno-y-merienda/galletitas-bizcochitos-y-tostadas/galletitas-de-agua
+# Galletitas bizcochitos y tostadas > Galletas de arroz
+https://www.carrefour.com.ar/desayuno-y-merienda/galletitas-bizcochitos-y-tostadas/galletas-de-arroz
+# Galletitas bizcochitos y tostadas > Tostadas, grisines y marineras
+https://www.carrefour.com.ar/desayuno-y-merienda/galletitas-bizcochitos-y-tostadas/tostadas-grisines-y-marineras
+# Budines y magdalenas > Budines
+https://www.carrefour.com.ar/desayuno-y-merienda/budines-y-magdalenas/budines
+# Budines y magdalenas > Magdalenas
+https://www.carrefour.com.ar/desayuno-y-merienda/budines-y-magdalenas/magdalenas
+# Yerba
+https://www.carrefour.com.ar/desayuno-y-merienda/yerba
+# Café > Café molido y en grano
+https://www.carrefour.com.ar/desayuno-y-merienda/cafe/cafe-molido-y-en-grano
+# Café > Café instantáneo
+https://www.carrefour.com.ar/desayuno-y-merienda/cafe/cafe-instantaneo
+# Café > Cápsulas de café
+https://www.carrefour.com.ar/desayuno-y-merienda/cafe/capsulas-de-cafe
+# Café > Filtros de café
+https://www.carrefour.com.ar/desayuno-y-merienda/cafe/filtros-de-cafe
+# Infusiones > Té
+https://www.carrefour.com.ar/desayuno-y-merienda/infusiones/te
+# Infusiones > Cacao
+https://www.carrefour.com.ar/desayuno-y-merienda/infusiones/cacao
+# Infusiones > Mate cocido
+https://www.carrefour.com.ar/desayuno-y-merienda/infusiones/mate-cocido
+# Azúcar y endulzantes > Azúcar
+https://www.carrefour.com.ar/desayuno-y-merienda/azucar-y-endulzantes/azucar
+# Azúcar y endulzantes > Edulcorantes y endulzantes
+https://www.carrefour.com.ar/desayuno-y-merienda/azucar-y-endulzantes/edulcorantes-y-endulzantes
+# Mermeladas y otros dulces > Miel
+https://www.carrefour.com.ar/desayuno-y-merienda/mermeladas-y-otros-dulces/miel
+# Mermeladas y otros dulces > Dulce de leche
+https://www.carrefour.com.ar/desayuno-y-merienda/mermeladas-y-otros-dulces/dulce-de-leche
+# Mermeladas y otros dulces > Mermeladas, dulces y jaleas
+https://www.carrefour.com.ar/desayuno-y-merienda/mermeladas-y-otros-dulces/mermeladas-dulces-y-jaleas
+# Mermeladas y otros dulces > Pasta de maní y crema de avellanas
+https://www.carrefour.com.ar/desayuno-y-merienda/mermeladas-y-otros-dulces/pasta-de-mani-y-crema-de-avellanas
+# Cereales y barritas > Cereales
+https://www.carrefour.com.ar/desayuno-y-merienda/cereales-y-barritas/cereales
+# Cereales y barritas > Barritas de cereales
+https://www.carrefour.com.ar/desayuno-y-merienda/cereales-y-barritas/barritas-de-cereales
+# Cereales y barritas > Granola
+https://www.carrefour.com.ar/desayuno-y-merienda/cereales-y-barritas/granola
+# Pascuas
+https://www.carrefour.com.ar/desayuno-y-merienda/pascuas
+
+# === BEBIDAS (30) ===
+# Cervezas
+https://www.carrefour.com.ar/bebidas/cervezas
+# Vinos > Vinos tintos
+https://www.carrefour.com.ar/bebidas/vinos/vinos-tintos
+# Vinos > Vinos blancos
+https://www.carrefour.com.ar/bebidas/vinos/vinos-blancos
+# Vinos > Vinos rosados
+https://www.carrefour.com.ar/bebidas/vinos/vinos-rosados
+# Vinos > Vinos generosos
+https://www.carrefour.com.ar/bebidas/vinos/vinos-generosos
+# Fernet y aperitivos > Fernet
+https://www.carrefour.com.ar/bebidas/fernet-y-aperitivos/fernet
+# Fernet y aperitivos > Aperitivos con alcohol
+https://www.carrefour.com.ar/bebidas/fernet-y-aperitivos/aperitivos-con-alcohol
+# Fernet y aperitivos > Aperitivos sin alcohol
+https://www.carrefour.com.ar/bebidas/fernet-y-aperitivos/aperitivos-sin-alcohol
+# Bebidas blancas > Whisky
+https://www.carrefour.com.ar/bebidas/bebidas-blancas/whisky
+# Bebidas blancas > Vodka
+https://www.carrefour.com.ar/bebidas/bebidas-blancas/vodka
+# Bebidas blancas > Ron
+https://www.carrefour.com.ar/bebidas/bebidas-blancas/ron
+# Bebidas blancas > Gin
+https://www.carrefour.com.ar/bebidas/bebidas-blancas/gin
+# Bebidas blancas > Licores
+https://www.carrefour.com.ar/bebidas/bebidas-blancas/licores
+# Bebidas blancas > Otras espirituosas
+https://www.carrefour.com.ar/bebidas/bebidas-blancas/otras-espirituosas
+# Espumantes y sidras > Espumantes
+https://www.carrefour.com.ar/bebidas/espumantes-y-sidras/espumantes
+# Espumantes y sidras > Sidras
+https://www.carrefour.com.ar/bebidas/espumantes-y-sidras/sidras
+# Espumantes y sidras > Frizzantes
+https://www.carrefour.com.ar/bebidas/espumantes-y-sidras/frizzantes
+# Gaseosas > Gaseosas cola
+https://www.carrefour.com.ar/bebidas/gaseosas/gaseosas-cola
+# Gaseosas > Gaseosas naranja
+https://www.carrefour.com.ar/bebidas/gaseosas/gaseosas-naranja
+# Gaseosas > Gaseosas limón
+https://www.carrefour.com.ar/bebidas/gaseosas/gaseosas-limon
+# Gaseosas > Gaseosas pomelo
+https://www.carrefour.com.ar/bebidas/gaseosas/gaseosas-pomelo
+# Gaseosas > Gaseosas tónicas y otras
+https://www.carrefour.com.ar/bebidas/gaseosas/gaseosas-tonicas-y-otras
+# Aguas > Aguas minerales y de mesa
+https://www.carrefour.com.ar/bebidas/aguas/aguas-minerales-y-de-mesa
+# Aguas > Aguas saborizadas
+https://www.carrefour.com.ar/bebidas/aguas/aguas-saborizadas
+# Jugos > Jugos en polvo
+https://www.carrefour.com.ar/bebidas/jugos/jugos-en-polvo
+# Jugos > Jugos listos
+https://www.carrefour.com.ar/bebidas/jugos/jugos-listos
+# Jugos > Jugos concentrados
+https://www.carrefour.com.ar/bebidas/jugos/jugos-concentrados
+# Bebidas energizantes
+https://www.carrefour.com.ar/bebidas/bebidas-energizantes
+# Bebidas isotónicas
+https://www.carrefour.com.ar/bebidas/bebidas-isotonicas
+# Envases
+https://www.carrefour.com.ar/bebidas/envases
+
+# === LÁCTEOS Y PRODUCTOS FRESCOS (23) ===
+# Leches > Leches enteras
+https://www.carrefour.com.ar/lacteos-y-productos-frescos/leches/leches-enteras
+# Leches > Leches descremadas
+https://www.carrefour.com.ar/lacteos-y-productos-frescos/leches/leches-descremadas
+# Leches > Leches vegetales
+https://www.carrefour.com.ar/lacteos-y-productos-frescos/leches/leches-vegetales
+# Leches > Leches saborizadas
+https://www.carrefour.com.ar/lacteos-y-productos-frescos/leches/leches-saborizadas
+# Leches > Leches en polvo
+https://www.carrefour.com.ar/lacteos-y-productos-frescos/leches/leches-en-polvo
+# Yogures > Yogures enteros
+https://www.carrefour.com.ar/lacteos-y-productos-frescos/yogures/yogures-enteros
+# Yogures > Yogures descremados
+https://www.carrefour.com.ar/lacteos-y-productos-frescos/yogures/yogures-descremados
+# Mantecas, margarinas y levaduras
+https://www.carrefour.com.ar/lacteos-y-productos-frescos/mantecas-margarinas-y-levaduras
+# Cremas de leche
+https://www.carrefour.com.ar/lacteos-y-productos-frescos/cremas-de-leche
+# Postres
+https://www.carrefour.com.ar/lacteos-y-productos-frescos/postres
+# Huevos
+https://www.carrefour.com.ar/lacteos-y-productos-frescos/huevos
+# Tapas y pastas frescas
+https://www.carrefour.com.ar/lacteos-y-productos-frescos/tapas-y-pastas-frescas
+# Dulce de membrillo y otros dulces
+https://www.carrefour.com.ar/lacteos-y-productos-frescos/dulce-de-membrillo-y-otros-dulces
+# Salchichas
+https://www.carrefour.com.ar/lacteos-y-productos-frescos/salchichas
+# Quesos > Quesos cremas y untables
+https://www.carrefour.com.ar/lacteos-y-productos-frescos/quesos/quesos-cremas-y-untables
+# Quesos > Quesos cremosos y mozzarellas
+https://www.carrefour.com.ar/lacteos-y-productos-frescos/quesos/quesos-cremosos-y-mozzarellas
+# Quesos > Quesos duros y semi duros
+https://www.carrefour.com.ar/lacteos-y-productos-frescos/quesos/quesos-duros-y-semi-duros
+# Quesos > Quesos rallados y en hebras
+https://www.carrefour.com.ar/lacteos-y-productos-frescos/quesos/quesos-rallados-y-en-hebras
+# Quesos > Quesos especiales
+https://www.carrefour.com.ar/lacteos-y-productos-frescos/quesos/quesos-especiales
+# Quesos > Quesos feteados
+https://www.carrefour.com.ar/lacteos-y-productos-frescos/quesos/quesos-feteados
+# Quesos > Ricota
+https://www.carrefour.com.ar/lacteos-y-productos-frescos/quesos/ricota
+# Fiambres > Fiambres feteados
+https://www.carrefour.com.ar/lacteos-y-productos-frescos/fiambres/fiambres-feteados
+# Fiambres > Salamines y embutidos
+https://www.carrefour.com.ar/lacteos-y-productos-frescos/fiambres/salamines-y-embutidos

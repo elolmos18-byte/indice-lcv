@@ -1,0 +1,30 @@
+# Cache de Python
+__pycache__/
+*.pyc
+
+# Catalogos generados por los scrapers (se regeneran cada corrida,
+# no tiene sentido versionarlos - pesan y cambian todos los dias)
+catalogo_anonima.csv
+catalogo_vtex.csv
+
+# Fotos semanales de precios (historico - se acumulan con el tiempo,
+# no van al repo de codigo)
+foto_semanal_*.csv
+
+# JSON que lee la pagina web (se regenera cada corrida del cron)
+precios_ultimo.json
+
+# Base de datos historica (es dato, no codigo - crece todos los dias,
+# mismo criterio que los CSV de arriba. Vive en el servidor, no en Git)
+precios_historico.db
+
+# Log de corridas
+log_corrida.txt
+
+# Archivos de investigacion/debug que no son parte del proyecto final
+categorias_encontradas_*.txt
+debug_html/
+
+# Entorno virtual de Python, si se llega a crear en el servidor
+venv/
+.venv/

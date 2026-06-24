@@ -1,0 +1,51 @@
+# categorias.txt - Indice LCV
+#
+# Categorias de La Anonima que necesitamos para armar la canasta
+# CCV-37 (los 37 productos definidos en precios_MAESTRO.md).
+#
+# Una URL por linea. Las que empiezan con # se ignoran.
+# Todos los codigos n3_XXX fueron verificados navegando el menu real
+# del sitio - no son adivinados.
+
+
+# === Cereales y harinas ===
+https://www.laanonima.com.ar/harina-de-trigo/n3_621/
+https://www.laanonima.com.ar/harinas-especiales/n3_622/
+https://www.laanonima.com.ar/arroz/n3_608/
+https://www.laanonima.com.ar/fideos-y-pastas/n3_609/
+https://www.laanonima.com.ar/legumbres/n3_610/
+
+# === Galletitas ===
+https://www.laanonima.com.ar/galletitas-dulces/n3_598/
+https://www.laanonima.com.ar/galletitas-saladas-y-tostadas/n3_599/
+
+# === Azucar y dulces ===
+https://www.laanonima.com.ar/azucar-y-endulzantes/n3_840/
+https://www.laanonima.com.ar/dulce-de-leche/n3_796/
+https://www.laanonima.com.ar/dulces-y-mermeladas/n3_843/
+
+# === Aceites y condimentos ===
+https://www.laanonima.com.ar/aceite/n3_604/
+https://www.laanonima.com.ar/sal-y-especias/n3_606/
+https://www.laanonima.com.ar/vinagre-y-limon/n3_605/
+https://www.laanonima.com.ar/aderezos/n3_847/
+
+# === Conservas ===
+https://www.laanonima.com.ar/atun-y-pescado/n3_616/
+https://www.laanonima.com.ar/tomates-y-salsas/n3_615/
+
+# === Lacteos ===
+https://www.laanonima.com.ar/leches/n3_722/
+https://www.laanonima.com.ar/yogures/n3_724/
+https://www.laanonima.com.ar/queso-untable/n3_723/
+https://www.laanonima.com.ar/manteca-y-margarina/n3_725/
+
+# === Huevos ===
+https://www.laanonima.com.ar/huevos/n2_578/
+
+# === Bebidas e infusiones ===
+https://www.laanonima.com.ar/gaseosas/n2_541/
+https://www.laanonima.com.ar/aguas-sin-gas/n3_854/
+https://www.laanonima.com.ar/aguas-saborizadas-y-jugos/n3_853/
+https://www.laanonima.com.ar/jugo-en-polvo/n3_856/
+https://www.laanonima.com.ar/infusiones/n3_600/

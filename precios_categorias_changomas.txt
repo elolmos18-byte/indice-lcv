@@ -1,0 +1,602 @@
+# Categorias descubiertas automaticamente
+# Total: 284 categorias
+# Revisar y filtrar segun los 37 productos de la CCV-37.
+
+
+# === ACEITES, VINAGRES Y ADEREZOS (34) ===
+# Aderezos > Jugo De Limon
+https://www.masonline.com.ar/aceites-vinagres-y-aderezos/aderezos/jugo-de-limon
+# Aderezos > Ketchup
+https://www.masonline.com.ar/aceites-vinagres-y-aderezos/aderezos/ketchup
+# Aderezos > Salsa Golf
+https://www.masonline.com.ar/aceites-vinagres-y-aderezos/aderezos/salsa-golf
+# Aderezos > Mostaza
+https://www.masonline.com.ar/aceites-vinagres-y-aderezos/aderezos/mostaza
+# Aderezos > Otras Salsas
+https://www.masonline.com.ar/aceites-vinagres-y-aderezos/aderezos/otras-salsas
+# Aderezos > Mayonesa
+https://www.masonline.com.ar/aceites-vinagres-y-aderezos/aderezos/mayonesa
+# Vinagres Y Aceto > Otros Vinagres
+https://www.masonline.com.ar/aceites-vinagres-y-aderezos/vinagres-y-aceto/otros-vinagres
+# Vinagres Y Aceto > Vinagre De Alcohol
+https://www.masonline.com.ar/aceites-vinagres-y-aderezos/vinagres-y-aceto/vinagre-de-alcohol
+# Vinagres Y Aceto > Vinagre De Manzana
+https://www.masonline.com.ar/aceites-vinagres-y-aderezos/vinagres-y-aceto/vinagre-de-manzana
+# Vinagres Y Aceto > Vinagre De Vino
+https://www.masonline.com.ar/aceites-vinagres-y-aderezos/vinagres-y-aceto/vinagre-de-vino
+# Vinagres Y Aceto > Aceto
+https://www.masonline.com.ar/aceites-vinagres-y-aderezos/vinagres-y-aceto/aceto
+# Aceites > Aceite De Girasol
+https://www.masonline.com.ar/aceites-vinagres-y-aderezos/aceites/aceite-de-girasol
+# Aceites > Aceite De Maiz
+https://www.masonline.com.ar/aceites-vinagres-y-aderezos/aceites/aceite-de-maiz
+# Aceites > Aceite De Oliva
+https://www.masonline.com.ar/aceites-vinagres-y-aderezos/aceites/aceite-de-oliva
+# Aceites > Aceite En Aerosol
+https://www.masonline.com.ar/aceites-vinagres-y-aderezos/aceites/aceite-en-aerosol
+# Aceites > Aceite Mezcla
+https://www.masonline.com.ar/aceites-vinagres-y-aderezos/aceites/aceite-mezcla
+# Aceites > Otros Aceites
+https://www.masonline.com.ar/aceites-vinagres-y-aderezos/aceites/otros-aceites
+# Jugo De Limon
+https://www.masonline.com.ar/aceites-vinagres-y-aderezos/jugo-de-limon
+# Ketchup
+https://www.masonline.com.ar/aceites-vinagres-y-aderezos/ketchup
+# Salsa Golf
+https://www.masonline.com.ar/aceites-vinagres-y-aderezos/salsa-golf
+# Mostaza
+https://www.masonline.com.ar/aceites-vinagres-y-aderezos/mostaza
+# Otras Salsas
+https://www.masonline.com.ar/aceites-vinagres-y-aderezos/otras-salsas
+# Mayonesa
+https://www.masonline.com.ar/aceites-vinagres-y-aderezos/mayonesa
+# Otros Vinagres
+https://www.masonline.com.ar/aceites-vinagres-y-aderezos/otros-vinagres
+# Vinagre De Alcohol
+https://www.masonline.com.ar/aceites-vinagres-y-aderezos/vinagre-de-alcohol
+# Vinagre De Manzana
+https://www.masonline.com.ar/aceites-vinagres-y-aderezos/vinagre-de-manzana
+# Vinagre De Vino
+https://www.masonline.com.ar/aceites-vinagres-y-aderezos/vinagre-de-vino
+# Aceto
+https://www.masonline.com.ar/aceites-vinagres-y-aderezos/aceto
+# Aceite De Girasol
+https://www.masonline.com.ar/aceites-vinagres-y-aderezos/aceite-de-girasol
+# Aceite De Maiz
+https://www.masonline.com.ar/aceites-vinagres-y-aderezos/aceite-de-maiz
+# Aceite De Oliva
+https://www.masonline.com.ar/aceites-vinagres-y-aderezos/aceite-de-oliva
+# Aceite En Aerosol
+https://www.masonline.com.ar/aceites-vinagres-y-aderezos/aceite-en-aerosol
+# Aceite Mezcla
+https://www.masonline.com.ar/aceites-vinagres-y-aderezos/aceite-mezcla
+# Otros Aceites
+https://www.masonline.com.ar/aceites-vinagres-y-aderezos/otros-aceites
+
+# === ARROZ, LEGUMBRES Y PASTAS (36) ===
+# Arroz > Arroz Largo Fino
+https://www.masonline.com.ar/arroz-legumbres-y-pastas/arroz/arroz-largo-fino
+# Arroz > Arroz Parboil
+https://www.masonline.com.ar/arroz-legumbres-y-pastas/arroz/arroz-parboil
+# Arroz > Arroz Doble Carolina
+https://www.masonline.com.ar/arroz-legumbres-y-pastas/arroz/arroz-doble-carolina
+# Arroz > Arroz Integral
+https://www.masonline.com.ar/arroz-legumbres-y-pastas/arroz/arroz-integral
+# Arroz > Otros Arroces
+https://www.masonline.com.ar/arroz-legumbres-y-pastas/arroz/otros-arroces
+# Arroz > Arroz Preparado
+https://www.masonline.com.ar/arroz-legumbres-y-pastas/arroz/arroz-preparado
+# Legumbres > Arvejas
+https://www.masonline.com.ar/arroz-legumbres-y-pastas/legumbres/arvejas
+# Legumbres > Garbanzos
+https://www.masonline.com.ar/arroz-legumbres-y-pastas/legumbres/garbanzos
+# Legumbres > Lentejas
+https://www.masonline.com.ar/arroz-legumbres-y-pastas/legumbres/lentejas
+# Legumbres > Maiz
+https://www.masonline.com.ar/arroz-legumbres-y-pastas/legumbres/maiz
+# Legumbres > Otros Arroz, Legumbres y Pastas
+https://www.masonline.com.ar/arroz-legumbres-y-pastas/legumbres/otros-arroz-legumbres-y-pastas
+# Legumbres > Porotos
+https://www.masonline.com.ar/arroz-legumbres-y-pastas/legumbres/porotos
+# Pastas Secas > Fideos Largos
+https://www.masonline.com.ar/arroz-legumbres-y-pastas/pastas-secas/fideos-largos
+# Pastas Secas > Fideos Para Sopa
+https://www.masonline.com.ar/arroz-legumbres-y-pastas/pastas-secas/fideos-para-sopa
+# Pastas Secas > Pastas Listas, Rellenas Y Lasagna
+https://www.masonline.com.ar/arroz-legumbres-y-pastas/pastas-secas/pastas-listas-rellenas-y-lasagna
+# Pastas Secas > Fideos Guiseros
+https://www.masonline.com.ar/arroz-legumbres-y-pastas/pastas-secas/fideos-guiseros
+# Pastas Frescas > Pastas Rellenas
+https://www.masonline.com.ar/arroz-legumbres-y-pastas/pastas-frescas/pastas-rellenas
+# Pastas Frescas > Fideos Y Ñoquis
+https://www.masonline.com.ar/arroz-legumbres-y-pastas/pastas-frescas/fideos-y-noquis
+# Pastas Frescas > Otras Pastas
+https://www.masonline.com.ar/arroz-legumbres-y-pastas/pastas-frescas/otras-pastas
+# Arroz Largo Fino
+https://www.masonline.com.ar/arroz-legumbres-y-pastas/arroz-largo-fino
+# Arroz Parboil
+https://www.masonline.com.ar/arroz-legumbres-y-pastas/arroz-parboil
+# Arroz Integral
+https://www.masonline.com.ar/arroz-legumbres-y-pastas/arroz-integral
+# Otros Arroces
+https://www.masonline.com.ar/arroz-legumbres-y-pastas/otros-arroces
+# Arroz Preparado
+https://www.masonline.com.ar/arroz-legumbres-y-pastas/arroz-preparado
+# Arvejas
+https://www.masonline.com.ar/arroz-legumbres-y-pastas/arvejas
+# Garbanzos
+https://www.masonline.com.ar/arroz-legumbres-y-pastas/garbanzos
+# Lentejas
+https://www.masonline.com.ar/arroz-legumbres-y-pastas/lentejas
+# Maiz
+https://www.masonline.com.ar/arroz-legumbres-y-pastas/maiz
+# Otros Arroz, Legumbres y Pastas
+https://www.masonline.com.ar/arroz-legumbres-y-pastas/otros-arroz-legumbres-y-pastas
+# Porotos
+https://www.masonline.com.ar/arroz-legumbres-y-pastas/porotos
+# Fideos Largos
+https://www.masonline.com.ar/arroz-legumbres-y-pastas/fideos-largos
+# Fideos Para Sopa
+https://www.masonline.com.ar/arroz-legumbres-y-pastas/fideos-para-sopa
+# Pastas Listas, Rellenas Y Lasagna
+https://www.masonline.com.ar/arroz-legumbres-y-pastas/pastas-listas-rellenas-y-lasagna
+# Pastas Rellenas
+https://www.masonline.com.ar/arroz-legumbres-y-pastas/pastas-rellenas
+# Fideos Y Ñoquis
+https://www.masonline.com.ar/arroz-legumbres-y-pastas/fideos-y-noquis
+# Otras Pastas
+https://www.masonline.com.ar/arroz-legumbres-y-pastas/otras-pastas
+
+# === CALDOS, SOPAS Y PURE (3) ===
+# Pure
+https://www.masonline.com.ar/caldos-sopas-y-pure/pure
+# Sopas
+https://www.masonline.com.ar/caldos-sopas-y-pure/sopas
+# Caldos
+https://www.masonline.com.ar/caldos-sopas-y-pure/caldos
+
+# === CONDIMENTOS Y ESPECIAS (6) ===
+# Sal Y Pimienta > Pimienta
+https://www.masonline.com.ar/condimentos-y-especias/sal-y-pimienta/pimienta
+# Sal Y Pimienta > Sal
+https://www.masonline.com.ar/condimentos-y-especias/sal-y-pimienta/sal
+# Sabores En Polvo Y Bolsas Para Horno
+https://www.masonline.com.ar/condimentos-y-especias/sabores-en-polvo-y-bolsas-para-horno
+# Especias
+https://www.masonline.com.ar/condimentos-y-especias/especias
+# Pimienta
+https://www.masonline.com.ar/condimentos-y-especias/pimienta
+# Sal
+https://www.masonline.com.ar/condimentos-y-especias/sal
+
+# === CONSERVAS Y ENLATADOS (25) ===
+# Conservas > Conservas De Verdura Y Legumbres
+https://www.masonline.com.ar/conservas-y-enlatados/conservas/conservas-de-verdura-y-legumbres
+# Conservas > Conservas De Pescado
+https://www.masonline.com.ar/conservas-y-enlatados/conservas/conservas-de-pescado
+# Conservas > Conservas De Frutas
+https://www.masonline.com.ar/conservas-y-enlatados/conservas/conservas-de-frutas
+# Conservas > Otras Conservas
+https://www.masonline.com.ar/conservas-y-enlatados/conservas/otras-conservas
+# Tomates Y Salsas > Pulpa De Tomate
+https://www.masonline.com.ar/conservas-y-enlatados/tomates-y-salsas/pulpa-de-tomate
+# Tomates Y Salsas > Pure De Tomate
+https://www.masonline.com.ar/conservas-y-enlatados/tomates-y-salsas/pure-de-tomate
+# Tomates Y Salsas > Salsa De Tomate
+https://www.masonline.com.ar/conservas-y-enlatados/tomates-y-salsas/salsa-de-tomate
+# Tomates Y Salsas > Tomate En Lata
+https://www.masonline.com.ar/conservas-y-enlatados/tomates-y-salsas/tomate-en-lata
+# Picadillos Y Pate
+https://www.masonline.com.ar/conservas-y-enlatados/picadillos-y-pate
+# Aceitunas Y Encurtidos > Aceitunas Verdes
+https://www.masonline.com.ar/conservas-y-enlatados/aceitunas-y-encurtidos/aceitunas-verdes
+# Aceitunas Y Encurtidos > Aceitunas Negras
+https://www.masonline.com.ar/conservas-y-enlatados/aceitunas-y-encurtidos/aceitunas-negras
+# Aceitunas Y Encurtidos > Aceitunas Rellenas
+https://www.masonline.com.ar/conservas-y-enlatados/aceitunas-y-encurtidos/aceitunas-rellenas
+# Aceitunas Y Encurtidos > Encurtidos
+https://www.masonline.com.ar/conservas-y-enlatados/aceitunas-y-encurtidos/encurtidos
+# Conservas De Verdura Y Legumbres
+https://www.masonline.com.ar/conservas-y-enlatados/conservas-de-verdura-y-legumbres
+# Conservas De Pescado
+https://www.masonline.com.ar/conservas-y-enlatados/conservas-de-pescado
+# Conservas De Frutas
+https://www.masonline.com.ar/conservas-y-enlatados/conservas-de-frutas
+# Otras Conservas
+https://www.masonline.com.ar/conservas-y-enlatados/otras-conservas
+# Pulpa De Tomate
+https://www.masonline.com.ar/conservas-y-enlatados/pulpa-de-tomate
+# Pure De Tomate
+https://www.masonline.com.ar/conservas-y-enlatados/pure-de-tomate
+# Salsa De Tomate
+https://www.masonline.com.ar/conservas-y-enlatados/salsa-de-tomate
+# Tomate En Lata
+https://www.masonline.com.ar/conservas-y-enlatados/tomate-en-lata
+# Aceitunas Verdes
+https://www.masonline.com.ar/conservas-y-enlatados/aceitunas-verdes
+# Aceitunas Negras
+https://www.masonline.com.ar/conservas-y-enlatados/aceitunas-negras
+# Aceitunas Rellenas
+https://www.masonline.com.ar/conservas-y-enlatados/aceitunas-rellenas
+# Encurtidos
+https://www.masonline.com.ar/conservas-y-enlatados/encurtidos
+
+# === DESAYUNOS Y MERIENDAS (92) ===
+# Endulzantes > Azucar
+https://www.masonline.com.ar/desayunos-y-meriendas/endulzantes/azucar
+# Endulzantes > Edulcorante
+https://www.masonline.com.ar/desayunos-y-meriendas/endulzantes/edulcorante
+# Bizcochos
+https://www.masonline.com.ar/desayunos-y-meriendas/bizcochos
+# Galletitas Saladas > Galletitas De Agua
+https://www.masonline.com.ar/desayunos-y-meriendas/galletitas-saladas/galletitas-de-agua
+# Galletitas Saladas > Galletitas De Cereales
+https://www.masonline.com.ar/desayunos-y-meriendas/galletitas-saladas/galletitas-de-cereales
+# Galletitas Saladas > Galletitas De Salvado
+https://www.masonline.com.ar/desayunos-y-meriendas/galletitas-saladas/galletitas-de-salvado
+# Tostadas, Grisines Y Marineras
+https://www.masonline.com.ar/desayunos-y-meriendas/tostadas-grisines-y-marineras
+# Galletas De Arroz
+https://www.masonline.com.ar/desayunos-y-meriendas/galletas-de-arroz
+# Cacao
+https://www.masonline.com.ar/desayunos-y-meriendas/cacao
+# Mermeladas y untables > Mermeladas Y Dulces
+https://www.masonline.com.ar/desayunos-y-meriendas/mermeladas-y-untables/mermeladas-y-dulces
+# Mermeladas y untables > Miel
+https://www.masonline.com.ar/desayunos-y-meriendas/mermeladas-y-untables/miel
+# Mermeladas y untables > Pasta De Mani
+https://www.masonline.com.ar/desayunos-y-meriendas/mermeladas-y-untables/pasta-de-mani
+# Mermeladas y untables > Otros Mermeladas y untables
+https://www.masonline.com.ar/desayunos-y-meriendas/mermeladas-y-untables/otros-mermeladas-y-untables
+# Café > En Capsulas
+https://www.masonline.com.ar/desayunos-y-meriendas/cafe/en-capsulas
+# Café > En Granos
+https://www.masonline.com.ar/desayunos-y-meriendas/cafe/en-granos
+# Café > Filtro Para Café
+https://www.masonline.com.ar/desayunos-y-meriendas/cafe/filtro-para-cafe
+# Café > Instantaneo
+https://www.masonline.com.ar/desayunos-y-meriendas/cafe/instantaneo
+# Café > Molido
+https://www.masonline.com.ar/desayunos-y-meriendas/cafe/molido
+# Te > Te Clasico
+https://www.masonline.com.ar/desayunos-y-meriendas/te/te-clasico
+# Te > Te Hierbas
+https://www.masonline.com.ar/desayunos-y-meriendas/te/te-hierbas
+# Te > Te Saborizados
+https://www.masonline.com.ar/desayunos-y-meriendas/te/te-saborizados
+# Yerbas > Mate Cocido
+https://www.masonline.com.ar/desayunos-y-meriendas/yerbas/mate-cocido
+# Yerbas > Yerba Compuesta
+https://www.masonline.com.ar/desayunos-y-meriendas/yerbas/yerba-compuesta
+# Yerbas > Yerba Comun
+https://www.masonline.com.ar/desayunos-y-meriendas/yerbas/yerba-comun
+# Cereales > Barritas De Cereal
+https://www.masonline.com.ar/desayunos-y-meriendas/cereales/barritas-de-cereal
+# Cereales > Chocolate
+https://www.masonline.com.ar/desayunos-y-meriendas/cereales/chocolate
+# Cereales > Copos
+https://www.masonline.com.ar/desayunos-y-meriendas/cereales/copos
+# Cereales > Frutales
+https://www.masonline.com.ar/desayunos-y-meriendas/cereales/frutales
+# Cereales > Granola Y Avena
+https://www.masonline.com.ar/desayunos-y-meriendas/cereales/granola-y-avena
+# Cereales > Otros Cereales
+https://www.masonline.com.ar/desayunos-y-meriendas/cereales/otros-cereales
+# Galletitas Dulces > Galletitas De Avena Y Cereales
+https://www.masonline.com.ar/desayunos-y-meriendas/galletitas-dulces/galletitas-de-avena-y-cereales
+# Galletitas Dulces > Galletitas Rellenas
+https://www.masonline.com.ar/desayunos-y-meriendas/galletitas-dulces/galletitas-rellenas
+# Galletitas Dulces > Galletitas Simples
+https://www.masonline.com.ar/desayunos-y-meriendas/galletitas-dulces/galletitas-simples
+# Galletitas Dulces > Pepas
+https://www.masonline.com.ar/desayunos-y-meriendas/galletitas-dulces/pepas
+# Galletitas Dulces > Vainillas
+https://www.masonline.com.ar/desayunos-y-meriendas/galletitas-dulces/vainillas
+# Galletitas Dulces > Galletitas De Hojaldre
+https://www.masonline.com.ar/desayunos-y-meriendas/galletitas-dulces/galletitas-de-hojaldre
+# Galletitas Dulces > Obleas
+https://www.masonline.com.ar/desayunos-y-meriendas/galletitas-dulces/obleas
+# Budines, Magdalenas Y Otros > Bizcochuelos
+https://www.masonline.com.ar/desayunos-y-meriendas/budines-magdalenas-y-otros/bizcochuelos
+# Budines, Magdalenas Y Otros > Budines
+https://www.masonline.com.ar/desayunos-y-meriendas/budines-magdalenas-y-otros/budines
+# Budines, Magdalenas Y Otros > Otros Budines, Magdalenas y Otros
+https://www.masonline.com.ar/desayunos-y-meriendas/budines-magdalenas-y-otros/otros-budines-magdalenas-y-otros
+# Budines, Magdalenas Y Otros > Piononos
+https://www.masonline.com.ar/desayunos-y-meriendas/budines-magdalenas-y-otros/piononos
+# Budines, Magdalenas Y Otros > Magdalenas
+https://www.masonline.com.ar/desayunos-y-meriendas/budines-magdalenas-y-otros/magdalenas
+# Frutas Secas, Disecadas Y Mas > Cereales E Inflados
+https://www.masonline.com.ar/desayunos-y-meriendas/frutas-secas-disecadas-y-mas/cereales-e-inflados
+# Frutas Secas, Disecadas Y Mas > Especias Y Hierbas
+https://www.masonline.com.ar/desayunos-y-meriendas/frutas-secas-disecadas-y-mas/especias-y-hierbas
+# Frutas Secas, Disecadas Y Mas > Frutos Secos Y Semillas
+https://www.masonline.com.ar/desayunos-y-meriendas/frutas-secas-disecadas-y-mas/frutos-secos-y-semillas
+# Frutas Secas, Disecadas Y Mas > Legumbres Y Granos
+https://www.masonline.com.ar/desayunos-y-meriendas/frutas-secas-disecadas-y-mas/legumbres-y-granos
+# Leches Y Chocolatadas > Chocolatadas
+https://www.masonline.com.ar/desayunos-y-meriendas/leches-y-chocolatadas/chocolatadas
+# Leches Y Chocolatadas > Leche En Polvo
+https://www.masonline.com.ar/desayunos-y-meriendas/leches-y-chocolatadas/leche-en-polvo
+# Azucar
+https://www.masonline.com.ar/desayunos-y-meriendas/azucar
+# Edulcorante
+https://www.masonline.com.ar/desayunos-y-meriendas/edulcorante
+# Galletitas De Agua
+https://www.masonline.com.ar/desayunos-y-meriendas/galletitas-de-agua
+# Galletitas De Cereales
+https://www.masonline.com.ar/desayunos-y-meriendas/galletitas-de-cereales
+# Galletitas De Salvado
+https://www.masonline.com.ar/desayunos-y-meriendas/galletitas-de-salvado
+# Mermeladas Y Dulces
+https://www.masonline.com.ar/desayunos-y-meriendas/mermeladas-y-dulces
+# Miel
+https://www.masonline.com.ar/desayunos-y-meriendas/miel
+# Pasta De Mani
+https://www.masonline.com.ar/desayunos-y-meriendas/pasta-de-mani
+# Otros Mermeladas y untables
+https://www.masonline.com.ar/desayunos-y-meriendas/otros-mermeladas-y-untables
+# En Capsulas
+https://www.masonline.com.ar/desayunos-y-meriendas/en-capsulas
+# En Granos
+https://www.masonline.com.ar/desayunos-y-meriendas/en-granos
+# Filtro Para Café
+https://www.masonline.com.ar/desayunos-y-meriendas/filtro-para-cafe
+# Instantaneo
+https://www.masonline.com.ar/desayunos-y-meriendas/instantaneo
+# Molido
+https://www.masonline.com.ar/desayunos-y-meriendas/molido
+# Te Clasico
+https://www.masonline.com.ar/desayunos-y-meriendas/te-clasico
+# Te Hierbas
+https://www.masonline.com.ar/desayunos-y-meriendas/te-hierbas
+# Te Saborizados
+https://www.masonline.com.ar/desayunos-y-meriendas/te-saborizados
+# Mate Cocido
+https://www.masonline.com.ar/desayunos-y-meriendas/mate-cocido
+# Yerba Compuesta
+https://www.masonline.com.ar/desayunos-y-meriendas/yerba-compuesta
+# Yerba Comun
+https://www.masonline.com.ar/desayunos-y-meriendas/yerba-comun
+# Barritas De Cereal
+https://www.masonline.com.ar/desayunos-y-meriendas/barritas-de-cereal
+# Chocolate
+https://www.masonline.com.ar/desayunos-y-meriendas/chocolate
+# Copos
+https://www.masonline.com.ar/desayunos-y-meriendas/copos
+# Frutales
+https://www.masonline.com.ar/desayunos-y-meriendas/frutales
+# Granola Y Avena
+https://www.masonline.com.ar/desayunos-y-meriendas/granola-y-avena
+# Otros Cereales
+https://www.masonline.com.ar/desayunos-y-meriendas/otros-cereales
+# Galletitas De Avena Y Cereales
+https://www.masonline.com.ar/desayunos-y-meriendas/galletitas-de-avena-y-cereales
+# Galletitas Rellenas
+https://www.masonline.com.ar/desayunos-y-meriendas/galletitas-rellenas
+# Galletitas Simples
+https://www.masonline.com.ar/desayunos-y-meriendas/galletitas-simples
+# Pepas
+https://www.masonline.com.ar/desayunos-y-meriendas/pepas
+# Vainillas
+https://www.masonline.com.ar/desayunos-y-meriendas/vainillas
+# Galletitas De Hojaldre
+https://www.masonline.com.ar/desayunos-y-meriendas/galletitas-de-hojaldre
+# Obleas
+https://www.masonline.com.ar/desayunos-y-meriendas/obleas
+# Bizcochuelos
+https://www.masonline.com.ar/desayunos-y-meriendas/bizcochuelos
+# Budines
+https://www.masonline.com.ar/desayunos-y-meriendas/budines
+# Otros Budines, Magdalenas y Otros
+https://www.masonline.com.ar/desayunos-y-meriendas/otros-budines-magdalenas-y-otros
+# Piononos
+https://www.masonline.com.ar/desayunos-y-meriendas/piononos
+# Magdalenas
+https://www.masonline.com.ar/desayunos-y-meriendas/magdalenas
+# Cereales E Inflados
+https://www.masonline.com.ar/desayunos-y-meriendas/cereales-e-inflados
+# Especias Y Hierbas
+https://www.masonline.com.ar/desayunos-y-meriendas/especias-y-hierbas
+# Frutos Secos Y Semillas
+https://www.masonline.com.ar/desayunos-y-meriendas/frutos-secos-y-semillas
+# Legumbres Y Granos
+https://www.masonline.com.ar/desayunos-y-meriendas/legumbres-y-granos
+# Chocolatadas
+https://www.masonline.com.ar/desayunos-y-meriendas/chocolatadas
+# Leche En Polvo
+https://www.masonline.com.ar/desayunos-y-meriendas/leche-en-polvo
+
+# === HARINAS (6) ===
+# Avena
+https://www.masonline.com.ar/harinas/avena
+# Harina De Maiz
+https://www.masonline.com.ar/harinas/harina-de-maiz
+# Harina De Trigo
+https://www.masonline.com.ar/harinas/harina-de-trigo
+# Premezclas
+https://www.masonline.com.ar/harinas/premezclas
+# Semola
+https://www.masonline.com.ar/harinas/semola
+# Otras Harinas
+https://www.masonline.com.ar/harinas/otras-harinas
+
+# === REPOSTERIA (7) ===
+# Postres Y Flanes > Flanes
+https://www.masonline.com.ar/reposteria/postres-y-flanes/flanes
+# Postres Y Flanes > Postres
+https://www.masonline.com.ar/reposteria/postres-y-flanes/postres
+# Bizcochuelos, Brownies Y Tortas
+https://www.masonline.com.ar/reposteria/bizcochuelos-brownies-y-tortas
+# Chocolates, Rellenos Y Baños
+https://www.masonline.com.ar/reposteria/chocolates-rellenos-y-banos
+# Gelatinas
+https://www.masonline.com.ar/reposteria/gelatinas
+# Helados
+https://www.masonline.com.ar/reposteria/helados
+# Mas Reposteria
+https://www.masonline.com.ar/reposteria/mas-reposteria
+
+# === HUEVOS (1) ===
+# Huevos
+https://www.masonline.com.ar/huevos
+
+# === LÁCTEOS (20) ===
+# Leches Infantiles > Etapa 1
+https://www.masonline.com.ar/lacteos/leches-infantiles/etapa-1
+# Leches Infantiles > Etapa 2
+https://www.masonline.com.ar/lacteos/leches-infantiles/etapa-2
+# Leches Infantiles > Etapa 3
+https://www.masonline.com.ar/lacteos/leches-infantiles/etapa-3
+# Leches Infantiles > Etapa 4
+https://www.masonline.com.ar/lacteos/leches-infantiles/etapa-4
+# Leches > Leche Descremada
+https://www.masonline.com.ar/lacteos/leches/leche-descremada
+# Leches > Leche Entera
+https://www.masonline.com.ar/lacteos/leches/leche-entera
+# Leches > Leches Chocolatadas
+https://www.masonline.com.ar/lacteos/leches/leches-chocolatadas
+# Leches > Leches Saborizadas
+https://www.masonline.com.ar/lacteos/leches/leches-saborizadas
+# Leches > Bebidas Vegetales
+https://www.masonline.com.ar/lacteos/leches/bebidas-vegetales
+# Leches > Leches en Polvo
+https://www.masonline.com.ar/lacteos/leches/leches-en-polvo
+# Yogures > Descremados
+https://www.masonline.com.ar/lacteos/yogures/descremados
+# Yogures > Enteros
+https://www.masonline.com.ar/lacteos/yogures/enteros
+# Yogures > Semidescremados
+https://www.masonline.com.ar/lacteos/yogures/semidescremados
+# Cremas
+https://www.masonline.com.ar/lacteos/cremas
+# Dulce De Leche
+https://www.masonline.com.ar/lacteos/dulce-de-leche
+# Levaduras Y Grasas
+https://www.masonline.com.ar/lacteos/levaduras-y-grasas
+# Mantecas Y Margarinas > Manteca
+https://www.masonline.com.ar/lacteos/mantecas-y-margarinas/manteca
+# Mantecas Y Margarinas > Margarina
+https://www.masonline.com.ar/lacteos/mantecas-y-margarinas/margarina
+# Postres Y Flanes Frescos > Postres Frescos
+https://www.masonline.com.ar/lacteos/postres-y-flanes-frescos/postres-frescos
+# Postres Y Flanes Frescos > Flanes Frescos
+https://www.masonline.com.ar/lacteos/postres-y-flanes-frescos/flanes-frescos
+
+# === QUESOS (13) ===
+# Ricota
+https://www.masonline.com.ar/quesos/ricota
+# Cremosos Y Port Salut
+https://www.masonline.com.ar/quesos/cremosos-y-port-salut
+# Quesos Crema Y Untables > Hummus
+https://www.masonline.com.ar/quesos/quesos-crema-y-untables/hummus
+# Quesos Crema Y Untables > Quesos Crema
+https://www.masonline.com.ar/quesos/quesos-crema-y-untables/quesos-crema
+# Quesos Crema Y Untables > Quesos Fundidos
+https://www.masonline.com.ar/quesos/quesos-crema-y-untables/quesos-fundidos
+# Semiduros
+https://www.masonline.com.ar/quesos/semiduros
+# Duros
+https://www.masonline.com.ar/quesos/duros
+# Rallados
+https://www.masonline.com.ar/quesos/rallados
+# Mozzarella
+https://www.masonline.com.ar/quesos/mozzarella
+# Quesos Veganos
+https://www.masonline.com.ar/quesos/quesos-veganos
+# Hummus
+https://www.masonline.com.ar/quesos/hummus
+# Quesos Crema
+https://www.masonline.com.ar/quesos/quesos-crema
+# Quesos Fundidos
+https://www.masonline.com.ar/quesos/quesos-fundidos
+
+# === FIAMBRES Y EMBUTIDOS (24) ===
+# Embutidos > Patés y Leberwurst
+https://www.masonline.com.ar/fiambres-y-embutidos/embutidos/pates-y-leberwurst
+# Embutidos > Salames Y Salamines
+https://www.masonline.com.ar/fiambres-y-embutidos/embutidos/salames-y-salamines
+# Embutidos > Salchichas
+https://www.masonline.com.ar/fiambres-y-embutidos/embutidos/salchichas
+# Embutidos > Mas Embutidos
+https://www.masonline.com.ar/fiambres-y-embutidos/embutidos/mas-embutidos
+# Feteados > Jamón Cocido Y Paleta
+https://www.masonline.com.ar/fiambres-y-embutidos/feteados/jamon-cocido-y-paleta
+# Feteados > Jamón Crudo Y Bondiola
+https://www.masonline.com.ar/fiambres-y-embutidos/feteados/jamon-crudo-y-bondiola
+# Feteados > Mas Feteados
+https://www.masonline.com.ar/fiambres-y-embutidos/feteados/mas-feteados
+# Feteados > Mortadela Y Salchichón
+https://www.masonline.com.ar/fiambres-y-embutidos/feteados/mortadela-y-salchichon
+# Feteados > Queso
+https://www.masonline.com.ar/fiambres-y-embutidos/feteados/queso
+# Feteados > Salames Y Salamines Feteados
+https://www.masonline.com.ar/fiambres-y-embutidos/feteados/salames-y-salamines-feteados
+# Dulces > Batata
+https://www.masonline.com.ar/fiambres-y-embutidos/dulces/batata
+# Dulces > Membrillo
+https://www.masonline.com.ar/fiambres-y-embutidos/dulces/membrillo
+# Patés y Leberwurst
+https://www.masonline.com.ar/fiambres-y-embutidos/pates-y-leberwurst
+# Salames Y Salamines
+https://www.masonline.com.ar/fiambres-y-embutidos/salames-y-salamines
+# Salchichas
+https://www.masonline.com.ar/fiambres-y-embutidos/salchichas
+# Mas Embutidos
+https://www.masonline.com.ar/fiambres-y-embutidos/mas-embutidos
+# Jamón Cocido Y Paleta
+https://www.masonline.com.ar/fiambres-y-embutidos/jamon-cocido-y-paleta
+# Jamón Crudo Y Bondiola
+https://www.masonline.com.ar/fiambres-y-embutidos/jamon-crudo-y-bondiola
+# Mas Feteados
+https://www.masonline.com.ar/fiambres-y-embutidos/mas-feteados
+# Mortadela Y Salchichón
+https://www.masonline.com.ar/fiambres-y-embutidos/mortadela-y-salchichon
+# Queso
+https://www.masonline.com.ar/fiambres-y-embutidos/queso
+# Salames Y Salamines Feteados
+https://www.masonline.com.ar/fiambres-y-embutidos/salames-y-salamines-feteados
+# Batata
+https://www.masonline.com.ar/fiambres-y-embutidos/batata
+# Membrillo
+https://www.masonline.com.ar/fiambres-y-embutidos/membrillo
+
+# === GASEOSAS (6) ===
+# Lima Limón
+https://www.masonline.com.ar/gaseosas/lima-limon
+# Naranja
+https://www.masonline.com.ar/gaseosas/naranja
+# Pomelo
+https://www.masonline.com.ar/gaseosas/pomelo
+# Tónica
+https://www.masonline.com.ar/gaseosas/tonica
+# Cola
+https://www.masonline.com.ar/gaseosas/cola
+# Otras Gaseosas
+https://www.masonline.com.ar/gaseosas/otras-gaseosas
+
+# === AGUAS (7) ===
+# Agua Con Gas
+https://www.masonline.com.ar/aguas/agua-con-gas
+# Agua Sin Gas
+https://www.masonline.com.ar/aguas/agua-sin-gas
+# Agua Saborizada > Con Gas
+https://www.masonline.com.ar/aguas/agua-saborizada/con-gas
+# Agua Saborizada > Sin Gas
+https://www.masonline.com.ar/aguas/agua-saborizada/sin-gas
+# Sodas
+https://www.masonline.com.ar/aguas/sodas
+# Con Gas
+https://www.masonline.com.ar/aguas/con-gas
+# Sin Gas
+https://www.masonline.com.ar/aguas/sin-gas
+
+# === JUGOS (4) ===
+# En Polvo
+https://www.masonline.com.ar/jugos/en-polvo
+# Jugos Listos
+https://www.masonline.com.ar/jugos/jugos-listos
+# Jugos Concentrados
+https://www.masonline.com.ar/jugos/jugos-concentrados
+# Jugos Refrigerados
+https://www.masonline.com.ar/jugos/jugos-refrigerados

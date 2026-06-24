@@ -1,0 +1,60 @@
+# precios_categorias_carrefour_canasta.txt - Indice LCV
+#
+# Subset filtrado de categorias de Carrefour que necesitamos para la
+# canasta CCV-37. Sale del archivo completo (124 categorias) generado
+# por precios_descubrir_arbol_vtex.py, recortado a solo lo relevante
+# segun los 37 rubros definidos en precios_CANASTA.md.
+#
+# Formato: una linea de "nombre|url" por categoria. El nombre se usa
+# despues como etiqueta interna para identificar a que rubro pertenece.
+# Las lineas que empiezan con # se ignoran.
+
+
+# === Pan, harinas y derivados ===
+harinas|https://www.carrefour.com.ar/almacen/harinas/harinas-comunes-y-leudantes
+polenta|https://www.carrefour.com.ar/almacen/harinas/polentas
+fideos-largos|https://www.carrefour.com.ar/almacen/pastas-secas/fideos-largos
+fideos-cortos|https://www.carrefour.com.ar/almacen/pastas-secas/fideos-guiseros-y-para-sopas
+arroz|https://www.carrefour.com.ar/almacen/arroz-y-legumbres/arroz
+galletitas-dulces|https://www.carrefour.com.ar/desayuno-y-merienda/galletitas-bizcochitos-y-tostadas/galletitas-dulces
+galletitas-saladas|https://www.carrefour.com.ar/desayuno-y-merienda/galletitas-bizcochitos-y-tostadas/galletitas-de-agua
+
+# === Azucar y dulces ===
+azucar|https://www.carrefour.com.ar/desayuno-y-merienda/azucar-y-endulzantes/azucar
+dulce-de-leche|https://www.carrefour.com.ar/desayuno-y-merienda/mermeladas-y-otros-dulces/dulce-de-leche
+mermelada|https://www.carrefour.com.ar/desayuno-y-merienda/mermeladas-y-otros-dulces/mermeladas-dulces-y-jaleas
+
+# === Aceites y grasas ===
+aceites|https://www.carrefour.com.ar/almacen/aceites-y-vinagres/aceites-comunes
+manteca|https://www.carrefour.com.ar/lacteos-y-productos-frescos/mantecas-margarinas-y-levaduras
+
+# === Lacteos ===
+leches-enteras|https://www.carrefour.com.ar/lacteos-y-productos-frescos/leches/leches-enteras
+leches-descremadas|https://www.carrefour.com.ar/lacteos-y-productos-frescos/leches/leches-descremadas
+yogures-enteros|https://www.carrefour.com.ar/lacteos-y-productos-frescos/yogures/yogures-enteros
+yogures-descremados|https://www.carrefour.com.ar/lacteos-y-productos-frescos/yogures/yogures-descremados
+queso-untable|https://www.carrefour.com.ar/lacteos-y-productos-frescos/quesos/quesos-cremas-y-untables
+
+# === Huevos ===
+huevos|https://www.carrefour.com.ar/lacteos-y-productos-frescos/huevos
+
+# === Legumbres y conservas ===
+legumbres-en-lata|https://www.carrefour.com.ar/almacen/enlatados-y-conservas/conservas-de-legumbres-y-vegetales
+legumbres-secas|https://www.carrefour.com.ar/almacen/arroz-y-legumbres/legumbres
+atun|https://www.carrefour.com.ar/almacen/enlatados-y-conservas/conservas-de-pescado
+salsa-y-pure-de-tomate|https://www.carrefour.com.ar/almacen/enlatados-y-conservas/conservas-y-salsas-de-tomate
+
+# === Condimentos y aderezos ===
+sal|https://www.carrefour.com.ar/almacen/sal-aderezos-y-saborizadores/sal
+vinagre|https://www.carrefour.com.ar/almacen/aceites-y-vinagres/vinagres-acetos-y-limon
+aderezos|https://www.carrefour.com.ar/almacen/sal-aderezos-y-saborizadores/salsas-y-aderezos
+
+# === Infusiones ===
+yerba|https://www.carrefour.com.ar/desayuno-y-merienda/yerba
+cafe|https://www.carrefour.com.ar/desayuno-y-merienda/cafe/cafe-molido-y-en-grano
+te|https://www.carrefour.com.ar/desayuno-y-merienda/infusiones/te
+
+# === Bebidas no alcoholicas ===
+gaseosa-cola|https://www.carrefour.com.ar/bebidas/gaseosas/gaseosas-cola
+agua-sin-gas|https://www.carrefour.com.ar/bebidas/aguas/aguas-minerales-y-de-mesa
+jugo-en-polvo|https://www.carrefour.com.ar/bebidas/jugos/jugos-en-polvo

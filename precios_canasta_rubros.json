@@ -1,0 +1,653 @@
+{
+  "version": "1.0",
+  "descripcion": "Canasta CCV-37 — definición de rubros para búsqueda automática del producto más barato en cada súper. Cada rubro tiene palabras clave (todas deben aparecer en el nombre del producto) y palabras a excluir (si aparece alguna, el producto se descarta). El tamaño objetivo se usa para normalizar precios y comparar presentaciones distintas.",
+  "rubros": [
+    {
+      "id": 1,
+      "nombre": "Harina 000",
+      "claves": [
+        "harina",
+        "000"
+      ],
+      "excluir": [
+        "fuerza",
+        "0000",
+        "integral",
+        "especial",
+        "pizza",
+        "maiz",
+        "arepa",
+        "premezcla"
+      ],
+      "tamano_objetivo_g": 1000,
+      "unidad": "kg"
+    },
+    {
+      "id": 2,
+      "nombre": "Harina leudante",
+      "claves": [
+        "harina",
+        "leudante"
+      ],
+      "excluir": [
+        "integral",
+        "premezcla",
+        "pizza"
+      ],
+      "tamano_objetivo_g": 1000,
+      "unidad": "kg"
+    },
+    {
+      "id": 3,
+      "nombre": "Fideos spaguetti",
+      "claves": [
+        "spaguetti"
+      ],
+      "excluir": [
+        "huevo",
+        "relleno"
+      ],
+      "tamano_objetivo_g": 500,
+      "unidad": "kg"
+    },
+    {
+      "id": 4,
+      "nombre": "Fideos mostachol",
+      "claves": [
+        "mostachol"
+      ],
+      "excluir": [
+        "huevo",
+        "relleno"
+      ],
+      "tamano_objetivo_g": 500,
+      "unidad": "kg"
+    },
+    {
+      "id": 5,
+      "nombre": "Arroz largo fino",
+      "claves": [
+        "arroz",
+        "largo"
+      ],
+      "excluir": [
+        "parboil",
+        "doble",
+        "integral",
+        "yamani",
+        "caldoso",
+        "risotto",
+        "arborio"
+      ],
+      "tamano_objetivo_g": 500,
+      "unidad": "kg"
+    },
+    {
+      "id": 6,
+      "nombre": "Polenta instantanea",
+      "claves": [
+        "polenta"
+      ],
+      "excluir": [
+        "queso",
+        "4 quesos",
+        "verdura",
+        "jamon"
+      ],
+      "tamano_objetivo_g": 500,
+      "unidad": "kg"
+    },
+    {
+      "id": 7,
+      "nombre": "Galletitas dulces",
+      "claves": [
+        "galletita"
+      ],
+      "excluir": [
+        "agua",
+        "salada",
+        "tostada",
+        "grisin",
+        "crackers",
+        "arroz",
+        "marinera"
+      ],
+      "tamano_objetivo_g": 200,
+      "unidad": "kg"
+    },
+    {
+      "id": 8,
+      "nombre": "Galletitas de agua",
+      "claves": [
+        "galletita"
+      ],
+      "excluir": [
+        "rellena",
+        "chocolate",
+        "vainilla",
+        "frutilla",
+        "chips",
+        "kukinas",
+        "oreo",
+        "sonrisas",
+        "polvorita",
+        "formis",
+        "macucas",
+        "pepitos",
+        "bananet",
+        "fauna",
+        "surtido",
+        "merengue",
+        "oblea",
+        "alfajor",
+        "dulce"
+      ],
+      "tamano_objetivo_g": 200,
+      "unidad": "kg",
+      "nota": "Busca galletitas excluyendo todas las dulces. Lo que queda son crackers/agua/saladas."
+    },
+    {
+      "id": 9,
+      "nombre": "Azucar comun",
+      "claves": [
+        "azucar"
+      ],
+      "excluir": [
+        "mascabo",
+        "rubio",
+        "light",
+        "endulzante",
+        "edulcorante",
+        "impalpable",
+        "bizcocho",
+        "galletita",
+        "mermelada",
+        "sin azucar",
+        "gaseosa",
+        "galleta",
+        "rianitos",
+        "azucarado",
+        "azucarada",
+        "bizcochito",
+        "bizcocho",
+        "alfajor",
+        "caramelo",
+        "chicle"
+      ],
+      "tamano_objetivo_g": 1000,
+      "unidad": "kg"
+    },
+    {
+      "id": 10,
+      "nombre": "Dulce de leche",
+      "claves": [
+        "dulce de leche"
+      ],
+      "excluir": [
+        "galletita",
+        "obleas",
+        "polvoron",
+        "rellena",
+        "formis",
+        "yogur",
+        "yogurisimo",
+        "okebon",
+        "budines",
+        "helado",
+        "alfajor"
+      ],
+      "tamano_objetivo_g": 400,
+      "unidad": "kg"
+    },
+    {
+      "id": 11,
+      "nombre": "Mermelada",
+      "claves": [
+        "mermelada"
+      ],
+      "excluir": [
+        "sin azucar",
+        "light",
+        "diet"
+      ],
+      "tamano_objetivo_g": 454,
+      "unidad": "kg"
+    },
+    {
+      "id": 12,
+      "nombre": "Aceite de girasol",
+      "claves": [
+        "aceite",
+        "girasol"
+      ],
+      "excluir": [
+        "aerosol",
+        "oliva",
+        "mezcla",
+        "rocio",
+        "spray"
+      ],
+      "tamano_objetivo_ml": 1500,
+      "unidad": "L"
+    },
+    {
+      "id": 13,
+      "nombre": "Aceite mezcla",
+      "claves": [
+        "aceite",
+        "mezcla"
+      ],
+      "excluir": [
+        "aerosol",
+        "rocio",
+        "spray"
+      ],
+      "tamano_objetivo_ml": 900,
+      "unidad": "L"
+    },
+    {
+      "id": 14,
+      "nombre": "Manteca",
+      "claves": [
+        "manteca"
+      ],
+      "excluir": [
+        "light",
+        "galletita",
+        "tia maruca",
+        "cookie"
+      ],
+      "tamano_objetivo_g": 200,
+      "unidad": "kg"
+    },
+    {
+      "id": 15,
+      "nombre": "Leche entera",
+      "claves": [
+        "leche",
+        "entera"
+      ],
+      "excluir": [
+        "polvo",
+        "chocolatada",
+        "saborizada",
+        "reducida",
+        "sense",
+        "protein",
+        "descremada",
+        "200 cc",
+        "200 ml"
+      ],
+      "tamano_objetivo_ml": 1000,
+      "unidad": "L"
+    },
+    {
+      "id": 16,
+      "nombre": "Leche descremada",
+      "claves": [
+        "leche",
+        "descremada"
+      ],
+      "excluir": [
+        "polvo",
+        "chocolatada",
+        "saborizada",
+        "reducida",
+        "sense",
+        "protein",
+        "entera",
+        "200 cc",
+        "200 ml"
+      ],
+      "tamano_objetivo_ml": 1000,
+      "unidad": "L"
+    },
+    {
+      "id": 17,
+      "nombre": "Yogur firme",
+      "claves": [
+        "yogur",
+        "firme"
+      ],
+      "excluir": [
+        "descremado",
+        "light",
+        "diet"
+      ],
+      "tamano_objetivo_g": 190,
+      "unidad": "kg"
+    },
+    {
+      "id": 18,
+      "nombre": "Yogur bebible",
+      "claves": [
+        "yogur",
+        "bebible"
+      ],
+      "excluir": [
+        "descremado",
+        "light",
+        "diet"
+      ],
+      "tamano_objetivo_ml": 900,
+      "unidad": "L"
+    },
+    {
+      "id": 19,
+      "nombre": "Queso untable / crema",
+      "claves": [
+        "queso",
+        "crema"
+      ],
+      "excluir": [
+        "light",
+        "balance",
+        "sin sal",
+        "rallado",
+        "feteado",
+        "hebra",
+        "especial",
+        "barra"
+      ],
+      "tamano_objetivo_g": 290,
+      "unidad": "kg"
+    },
+    {
+      "id": 20,
+      "nombre": "Huevos x12",
+      "claves": [
+        "huevo"
+      ],
+      "excluir": [
+        "galletita",
+        "liquido",
+        "pascua",
+        "chocolate",
+        "kinder",
+        "fideos",
+        "fideo",
+        "tallarines",
+        "tallarin",
+        "pasta",
+        "blister",
+        "ravioles",
+        "noquis",
+        "al huevo"
+      ],
+      "tamano_objetivo_unidades": 12,
+      "unidad": "unidad"
+    },
+    {
+      "id": 21,
+      "nombre": "Arvejas en lata",
+      "claves": [
+        "arveja"
+      ],
+      "excluir": [
+        "seca",
+        "partida"
+      ],
+      "tamano_objetivo_g": 350,
+      "unidad": "kg"
+    },
+    {
+      "id": 22,
+      "nombre": "Lentejas secas",
+      "claves": [
+        "lenteja"
+      ],
+      "excluir": [
+        "lata",
+        "conserva",
+        "enlatada"
+      ],
+      "tamano_objetivo_g": 400,
+      "unidad": "kg"
+    },
+    {
+      "id": 23,
+      "nombre": "Atun en lata",
+      "claves": [
+        "atun"
+      ],
+      "excluir": [
+        "ensalada",
+        "ahumado"
+      ],
+      "tamano_objetivo_g": 170,
+      "unidad": "kg"
+    },
+    {
+      "id": 24,
+      "nombre": "Salsa de tomate",
+      "claves": [
+        "salsa"
+      ],
+      "excluir": [
+        "soja",
+        "inglesa",
+        "barbacoa",
+        "tabasco",
+        "picante",
+        "oliva premium",
+        "oliovita",
+        "blanca",
+        "dos anclas",
+        "51",
+        "mostaza",
+        "ketchup",
+        "mayonesa",
+        "golf",
+        "chimichurri",
+        "criolla",
+        "chimichurri"
+      ],
+      "tamano_objetivo_g": 340,
+      "unidad": "kg"
+    },
+    {
+      "id": 25,
+      "nombre": "Pure de tomate",
+      "claves": [
+        "pure",
+        "tomate"
+      ],
+      "excluir": [
+        "instantaneo",
+        "papa"
+      ],
+      "tamano_objetivo_g": 520,
+      "unidad": "kg"
+    },
+    {
+      "id": 26,
+      "nombre": "Sal fina",
+      "claves": [
+        "sal",
+        "fina"
+      ],
+      "excluir": [
+        "rosada",
+        "marina",
+        "himalaya",
+        "parrillera",
+        "entrefina"
+      ],
+      "tamano_objetivo_g": 500,
+      "unidad": "kg"
+    },
+    {
+      "id": 27,
+      "nombre": "Sal gruesa",
+      "claves": [
+        "sal",
+        "gruesa"
+      ],
+      "excluir": [
+        "rosada",
+        "marina",
+        "himalaya",
+        "parrillera",
+        "entrefina"
+      ],
+      "tamano_objetivo_g": 1000,
+      "unidad": "kg"
+    },
+    {
+      "id": 28,
+      "nombre": "Vinagre de alcohol",
+      "claves": [
+        "vinagre",
+        "alcohol"
+      ],
+      "excluir": [
+        "manzana",
+        "vino",
+        "aceto",
+        "balsamico"
+      ],
+      "tamano_objetivo_ml": 500,
+      "unidad": "L"
+    },
+    {
+      "id": 29,
+      "nombre": "Mayonesa",
+      "claves": [
+        "mayonesa"
+      ],
+      "excluir": [
+        "light",
+        "liviana",
+        "casera",
+        "vegana"
+      ],
+      "tamano_objetivo_g": 250,
+      "unidad": "kg"
+    },
+    {
+      "id": 30,
+      "nombre": "Ketchup",
+      "claves": [
+        "ketchup"
+      ],
+      "excluir": [
+        "light",
+        "diet"
+      ],
+      "tamano_objetivo_g": 250,
+      "unidad": "kg"
+    },
+    {
+      "id": 31,
+      "nombre": "Mostaza",
+      "claves": [
+        "mostaza"
+      ],
+      "excluir": [
+        "dijon",
+        "miel",
+        "patria"
+      ],
+      "tamano_objetivo_g": 250,
+      "unidad": "kg"
+    },
+    {
+      "id": 32,
+      "nombre": "Yerba mate",
+      "claves": [
+        "yerba"
+      ],
+      "excluir": [
+        "saquito",
+        "cocido",
+        "compuesta"
+      ],
+      "tamano_objetivo_g": 1000,
+      "unidad": "kg"
+    },
+    {
+      "id": 33,
+      "nombre": "Cafe molido",
+      "claves": [
+        "cafe",
+        "molido"
+      ],
+      "excluir": [
+        "capsul",
+        "instantaneo",
+        "descafeinado",
+        "saquito",
+        "grano"
+      ],
+      "tamano_objetivo_g": 250,
+      "unidad": "kg"
+    },
+    {
+      "id": 34,
+      "nombre": "Te en saquitos",
+      "claves": [
+        "te en saquito"
+      ],
+      "excluir": [
+        "verde",
+        "manzanilla",
+        "hierba",
+        "silvestre",
+        "mate cocido",
+        "fruta",
+        "menta",
+        "boldo",
+        "tilo",
+        "yerba mate"
+      ],
+      "tamano_objetivo_unidades": 25,
+      "unidad": "unidad"
+    },
+    {
+      "id": 35,
+      "nombre": "Gaseosa cola",
+      "claves": [
+        "gaseosa",
+        "cola"
+      ],
+      "excluir": [
+        "zero",
+        "sin azucar",
+        "light",
+        "liviano",
+        "dietetica"
+      ],
+      "tamano_objetivo_ml": 1500,
+      "unidad": "L"
+    },
+    {
+      "id": 36,
+      "nombre": "Agua mineral sin gas",
+      "claves": [
+        "agua",
+        "sin gas"
+      ],
+      "excluir": [
+        "saborizada",
+        "con gas"
+      ],
+      "tamano_objetivo_ml": 1500,
+      "unidad": "L"
+    },
+    {
+      "id": 37,
+      "nombre": "Jugo en polvo",
+      "claves": [
+        "jugo",
+        "polvo"
+      ],
+      "excluir": [
+        "light",
+        "cero",
+        "zero"
+      ],
+      "tamano_objetivo_g": 15,
+      "unidad": "unidad"
+    }
+  ]
+}

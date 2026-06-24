@@ -1,0 +1,548 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Índice LCV — Precios Puerto Madryn</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;700&family=Lato:wght@300;400;700&display=swap" rel="stylesheet">
+    <style>
+        /* --------------------------------------------------------
+           TOKENS — paleta LCdV (navy/gold costero patagónico)
+           -------------------------------------------------------- */
+        :root {
+            --navy:       #0a1628;
+            --navy-light: #142238;
+            --gold:       #c9a84c;
+            --gold-dim:   #a08636;
+            --cream:      #f5f0e8;
+            --cream-dark: #e8e0d0;
+            --green:      #2d6a4f;
+            --green-light:#40916c;
+            --red-soft:   #b85450;
+            --text:       #2c2c2c;
+            --text-light: #6b6b6b;
+            --white:      #ffffff;
+        }
+
+        /* --------------------------------------------------------
+           BASE
+           -------------------------------------------------------- */
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            font-family: 'Lato', sans-serif;
+            color: var(--text);
+            background: var(--cream);
+            line-height: 1.5;
+            -webkit-font-smoothing: antialiased;
+        }
+
+        .container {
+            max-width: 960px;
+            margin: 0 auto;
+            padding: 0 1rem;
+        }
+
+        /* --------------------------------------------------------
+           HEADER
+           -------------------------------------------------------- */
+        header {
+            background: var(--navy);
+            padding: 1.25rem 0;
+            text-align: center;
+            border-bottom: 3px solid var(--gold);
+        }
+
+        header h1 {
+            font-family: 'Cinzel', serif;
+            color: var(--gold);
+            font-size: 1.1rem;
+            font-weight: 400;
+            letter-spacing: 0.15em;
+            text-transform: uppercase;
+        }
+
+        header p {
+            color: var(--cream-dark);
+            font-size: 0.8rem;
+            margin-top: 0.25rem;
+            font-weight: 300;
+        }
+
+        /* --------------------------------------------------------
+           HERO — resumen de totales
+           -------------------------------------------------------- */
+        .hero {
+            background: var(--navy);
+            padding: 2rem 0 2.5rem;
+            text-align: center;
+        }
+
+        .hero h2 {
+            font-family: 'Cinzel', serif;
+            color: var(--cream);
+            font-size: 1.3rem;
+            font-weight: 400;
+            margin-bottom: 0.5rem;
+        }
+
+        .hero .fecha {
+            color: var(--gold-dim);
+            font-size: 0.85rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .totales {
+            display: flex;
+            gap: 1rem;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+
+        .total-card {
+            background: var(--navy-light);
+            border: 1px solid #1e3250;
+            border-radius: 8px;
+            padding: 1.25rem 1.5rem;
+            min-width: 160px;
+            flex: 1;
+            max-width: 220px;
+            transition: border-color 0.2s;
+        }
+
+        .total-card.ganador {
+            border-color: var(--gold);
+            box-shadow: 0 0 20px rgba(201, 168, 76, 0.15);
+        }
+
+        .total-card .super-nombre {
+            font-size: 0.8rem;
+            color: var(--cream-dark);
+            text-transform: uppercase;
+            letter-spacing: 0.08em;
+            margin-bottom: 0.5rem;
+        }
+
+        .total-card .super-total {
+            font-family: 'Cinzel', serif;
+            font-size: 1.6rem;
+            color: var(--cream);
+            font-weight: 700;
+        }
+
+        .total-card.ganador .super-total {
+            color: var(--gold);
+        }
+
+        .total-card .super-badge {
+            display: inline-block;
+            margin-top: 0.5rem;
+            font-size: 0.7rem;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            padding: 0.2rem 0.6rem;
+            border-radius: 3px;
+            background: var(--gold);
+            color: var(--navy);
+            font-weight: 700;
+        }
+
+        .total-card .super-rubros {
+            color: var(--text-light);
+            font-size: 0.75rem;
+            margin-top: 0.4rem;
+        }
+
+        /* --------------------------------------------------------
+           TABLA COMPARATIVA
+           -------------------------------------------------------- */
+        .tabla-section {
+            padding: 2rem 0;
+        }
+
+        .tabla-section h3 {
+            font-family: 'Cinzel', serif;
+            font-size: 1.1rem;
+            color: var(--navy);
+            margin-bottom: 1rem;
+            text-align: center;
+        }
+
+        .tabla-wrapper {
+            overflow-x: auto;
+            border-radius: 6px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            background: var(--white);
+            font-size: 0.85rem;
+        }
+
+        thead {
+            background: var(--navy);
+        }
+
+        thead th {
+            color: var(--gold);
+            font-family: 'Cinzel', serif;
+            font-weight: 400;
+            font-size: 0.75rem;
+            letter-spacing: 0.08em;
+            text-transform: uppercase;
+            padding: 0.75rem 0.5rem;
+            text-align: right;
+            white-space: nowrap;
+        }
+
+        thead th:first-child {
+            text-align: left;
+            padding-left: 1rem;
+        }
+
+        tbody tr {
+            border-bottom: 1px solid var(--cream-dark);
+            cursor: pointer;
+            transition: background 0.15s;
+        }
+
+        tbody tr:hover {
+            background: var(--cream);
+        }
+
+        tbody td {
+            padding: 0.6rem 0.5rem;
+            text-align: right;
+            font-variant-numeric: tabular-nums;
+            white-space: nowrap;
+        }
+
+        tbody td:first-child {
+            text-align: left;
+            padding-left: 1rem;
+            font-weight: 700;
+            color: var(--navy);
+            white-space: normal;
+        }
+
+        td.mas-barato {
+            color: var(--green);
+            font-weight: 700;
+        }
+
+        td.sin-dato {
+            color: var(--text-light);
+            font-style: italic;
+        }
+
+        /* --------------------------------------------------------
+           DETALLE EXPANDIBLE
+           -------------------------------------------------------- */
+        .detalle {
+            display: none;
+            background: var(--cream);
+        }
+
+        .detalle.visible {
+            display: table-row;
+        }
+
+        .detalle td {
+            padding: 0.75rem 1rem;
+            text-align: left;
+            font-size: 0.8rem;
+            color: var(--text);
+            line-height: 1.6;
+            white-space: normal;
+        }
+
+        .detalle-producto {
+            margin-bottom: 0.3rem;
+        }
+
+        .detalle-producto .tienda-label {
+            display: inline-block;
+            width: 100px;
+            font-weight: 700;
+            color: var(--navy);
+            font-size: 0.75rem;
+        }
+
+        .detalle-producto .precio-envase {
+            color: var(--text-light);
+            font-size: 0.75rem;
+        }
+
+        .detalle-producto.es-barato .tienda-label {
+            color: var(--green);
+        }
+
+        .detalle-producto .ver-producto {
+            display: inline-block;
+            margin-left: 0.4rem;
+            color: var(--gold-dim);
+            font-size: 0.75rem;
+            font-weight: 700;
+            text-decoration: none;
+            white-space: nowrap;
+        }
+
+        .detalle-producto .ver-producto:hover {
+            color: var(--gold);
+            text-decoration: underline;
+        }
+
+        /* --------------------------------------------------------
+           FOOTER
+           -------------------------------------------------------- */
+        footer {
+            background: var(--navy);
+            color: var(--cream-dark);
+            text-align: center;
+            padding: 1.5rem;
+            font-size: 0.75rem;
+            line-height: 1.8;
+            border-top: 2px solid var(--gold-dim);
+        }
+
+        footer a {
+            color: var(--gold);
+            text-decoration: none;
+        }
+
+        /* --------------------------------------------------------
+           LOADING / ERROR
+           -------------------------------------------------------- */
+        .estado {
+            text-align: center;
+            padding: 3rem;
+            color: var(--text-light);
+            font-size: 0.9rem;
+        }
+
+        /* --------------------------------------------------------
+           RESPONSIVE
+           -------------------------------------------------------- */
+        @media (max-width: 600px) {
+            .total-card { min-width: 130px; padding: 1rem; }
+            .total-card .super-total { font-size: 1.3rem; }
+            .hero h2 { font-size: 1.1rem; }
+            table { font-size: 0.78rem; }
+            thead th { font-size: 0.65rem; padding: 0.6rem 0.35rem; }
+            tbody td { padding: 0.5rem 0.35rem; }
+            tbody td:first-child { padding-left: 0.5rem; }
+            .detalle-producto .tienda-label { width: 80px; }
+        }
+    </style>
+</head>
+<body>
+
+<header>
+    <div class="container">
+        <h1>🌬️ Índice LCV</h1>
+        <p>Canasta básica comparada — Puerto Madryn</p>
+    </div>
+</header>
+
+<section class="hero" id="hero">
+    <div class="container">
+        <h2>¿Cuál es el súper más barato hoy?</h2>
+        <p class="fecha" id="fecha">Cargando...</p>
+        <div class="totales" id="totales"></div>
+    </div>
+</section>
+
+<section class="tabla-section">
+    <div class="container">
+        <h3>37 productos comparados</h3>
+        <p id="estado" class="estado" style="display:none;"></p>
+        <div class="tabla-wrapper">
+            <table id="tabla">
+                <thead>
+                    <tr>
+                        <th>Producto</th>
+                        <th>La Anónima</th>
+                        <th>Carrefour</th>
+                        <th>Changomas</th>
+                    </tr>
+                </thead>
+                <tbody id="cuerpo-tabla"></tbody>
+            </table>
+        </div>
+    </div>
+</section>
+
+<footer>
+    <div class="container">
+        Índice LCV — Canasta CCV-37<br>
+        Precios actualizados diariamente. Se muestra el producto más barato por kilo, litro o unidad en cada súper.<br>
+        Un proyecto de <a href="/">La Comunidad del Viento</a> — Puerto Madryn, Patagonia.
+    </div>
+</footer>
+
+<script>
+(function() {
+    const TIENDAS = ["La Anonima", "Carrefour", "Changomas"];
+    const TIENDAS_DISPLAY = {
+        "La Anonima": "La Anónima",
+        "Carrefour": "Carrefour",
+        "Changomas": "Changomas"
+    };
+
+    const UNIDADES = { "kg": "/kg", "L": "/L", "unidad": "/u" };
+
+    function formatPrecio(valor, unidad) {
+        if (valor == null) return "—";
+        const num = Math.round(valor);
+        const sufijo = UNIDADES[unidad] || "";
+        return "$" + num.toLocaleString("es-AR") + sufijo;
+    }
+
+    function formatTotal(valor) {
+        return "$" + Math.round(valor).toLocaleString("es-AR");
+    }
+
+    function formatFecha(fechaStr) {
+        const partes = fechaStr.split("-");
+        const meses = ["enero","febrero","marzo","abril","mayo","junio",
+                       "julio","agosto","septiembre","octubre","noviembre","diciembre"];
+        return parseInt(partes[2]) + " de " + meses[parseInt(partes[1])-1] + " de " + partes[0];
+    }
+
+    function masBarato(precios, tiendas) {
+        let min = Infinity;
+        let ganador = null;
+        for (const t of tiendas) {
+            if (!precios[t]) continue;
+            const pn = precios[t].precio_normalizado;
+            const pa = precios[t].precio_envase;
+            const val = pn != null ? pn : pa;
+            if (val < min) { min = val; ganador = t; }
+        }
+        return ganador;
+    }
+
+    function renderTotales(datos) {
+        const div = document.getElementById("totales");
+        div.innerHTML = "";
+
+        // Contar rubros ganados por cada super
+        const rubrosGanados = {};
+        TIENDAS.forEach(t => rubrosGanados[t] = 0);
+        for (const rubro of datos.rubros) {
+            const g = masBarato(rubro.precios, TIENDAS);
+            if (g) rubrosGanados[g]++;
+        }
+
+        TIENDAS.forEach(tienda => {
+            const total = datos.totales[tienda];
+            if (total == null) return;
+
+            const card = document.createElement("div");
+            card.className = "total-card" + (tienda === datos.mas_barato ? " ganador" : "");
+
+            let html = '<div class="super-nombre">' + TIENDAS_DISPLAY[tienda] + '</div>';
+            html += '<div class="super-total">' + formatTotal(total) + '</div>';
+
+            if (tienda === datos.mas_barato) {
+                html += '<span class="super-badge">Más barato</span>';
+            }
+
+            html += '<div class="super-rubros">Gana en ' + rubrosGanados[tienda] + ' de 37 productos</div>';
+            card.innerHTML = html;
+            div.appendChild(card);
+        });
+    }
+
+    function renderTabla(datos) {
+        const tbody = document.getElementById("cuerpo-tabla");
+        tbody.innerHTML = "";
+
+        for (const rubro of datos.rubros) {
+            const ganador = masBarato(rubro.precios, TIENDAS);
+
+            // Fila principal
+            const tr = document.createElement("tr");
+            tr.dataset.rubroId = rubro.id;
+
+            let celdas = '<td>' + rubro.nombre + '</td>';
+            TIENDAS.forEach(tienda => {
+                const info = rubro.precios[tienda];
+                if (!info) {
+                    celdas += '<td class="sin-dato">—</td>';
+                    return;
+                }
+                const pn = info.precio_normalizado;
+                const precio = pn != null ? formatPrecio(pn, rubro.unidad) : formatPrecio(info.precio_envase, "");
+                const esBarato = tienda === ganador;
+                celdas += '<td class="' + (esBarato ? 'mas-barato' : '') + '">' + precio + '</td>';
+            });
+            tr.innerHTML = celdas;
+
+            // Al hacer clic, expandir/colapsar el detalle
+            tr.addEventListener("click", function() {
+                const detalle = document.getElementById("detalle-" + rubro.id);
+                if (detalle) detalle.classList.toggle("visible");
+            });
+
+            tbody.appendChild(tr);
+
+            // Fila de detalle (oculta por defecto)
+            const trDetalle = document.createElement("tr");
+            trDetalle.className = "detalle";
+            trDetalle.id = "detalle-" + rubro.id;
+
+            let detalleHtml = '<td colspan="4">';
+            TIENDAS.forEach(tienda => {
+                const info = rubro.precios[tienda];
+                if (!info) return;
+
+                const esBarato = tienda === ganador;
+                const pn = info.precio_normalizado;
+                const precioStr = pn != null ? formatPrecio(pn, rubro.unidad) : formatPrecio(info.precio_envase, "");
+                const envaseStr = " · envase $" + Math.round(info.precio_envase).toLocaleString("es-AR");
+
+                detalleHtml += '<div class="detalle-producto ' + (esBarato ? 'es-barato' : '') + '">';
+                detalleHtml += '<span class="tienda-label">' + TIENDAS_DISPLAY[tienda] + '</span> ';
+                detalleHtml += precioStr;
+                detalleHtml += '<span class="precio-envase">' + envaseStr + '</span> ';
+                detalleHtml += '— ' + info.producto;
+                if (info.url) {
+                    detalleHtml += ' <a class="ver-producto" href="' + info.url + '" target="_blank" rel="noopener">Ver producto →</a>';
+                }
+                detalleHtml += '</div>';
+            });
+            detalleHtml += '</td>';
+            trDetalle.innerHTML = detalleHtml;
+            tbody.appendChild(trDetalle);
+        }
+    }
+
+    // Cargar datos
+    fetch("precios_ultimo.json")
+        .then(r => {
+            if (!r.ok) throw new Error("No se pudo cargar precios_ultimo.json");
+            return r.json();
+        })
+        .then(datos => {
+            document.getElementById("fecha").textContent =
+                "Precios del " + formatFecha(datos.fecha);
+
+            renderTotales(datos);
+            renderTabla(datos);
+        })
+        .catch(err => {
+            document.getElementById("fecha").textContent = "";
+            const estado = document.getElementById("estado");
+            estado.style.display = "block";
+            estado.textContent = "No se pudieron cargar los precios. " + err.message;
+        });
+})();
+</script>
+
+</body>
+</html>

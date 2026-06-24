@@ -1,0 +1,65 @@
+# precios_categorias_changomas_canasta.txt - Indice LCV
+#
+# Subset filtrado de categorias de Changomas (Mas Online) que
+# necesitamos para la canasta CCV-37. Sale del archivo completo (284
+# categorias) generado por precios_descubrir_arbol_vtex.py, recortado
+# a solo lo relevante segun los 37 rubros definidos en
+# precios_CANASTA.md.
+#
+# Formato: una linea de "nombre|url" por categoria. El nombre se usa
+# despues como etiqueta interna para identificar a que rubro pertenece.
+# Las lineas que empiezan con # se ignoran.
+
+
+# === Pan, harinas y derivados ===
+harinas|https://www.masonline.com.ar/harinas/harina-de-trigo
+polenta|https://www.masonline.com.ar/harinas/harina-de-maiz
+fideos-largos|https://www.masonline.com.ar/arroz-legumbres-y-pastas/pastas-secas/fideos-largos
+fideos-cortos|https://www.masonline.com.ar/arroz-legumbres-y-pastas/pastas-secas/fideos-guiseros
+arroz|https://www.masonline.com.ar/arroz-legumbres-y-pastas/arroz/arroz-largo-fino
+galletitas-dulces|https://www.masonline.com.ar/desayunos-y-meriendas/galletitas-dulces/galletitas-simples
+galletitas-saladas|https://www.masonline.com.ar/desayunos-y-meriendas/galletitas-saladas/galletitas-de-agua
+
+# === Azucar y dulces ===
+azucar|https://www.masonline.com.ar/desayunos-y-meriendas/endulzantes/azucar
+dulce-de-leche|https://www.masonline.com.ar/lacteos/dulce-de-leche
+mermelada|https://www.masonline.com.ar/desayunos-y-meriendas/mermeladas-y-untables/mermeladas-y-dulces
+
+# === Aceites y grasas ===
+aceite-girasol|https://www.masonline.com.ar/aceites-vinagres-y-aderezos/aceites/aceite-de-girasol
+aceite-mezcla|https://www.masonline.com.ar/aceites-vinagres-y-aderezos/aceites/aceite-mezcla
+manteca|https://www.masonline.com.ar/lacteos/mantecas-y-margarinas/manteca
+
+# === Lacteos ===
+leche-entera|https://www.masonline.com.ar/lacteos/leches/leche-entera
+leche-descremada|https://www.masonline.com.ar/lacteos/leches/leche-descremada
+yogures-enteros|https://www.masonline.com.ar/lacteos/yogures/enteros
+yogures-descremados|https://www.masonline.com.ar/lacteos/yogures/descremados
+queso-untable|https://www.masonline.com.ar/quesos/quesos-crema-y-untables/quesos-crema
+
+# === Huevos ===
+huevos|https://www.masonline.com.ar/huevos
+
+# === Legumbres y conservas ===
+arvejas-en-lata|https://www.masonline.com.ar/arroz-legumbres-y-pastas/legumbres/arvejas
+lentejas|https://www.masonline.com.ar/arroz-legumbres-y-pastas/legumbres/lentejas
+atun|https://www.masonline.com.ar/conservas-y-enlatados/conservas/conservas-de-pescado
+salsa-de-tomate|https://www.masonline.com.ar/conservas-y-enlatados/tomates-y-salsas/salsa-de-tomate
+pure-de-tomate|https://www.masonline.com.ar/conservas-y-enlatados/tomates-y-salsas/pure-de-tomate
+
+# === Condimentos y aderezos ===
+sal|https://www.masonline.com.ar/condimentos-y-especias/sal-y-pimienta/sal
+vinagre|https://www.masonline.com.ar/aceites-vinagres-y-aderezos/vinagres-y-aceto/vinagre-de-alcohol
+mayonesa|https://www.masonline.com.ar/aceites-vinagres-y-aderezos/aderezos/mayonesa
+ketchup|https://www.masonline.com.ar/aceites-vinagres-y-aderezos/aderezos/ketchup
+mostaza|https://www.masonline.com.ar/aceites-vinagres-y-aderezos/aderezos/mostaza
+
+# === Infusiones ===
+yerba|https://www.masonline.com.ar/desayunos-y-meriendas/yerbas/yerba-comun
+cafe|https://www.masonline.com.ar/desayunos-y-meriendas/cafe/molido
+te|https://www.masonline.com.ar/desayunos-y-meriendas/te/te-clasico
+
+# === Bebidas no alcoholicas ===
+gaseosa-cola|https://www.masonline.com.ar/gaseosas/cola
+agua-sin-gas|https://www.masonline.com.ar/aguas/sin-gas
+jugo-en-polvo|https://www.masonline.com.ar/jugos/en-polvo
