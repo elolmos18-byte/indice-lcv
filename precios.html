@@ -156,6 +156,73 @@
         }
 
         /* --------------------------------------------------------
+           TIPS — sección colapsable
+           -------------------------------------------------------- */
+        .tips {
+            background: var(--white);
+            border: 1px solid var(--cream-dark);
+            border-radius: 6px;
+            margin: 1.5rem 0;
+            overflow: hidden;
+        }
+
+        .tips summary {
+            list-style: none;
+            cursor: pointer;
+            padding: 0.85rem 1rem;
+            font-family: 'Cinzel', serif;
+            font-size: 0.85rem;
+            color: var(--navy);
+            background: var(--cream);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            user-select: none;
+        }
+
+        .tips summary::-webkit-details-marker {
+            display: none;
+        }
+
+        .tips summary::after {
+            content: "▼";
+            font-size: 0.7rem;
+            color: var(--gold-dim);
+            transition: transform 0.2s;
+        }
+
+        .tips[open] summary::after {
+            transform: rotate(180deg);
+        }
+
+        .tips-contenido {
+            padding: 1rem 1.25rem;
+            font-size: 0.85rem;
+            line-height: 1.6;
+        }
+
+        .tips-contenido ul {
+            margin: 0;
+            padding-left: 1.1rem;
+        }
+
+        .tips-contenido li {
+            margin-bottom: 0.85rem;
+        }
+
+        .tips-contenido li:last-child {
+            margin-bottom: 0;
+        }
+
+        .tips-contenido .ejemplo {
+            display: block;
+            margin-top: 0.3rem;
+            color: var(--text-light);
+            font-size: 0.8rem;
+            font-style: italic;
+        }
+
+        /* --------------------------------------------------------
            TABLA COMPARATIVA
            -------------------------------------------------------- */
         .tabla-section {
@@ -358,6 +425,27 @@
 
 <section class="tabla-section">
     <div class="container">
+        <details class="tips">
+            <summary>💡 Tips para leer esta tabla</summary>
+            <div class="tips-contenido">
+                <ul>
+                    <li>
+                        <strong>Los precios se muestran por kilo, litro o unidad — no por el precio del paquete.</strong>
+                        Un envase chico puede parecer más barato pero salir más caro por kilo que uno grande.
+                        <span class="ejemplo">Ejemplo real: Arroz Máximo 500g cuesta $909 ($1.818/kg), mientras que Arroz Check 1kg cuesta $1.266/kg — el de 1kg sale más barato aunque el número del envase sea más alto.</span>
+                    </li>
+                    <li>
+                        <strong>Cada día el sistema elige automáticamente la opción más económica disponible en cada súper.</strong>
+                        La marca puede cambiar de un día a otro — lo que se compara siempre es el precio mínimo accesible para ese tipo de producto, no una marca fija.
+                    </li>
+                    <li>
+                        <strong>"Ver producto →" te lleva directo a la página del súper</strong>
+                        para confirmar el precio actual antes de ir a comprar.
+                    </li>
+                </ul>
+            </div>
+        </details>
+
         <h3>37 productos comparados</h3>
         <p id="estado" class="estado" style="display:none;"></p>
         <div class="tabla-wrapper">
