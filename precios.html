@@ -301,6 +301,11 @@
             font-weight: 700;
         }
 
+        .medalla {
+            font-size: 0.75rem;
+            margin-right: 0.15rem;
+        }
+
         td.sin-dato {
             color: var(--text-light);
             font-style: italic;
@@ -501,18 +506,37 @@
         return parseInt(partes[2]) + " de " + meses[parseInt(partes[1])-1] + " de " + partes[0];
     }
 
-    function masBarato(precios, tiendas) {
-        let min = Infinity;
-        let ganador = null;
-        for (const t of tiendas) {
-            if (!precios[t]) continue;
-            const pn = precios[t].precio_normalizado;
-            const pa = precios[t].precio_envase;
-            const val = pn != null ? pn : pa;
-            if (val < min) { min = val; ganador = t; }
-        }
-        return ganador;
+    function valorComparable(infoTienda) {
+        const pn = infoTienda.precio_normalizado;
+        const pa = infoTienda.precio_envase;
+        return pn != null ? pn : pa;
     }
+
+    function rankearPrecios(precios, tiendas) {
+        // Devuelve un objeto { tienda: posicion } donde posicion es
+        // 1 (mas barato), 2 (medio) o 3 (mas caro). Las tiendas sin
+        // dato no entran en el ranking.
+        const disponibles = tiendas.filter(t => precios[t]);
+        const ordenadas = disponibles.slice().sort(
+            (a, b) => valorComparable(precios[a]) - valorComparable(precios[b])
+        );
+
+        const ranking = {};
+        ordenadas.forEach((tienda, indice) => {
+            ranking[tienda] = indice + 1; // 1, 2, 3
+        });
+        return ranking;
+    }
+
+    function masBarato(precios, tiendas) {
+        const ranking = rankearPrecios(precios, tiendas);
+        for (const t of tiendas) {
+            if (ranking[t] === 1) return t;
+        }
+        return null;
+    }
+
+    const MEDALLAS = { 1: "🥇", 2: "🥈", 3: "🥉" };
 
     function renderTotales(datos) {
         const div = document.getElementById("totales");
@@ -551,6 +575,7 @@
         tbody.innerHTML = "";
 
         for (const rubro of datos.rubros) {
+            const ranking = rankearPrecios(rubro.precios, TIENDAS);
             const ganador = masBarato(rubro.precios, TIENDAS);
 
             // Fila principal
@@ -566,8 +591,11 @@
                 }
                 const pn = info.precio_normalizado;
                 const precio = pn != null ? formatPrecio(pn, rubro.unidad) : formatPrecio(info.precio_envase, "");
-                const esBarato = tienda === ganador;
-                celdas += '<td class="' + (esBarato ? 'mas-barato' : '') + '">' + precio + '</td>';
+                const posicion = ranking[tienda];
+                const medalla = MEDALLAS[posicion] || "";
+                const esBarato = posicion === 1;
+                celdas += '<td class="' + (esBarato ? 'mas-barato' : '') + '">' +
+                    '<span class="medalla">' + medalla + '</span> ' + precio + '</td>';
             });
             tr.innerHTML = celdas;
 
