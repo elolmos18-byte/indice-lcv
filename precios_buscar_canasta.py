@@ -20,6 +20,18 @@ por la cantidad de referencia de cada rubro (ej: 1kg de harina, 500g
 de fideos, 6 huevos). Asi el total refleja "cuanto cuesta comprar
 la canasta completa" en cada super.
 
+CORRECCION DE PRECIO DE LISTA (La Anonima):
+El listado de categoria de La Anonima (lo que lee
+precios_armar_catalogo_anonima.py) a veces trae un "price" que es
+promocional o esta desactualizado, distinto del precio real que se ve
+en la pagina del producto. La pagina individual de cada producto si
+expone el precio de lista real, pero visitar la pagina individual de
+TODOS los productos del catalogo seria muy pesado. Como compromiso,
+una vez elegido el producto MAS BARATO de La Anonima en cada rubro
+(maximo 37 productos, uno por rubro), visitamos solo esa pagina
+individual puntual para confirmar/corregir su precio antes de armar
+el resumen final. Ver corregir_precio_lista_anonima().
+
 Dependencias:
 - precios_canasta_rubros.json (definicion de rubros con palabras clave)
 - catalogo_anonima.csv (generado por precios_armar_catalogo_anonima.py)
@@ -47,9 +59,13 @@ import csv
 import json
 import re
 import sys
+import time
 import unicodedata
 from datetime import date
 from pathlib import Path
+
+import requests
+from bs4 import BeautifulSoup
 
 import precios_db
 
@@ -58,6 +74,18 @@ ARCHIVO_ANONIMA = "catalogo_anonima.csv"
 ARCHIVO_VTEX = "catalogo_vtex.csv"
 
 TIENDAS = ["La Anonima", "Carrefour", "Changomas"]
+
+# Headers para visitar paginas individuales de producto de La Anonima
+# (corregir_precio_lista_anonima). Los mismos que usa
+# precios_armar_catalogo_anonima.py - el sitio rechaza con 403 los
+# pedidos que no tienen estos headers basicos.
+HEADERS_ANONIMA = {
+    "User-Agent": (
+        "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 "
+        "(KHTML, like Gecko) Chrome/124.0.0.0 Safari/537.36"
+    ),
+    "Accept-Language": "es-AR,es;q=0.9",
+}
 
 
 # --- Normalizacion de texto --------------------------------------------
@@ -206,6 +234,87 @@ def calcular_precio_normalizado(precio: float, nombre_norm: str, rubro: dict) ->
     return None
 
 
+# --- Correccion de precio de lista (La Anonima) -------------------------
+
+def _precio_lista_de_pagina_individual(url: str) -> float | None:
+    """
+    Visita la pagina individual de un producto de La Anonima y
+    devuelve su precio de lista (priceSpecification.price), si esta
+    disponible en el JSON-LD de esa pagina.
+
+    Por que esto hace falta: el listado de categoria (lo que lee
+    precios_armar_catalogo_anonima.py) solo expone "offers.price",
+    que a veces es un precio promocional o desactualizado. La pagina
+    individual del producto si expone ademas "priceSpecification"
+    con el precio de lista real (el que efectivamente se ve y se
+    cobra). Por eso, para el producto que gano como mas barato,
+    confirmamos su precio visitando esta pagina puntual.
+
+    Devuelve None si no se pudo obtener (timeout, sin JSON-LD de tipo
+    Product, sin priceSpecification, etc.) - en ese caso quien llama
+    debe seguir usando el precio que ya tenia del listado.
+    """
+    try:
+        respuesta = requests.get(url, headers=HEADERS_ANONIMA, timeout=10)
+        respuesta.raise_for_status()
+    except requests.RequestException:
+        return None
+
+    soup = BeautifulSoup(respuesta.text, "html.parser")
+
+    for bloque in soup.find_all("script", type="application/ld+json"):
+        if not bloque.string:
+            continue
+        try:
+            datos = json.loads(bloque.string)
+        except json.JSONDecodeError:
+            continue
+
+        if datos.get("@type") != "Product":
+            continue
+
+        oferta = datos.get("offers", {})
+        spec = oferta.get("priceSpecification")
+        if spec and spec.get("price"):
+            return spec["price"]
+
+    return None
+
+
+def corregir_precio_lista_anonima(elegido: dict) -> dict:
+    """
+    Dado el producto elegido como mas barato de La Anonima en un
+    rubro, intenta corregir su precio visitando su pagina individual
+    (ver _precio_lista_de_pagina_individual).
+
+    Si el precio de lista real es distinto al que vino del listado
+    de categoria, actualiza "precio" y reescala "precio_normalizado"
+    en la misma proporcion (sin volver a parsear el peso del nombre,
+    ya que la normalizacion es lineal respecto al precio).
+
+    Si no se pudo obtener un precio de lista (pagina caida, sin
+    promo, etc.), devuelve el producto sin modificar.
+    """
+    url = elegido.get("url")
+    if not url:
+        return elegido
+
+    precio_lista = _precio_lista_de_pagina_individual(url)
+
+    if precio_lista is None or precio_lista == elegido["precio"]:
+        return elegido
+
+    precio_viejo = elegido["precio"]
+    elegido["precio"] = precio_lista
+
+    if elegido.get("precio_normalizado") is not None:
+        elegido["precio_normalizado"] = (
+            elegido["precio_normalizado"] * precio_lista / precio_viejo
+        )
+
+    return elegido
+
+
 # --- Carga de datos ----------------------------------------------------
 
 def cargar_rubros() -> list[dict]:
@@ -267,6 +376,10 @@ def buscar_mas_barato(productos: list[dict], rubro: dict) -> dict[str, dict]:
 
     Devuelve un dict {tienda: {nombre, precio, precio_normalizado, url}}.
     Solo incluye tiendas donde encontro al menos un match.
+
+    Para La Anonima, antes de devolver el resultado, corrige el
+    precio del ganador con corregir_precio_lista_anonima() - ver esa
+    funcion para el porque.
     """
     claves = [normalizar(c) for c in rubro["claves"]]
     excluir = [normalizar(e) for e in rubro["excluir"]]
@@ -306,6 +419,10 @@ def buscar_mas_barato(productos: list[dict], rubro: dict) -> dict[str, dict]:
             elegido = min(con_norm, key=lambda c: c["precio_normalizado"])
         else:
             elegido = min(candidatos, key=lambda c: c["precio"])
+
+        if tienda == "La Anonima":
+            elegido = corregir_precio_lista_anonima(elegido)
+            time.sleep(1)  # cortesia: no golpear el sitio sin pausa
 
         resultado[tienda] = elegido
 
@@ -431,7 +548,7 @@ def imprimir_resumen(resultados_por_rubro: list[dict], rubros: list[dict]):
                 if pn_tienda is None:
                     # Si no tiene precio normalizado, usamos precio absoluto
                     pn_tienda = d["precios"][tienda]["precio"]
-                
+
                 es_mas_barato = True
                 for t2 in TIENDAS:
                     if t2 == tienda:
@@ -444,10 +561,10 @@ def imprimir_resumen(resultados_por_rubro: list[dict], rubros: list[dict]):
                     if pn_otro < pn_tienda:
                         es_mas_barato = False
                         break
-                
+
                 if es_mas_barato:
                     gana += 1
-            
+
             print(f"    {tienda}: {gana} rubros")
 
     # --- Detalle de productos por rubro ---
@@ -605,6 +722,7 @@ def guardar_json_web(resumen: list[dict], rubros: list[dict], fecha: str):
         json.dump(datos, f, ensure_ascii=False, indent=2)
 
     return ARCHIVO_JSON_WEB
+
 
 def main():
     print("Cargando datos...")
