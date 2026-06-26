@@ -314,6 +314,29 @@
         }
 
         /* --------------------------------------------------------
+           ENCABEZADOS DE GRUPO (Almacen, Carniceria, etc.)
+           -------------------------------------------------------- */
+        tbody tr.grupo-header {
+            cursor: default;
+        }
+
+        tbody tr.grupo-header:hover {
+            background: var(--navy);
+        }
+
+        tr.grupo-header td {
+            background: var(--navy);
+            color: var(--gold);
+            font-family: 'Cinzel', serif;
+            font-size: 0.8rem;
+            letter-spacing: 0.1em;
+            text-transform: uppercase;
+            padding: 0.6rem 1rem;
+            text-align: left;
+            white-space: normal;
+        }
+
+        /* --------------------------------------------------------
            DETALLE EXPANDIBLE
            -------------------------------------------------------- */
         .detalle {
@@ -458,7 +481,7 @@
             </div>
         </details>
 
-        <h3>37 productos comparados</h3>
+        <h3 id="contador-productos">Productos comparados</h3>
         <p id="estado" class="estado" style="display:none;"></p>
         <div class="tabla-wrapper">
             <table id="tabla">
@@ -495,6 +518,18 @@
     };
 
     const UNIDADES = { "kg": "/kg", "L": "/L", "unidad": "/u" };
+
+    // Orden fijo en que se muestran los grupos en la tabla, como los
+    // pasillos de un super. Los grupos sin productos todavia (ej.
+    // Limpieza o Verduleria antes de tener rubros cargados) se omiten
+    // solos, sin dejar un encabezado vacio.
+    const GRUPOS_ORDEN = ["Almacen", "Carniceria", "Verduleria", "Limpieza"];
+    const GRUPOS_DISPLAY = {
+        "Almacen": "🛒 Almacén",
+        "Carniceria": "🥩 Carnicería",
+        "Verduleria": "🥬 Verdulería",
+        "Limpieza": "🧼 Limpieza"
+    };
 
     function formatPrecio(valor, unidad) {
         if (valor == null) return "—";
@@ -572,7 +607,7 @@
                 html += '<span class="super-badge">Más barato</span>';
             }
 
-            html += '<div class="super-rubros">Gana en ' + rubrosGanados[tienda] + ' de 37 productos</div>';
+            html += '<div class="super-rubros">Gana en ' + rubrosGanados[tienda] + ' de ' + datos.rubros.length + ' productos</div>';
             card.innerHTML = html;
             div.appendChild(card);
         });
@@ -582,67 +617,89 @@
         const tbody = document.getElementById("cuerpo-tabla");
         tbody.innerHTML = "";
 
+        // Agrupamos los rubros por su campo "grupo" (Almacen,
+        // Carniceria, etc.) y los recorremos en el orden fijo de
+        // GRUPOS_ORDEN, para que la tabla quede organizada como
+        // pasillos de supermercado en vez de una lista plana.
+        const porGrupo = {};
         for (const rubro of datos.rubros) {
-            const ranking = rankearPrecios(rubro.precios, TIENDAS);
-            const ganador = masBarato(rubro.precios, TIENDAS);
+            const g = rubro.grupo || "Almacen";
+            if (!porGrupo[g]) porGrupo[g] = [];
+            porGrupo[g].push(rubro);
+        }
 
-            // Fila principal
-            const tr = document.createElement("tr");
-            tr.dataset.rubroId = rubro.id;
+        for (const grupo of GRUPOS_ORDEN) {
+            const rubrosDelGrupo = porGrupo[grupo];
+            if (!rubrosDelGrupo || rubrosDelGrupo.length === 0) continue;
 
-            let celdas = '<td>' + rubro.nombre + '</td>';
-            TIENDAS.forEach(tienda => {
-                const info = rubro.precios[tienda];
-                if (!info) {
-                    celdas += '<td class="sin-dato">—</td>';
-                    return;
-                }
-                const pn = info.precio_normalizado;
-                const precio = pn != null ? formatPrecio(pn, rubro.unidad) : formatPrecio(info.precio_envase, "");
-                const posicion = ranking[tienda];
-                const medalla = MEDALLAS[posicion] || "";
-                const esBarato = posicion === 1;
-                celdas += '<td class="' + (esBarato ? 'mas-barato' : '') + '">' +
-                    '<span class="medalla">' + medalla + '</span> ' + precio + '</td>';
-            });
-            tr.innerHTML = celdas;
+            const trGrupo = document.createElement("tr");
+            trGrupo.className = "grupo-header";
+            trGrupo.innerHTML = '<td colspan="4">' +
+                (GRUPOS_DISPLAY[grupo] || grupo) + '</td>';
+            tbody.appendChild(trGrupo);
 
-            // Al hacer clic, expandir/colapsar el detalle
-            tr.addEventListener("click", function() {
-                const detalle = document.getElementById("detalle-" + rubro.id);
-                if (detalle) detalle.classList.toggle("visible");
-            });
+            for (const rubro of rubrosDelGrupo) {
+                const ranking = rankearPrecios(rubro.precios, TIENDAS);
+                const ganador = masBarato(rubro.precios, TIENDAS);
 
-            tbody.appendChild(tr);
+                // Fila principal
+                const tr = document.createElement("tr");
+                tr.dataset.rubroId = rubro.id;
 
-            // Fila de detalle (oculta por defecto)
-            const trDetalle = document.createElement("tr");
-            trDetalle.className = "detalle";
-            trDetalle.id = "detalle-" + rubro.id;
+                let celdas = '<td>' + rubro.nombre + '</td>';
+                TIENDAS.forEach(tienda => {
+                    const info = rubro.precios[tienda];
+                    if (!info) {
+                        celdas += '<td class="sin-dato">—</td>';
+                        return;
+                    }
+                    const pn = info.precio_normalizado;
+                    const precio = pn != null ? formatPrecio(pn, rubro.unidad) : formatPrecio(info.precio_envase, "");
+                    const posicion = ranking[tienda];
+                    const medalla = MEDALLAS[posicion] || "";
+                    const esBarato = posicion === 1;
+                    celdas += '<td class="' + (esBarato ? 'mas-barato' : '') + '">' +
+                        '<span class="medalla">' + medalla + '</span> ' + precio + '</td>';
+                });
+                tr.innerHTML = celdas;
 
-            let detalleHtml = '<td colspan="4">';
-            TIENDAS.forEach(tienda => {
-                const info = rubro.precios[tienda];
-                if (!info) return;
+                // Al hacer clic, expandir/colapsar el detalle
+                tr.addEventListener("click", function() {
+                    const detalle = document.getElementById("detalle-" + rubro.id);
+                    if (detalle) detalle.classList.toggle("visible");
+                });
 
-                const esBarato = tienda === ganador;
-                const pn = info.precio_normalizado;
-                const precioStr = pn != null ? formatPrecio(pn, rubro.unidad) : formatPrecio(info.precio_envase, "");
-                const envaseStr = " · envase $" + Math.round(info.precio_envase).toLocaleString("es-AR");
+                tbody.appendChild(tr);
 
-                detalleHtml += '<div class="detalle-producto ' + (esBarato ? 'es-barato' : '') + '">';
-                detalleHtml += '<span class="tienda-label">' + TIENDAS_DISPLAY[tienda] + '</span> ';
-                detalleHtml += precioStr;
-                detalleHtml += '<span class="precio-envase">' + envaseStr + '</span> ';
-                detalleHtml += '— ' + info.producto;
-                if (info.url) {
-                    detalleHtml += ' <a class="ver-producto" href="' + info.url + '" target="_blank" rel="noopener">Ver producto →</a>';
-                }
-                detalleHtml += '</div>';
-            });
-            detalleHtml += '</td>';
-            trDetalle.innerHTML = detalleHtml;
-            tbody.appendChild(trDetalle);
+                // Fila de detalle (oculta por defecto)
+                const trDetalle = document.createElement("tr");
+                trDetalle.className = "detalle";
+                trDetalle.id = "detalle-" + rubro.id;
+
+                let detalleHtml = '<td colspan="4">';
+                TIENDAS.forEach(tienda => {
+                    const info = rubro.precios[tienda];
+                    if (!info) return;
+
+                    const esBarato = tienda === ganador;
+                    const pn = info.precio_normalizado;
+                    const precioStr = pn != null ? formatPrecio(pn, rubro.unidad) : formatPrecio(info.precio_envase, "");
+                    const envaseStr = " · envase $" + Math.round(info.precio_envase).toLocaleString("es-AR");
+
+                    detalleHtml += '<div class="detalle-producto ' + (esBarato ? 'es-barato' : '') + '">';
+                    detalleHtml += '<span class="tienda-label">' + TIENDAS_DISPLAY[tienda] + '</span> ';
+                    detalleHtml += precioStr;
+                    detalleHtml += '<span class="precio-envase">' + envaseStr + '</span> ';
+                    detalleHtml += '— ' + info.producto;
+                    if (info.url) {
+                        detalleHtml += ' <a class="ver-producto" href="' + info.url + '" target="_blank" rel="noopener">Ver producto →</a>';
+                    }
+                    detalleHtml += '</div>';
+                });
+                detalleHtml += '</td>';
+                trDetalle.innerHTML = detalleHtml;
+                tbody.appendChild(trDetalle);
+            }
         }
     }
 
@@ -658,6 +715,9 @@
 
             renderTotales(datos);
             renderTabla(datos);
+
+            document.getElementById("contador-productos").textContent =
+                datos.rubros.length + " productos comparados";
         })
         .catch(err => {
             document.getElementById("fecha").textContent = "";

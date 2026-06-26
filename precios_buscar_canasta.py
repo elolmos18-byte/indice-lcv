@@ -721,6 +721,7 @@ def guardar_json_web(resumen: list[dict], rubros: list[dict], fecha: str):
         rubros_json.append({
             "id": rubro_id,
             "nombre": dato["rubro_nombre"],
+            "grupo": rubro_def.get("grupo", "Almacen"),
             "unidad": unidad,
             "precios": precios_json,
         })

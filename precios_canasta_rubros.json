@@ -5,6 +5,7 @@
     {
       "id": 1,
       "nombre": "Harina 000",
+      "grupo": "Almacen",
       "claves": [
         "harina",
         "000"
@@ -25,6 +26,7 @@
     {
       "id": 2,
       "nombre": "Harina leudante",
+      "grupo": "Almacen",
       "claves": [
         "harina",
         "leudante"
@@ -40,6 +42,7 @@
     {
       "id": 3,
       "nombre": "Fideos spaguetti",
+      "grupo": "Almacen",
       "claves": [
         "spaguetti"
       ],
@@ -53,6 +56,7 @@
     {
       "id": 4,
       "nombre": "Fideos mostachol",
+      "grupo": "Almacen",
       "claves": [
         "mostachol"
       ],
@@ -66,6 +70,7 @@
     {
       "id": 5,
       "nombre": "Arroz largo fino",
+      "grupo": "Almacen",
       "claves": [
         "arroz",
         "largo"
@@ -85,6 +90,7 @@
     {
       "id": 6,
       "nombre": "Polenta instantanea",
+      "grupo": "Almacen",
       "claves": [
         "polenta"
       ],
@@ -100,6 +106,7 @@
     {
       "id": 7,
       "nombre": "Galletitas dulces",
+      "grupo": "Almacen",
       "claves": [
         "galletita"
       ],
@@ -119,6 +126,7 @@
     {
       "id": 8,
       "nombre": "Galletitas de agua",
+      "grupo": "Almacen",
       "claves": [
         "galletita"
       ],
@@ -150,6 +158,7 @@
     {
       "id": 9,
       "nombre": "Azucar comun",
+      "grupo": "Almacen",
       "claves": [
         "azucar"
       ],
@@ -181,6 +190,7 @@
     {
       "id": 10,
       "nombre": "Dulce de leche",
+      "grupo": "Almacen",
       "claves": [
         "dulce de leche"
       ],
@@ -203,6 +213,7 @@
     {
       "id": 11,
       "nombre": "Mermelada",
+      "grupo": "Almacen",
       "claves": [
         "mermelada"
       ],
@@ -217,6 +228,7 @@
     {
       "id": 12,
       "nombre": "Aceite de girasol",
+      "grupo": "Almacen",
       "claves": [
         "aceite",
         "girasol"
@@ -234,6 +246,7 @@
     {
       "id": 13,
       "nombre": "Aceite mezcla",
+      "grupo": "Almacen",
       "claves": [
         "aceite",
         "mezcla"
@@ -249,6 +262,7 @@
     {
       "id": 14,
       "nombre": "Manteca",
+      "grupo": "Almacen",
       "claves": [
         "manteca"
       ],
@@ -264,6 +278,7 @@
     {
       "id": 15,
       "nombre": "Leche entera",
+      "grupo": "Almacen",
       "claves": [
         "leche",
         "entera"
@@ -285,6 +300,7 @@
     {
       "id": 16,
       "nombre": "Leche descremada",
+      "grupo": "Almacen",
       "claves": [
         "leche",
         "descremada"
@@ -306,6 +322,7 @@
     {
       "id": 17,
       "nombre": "Yogur firme",
+      "grupo": "Almacen",
       "claves": [
         "yogur",
         "firme"
@@ -321,6 +338,7 @@
     {
       "id": 18,
       "nombre": "Yogur bebible",
+      "grupo": "Almacen",
       "claves": [
         "yogur",
         "bebible"
@@ -336,6 +354,7 @@
     {
       "id": 19,
       "nombre": "Queso untable / crema",
+      "grupo": "Almacen",
       "claves": [
         "queso",
         "crema"
@@ -356,6 +375,7 @@
     {
       "id": 20,
       "nombre": "Huevos x12",
+      "grupo": "Almacen",
       "claves": [
         "huevo"
       ],
@@ -381,6 +401,7 @@
     {
       "id": 21,
       "nombre": "Arvejas en lata",
+      "grupo": "Almacen",
       "claves": [
         "arveja"
       ],
@@ -394,6 +415,7 @@
     {
       "id": 22,
       "nombre": "Lentejas secas",
+      "grupo": "Almacen",
       "claves": [
         "lenteja"
       ],
@@ -408,6 +430,7 @@
     {
       "id": 23,
       "nombre": "Atun en lata",
+      "grupo": "Almacen",
       "claves": [
         "atun"
       ],
@@ -421,6 +444,7 @@
     {
       "id": 24,
       "nombre": "Salsa de tomate",
+      "grupo": "Almacen",
       "claves": [
         "salsa"
       ],
@@ -449,6 +473,7 @@
     {
       "id": 25,
       "nombre": "Pure de tomate",
+      "grupo": "Almacen",
       "claves": [
         "pure",
         "tomate"
@@ -463,6 +488,7 @@
     {
       "id": 26,
       "nombre": "Sal fina",
+      "grupo": "Almacen",
       "claves": [
         "sal",
         "fina"
@@ -480,6 +506,7 @@
     {
       "id": 27,
       "nombre": "Sal gruesa",
+      "grupo": "Almacen",
       "claves": [
         "sal",
         "gruesa"
@@ -497,6 +524,7 @@
     {
       "id": 28,
       "nombre": "Vinagre de alcohol",
+      "grupo": "Almacen",
       "claves": [
         "vinagre",
         "alcohol"
@@ -513,6 +541,7 @@
     {
       "id": 29,
       "nombre": "Mayonesa",
+      "grupo": "Almacen",
       "claves": [
         "mayonesa"
       ],
@@ -528,6 +557,7 @@
     {
       "id": 30,
       "nombre": "Ketchup",
+      "grupo": "Almacen",
       "claves": [
         "ketchup"
       ],
@@ -541,6 +571,7 @@
     {
       "id": 31,
       "nombre": "Mostaza",
+      "grupo": "Almacen",
       "claves": [
         "mostaza"
       ],
@@ -555,6 +586,7 @@
     {
       "id": 32,
       "nombre": "Yerba mate",
+      "grupo": "Almacen",
       "claves": [
         "yerba"
       ],
@@ -569,6 +601,7 @@
     {
       "id": 33,
       "nombre": "Cafe molido",
+      "grupo": "Almacen",
       "claves": [
         "cafe",
         "molido"
@@ -586,6 +619,7 @@
     {
       "id": 34,
       "nombre": "Te en saquitos",
+      "grupo": "Almacen",
       "claves": [
         "te en saquito"
       ],
@@ -607,6 +641,7 @@
     {
       "id": 35,
       "nombre": "Gaseosa cola",
+      "grupo": "Almacen",
       "claves": [
         "gaseosa",
         "cola"
@@ -624,6 +659,7 @@
     {
       "id": 36,
       "nombre": "Agua mineral sin gas",
+      "grupo": "Almacen",
       "claves": [
         "agua",
         "sin gas"
@@ -638,6 +674,7 @@
     {
       "id": 37,
       "nombre": "Jugo en polvo",
+      "grupo": "Almacen",
       "claves": [
         "jugo",
         "polvo"
@@ -653,6 +690,7 @@
     {
       "id": 38,
       "nombre": "Carne picada",
+      "grupo": "Carniceria",
       "claves": [
         "picada"
       ],
