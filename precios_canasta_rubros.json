@@ -701,6 +701,51 @@
       ],
       "tamano_objetivo_g": 1000,
       "unidad": "kg"
+    },
+    {
+      "id": 39,
+      "nombre": "Asado",
+      "grupo": "Carniceria",
+      "claves": [
+        "asado"
+      ],
+      "excluir": [
+        "carbon",
+        "cerdo",
+        "envasado"
+      ],
+      "tamano_objetivo_g": 1000,
+      "unidad": "kg"
+    },
+    {
+      "id": 40,
+      "nombre": "Pollo",
+      "grupo": "Carniceria",
+      "claves": [
+        "pollo"
+      ],
+      "excluir": [
+        "milanesa",
+        "rebozada",
+        "arrollado",
+        "salchicha"
+      ],
+      "tamano_objetivo_g": 1000,
+      "unidad": "kg"
+    },
+    {
+      "id": 41,
+      "nombre": "Nalga",
+      "grupo": "Carniceria",
+      "claves": [
+        "nalga"
+      ],
+      "excluir": [
+        "milanesa",
+        "cerdo"
+      ],
+      "tamano_objetivo_g": 1000,
+      "unidad": "kg"
     }
   ]
 }

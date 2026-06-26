@@ -392,6 +392,22 @@ def cargar_productos() -> list[dict]:
 
 # --- Busqueda por rubro ------------------------------------------------
 
+def _contiene_palabra(clave: str, texto_norm: str) -> bool:
+    """
+    Chequea si 'clave' aparece en 'texto_norm' empezando en un limite
+    de palabra (no como sufijo de otra palabra). Esto evita falsos
+    positivos como "asado" matcheando dentro de "envasado", o "te"
+    matcheando dentro de cualquier palabra que termine en "te".
+
+    A proposito NO exigimos limite de palabra al final de la clave:
+    asi "saquito" sigue matcheando "saquitos" (plural), que es el
+    comportamiento que ya usaban varios rubros (ej. "Te en saquitos",
+    cuya clave esta en singular pero el catalogo dice plural).
+    """
+    patron = r"\b" + re.escape(clave)
+    return re.search(patron, texto_norm) is not None
+
+
 def buscar_mas_barato(productos: list[dict], rubro: dict) -> dict[str, dict]:
     """
     Para un rubro dado, busca en cada tienda el producto mas barato
@@ -412,10 +428,10 @@ def buscar_mas_barato(productos: list[dict], rubro: dict) -> dict[str, dict]:
     for prod in productos:
         nombre_norm = normalizar(prod["nombre"])
 
-        if not all(c in nombre_norm for c in claves):
+        if not all(_contiene_palabra(c, nombre_norm) for c in claves):
             continue
 
-        if any(e in nombre_norm for e in excluir):
+        if any(_contiene_palabra(e, nombre_norm) for e in excluir):
             continue
 
         precio_norm = calcular_precio_normalizado(
