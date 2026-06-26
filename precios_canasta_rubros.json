@@ -649,6 +649,20 @@
       ],
       "tamano_objetivo_g": 15,
       "unidad": "unidad"
+    },
+    {
+      "id": 38,
+      "nombre": "Carne picada",
+      "claves": [
+        "picada"
+      ],
+      "excluir": [
+        "soja",
+        "vegetal",
+        "vegetariana"
+      ],
+      "tamano_objetivo_g": 1000,
+      "unidad": "kg"
     }
   ]
 }

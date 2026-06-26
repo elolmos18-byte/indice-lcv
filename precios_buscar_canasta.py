@@ -146,6 +146,14 @@ def extraer_gramos(nombre_norm: str) -> float | None:
             return None
         return gramos
 
+    # Fallback: productos vendidos a granel por kilo, sin un numero
+    # adelante de "kg" (ej: "Picada especial Novillito x kg.",
+    # "Vacio Envasado al Vacio FB MEATS (Kg)"). Es comun en carnes
+    # frescas, donde el precio del catalogo ya viene expresado por
+    # kilogramo en vez de por un envase de tamano fijo.
+    if re.search(r"\bkg\b|\bkilo\b", nombre_norm):
+        return 1000.0
+
     return None
 
 
