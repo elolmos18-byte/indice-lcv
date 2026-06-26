@@ -5,11 +5,17 @@ Modulo de acceso a precios_historico.db. Ningun otro script escribe
 SQL directo - todo pasa por las funciones de aca, igual que en LCdV
 el bot nunca toca la base directamente y todo pasa por la API.
 
-Funciones:
+Funciones para la canasta oficial (curada, lo que se ve en la web):
 - poblar_rubros(archivo_rubros)         -> llena la tabla rubros
 - guardar_foto_dia(fecha, resultados)   -> guarda los precios de un dia
 - obtener_historico(rubro_id, ...)      -> consulta evolucion en el tiempo
 - obtener_ultima_fecha()                -> la fecha mas reciente con datos
+- obtener_resumen_dia(fecha)            -> reconstruye un dia completo
+
+Funciones para el catalogo completo (backend, no se muestra en la
+web - ver precios_schema.sql, tabla historico_catalogo_completo):
+- extraer_codigo_producto(url)          -> codigo estable de un producto
+- guardar_catalogo_completo(fecha, productos) -> guarda TODO lo scrapeado
 
 Como se usa desde precios_buscar_canasta.py:
 
@@ -24,6 +30,7 @@ usar este modulo por primera vez.
 """
 
 import json
+import re
 import sqlite3
 from pathlib import Path
 
@@ -241,6 +248,158 @@ def obtener_resumen_dia(fecha: str) -> list[dict]:
             ORDER BY r.id ASC, t.nombre ASC
             """,
             (fecha,),
+        ).fetchall()
+
+    return [dict(fila) for fila in filas]
+
+
+# ============================================================
+# Catalogo completo (backend, no se muestra en la web)
+#
+# A diferencia de las funciones de arriba (que trabajan sobre la
+# canasta oficial curada), estas guardan TODO lo que el scraper
+# trae cada dia, sin filtrar - ver precios_schema.sql para el
+# porque de esta tabla separada.
+# ============================================================
+
+def extraer_codigo_producto(url: str) -> str:
+    """
+    Saca un codigo identificador estable a partir de la URL de un
+    producto, para poder reconocer "es el mismo producto" dia a dia
+    aunque el nombre cambie un poco (un espacio, una coma, un typo
+    corregido).
+
+    La Anonima:  .../algo-x-500-g/art_2318246/   -> "anonima_2318246"
+    Carrefour:   .../algo-720108/p                -> "vtex_720108"
+
+    Changomas (masonline) es un caso especial: muchas de sus URLs
+    terminan en un numero CORTO que no es un codigo de producto, sino
+    un simple sufijo de desambiguacion del sitio (ej. "...-290g-2/p",
+    "...-400-g-2/p" - el "2" se repite en cientos de productos sin
+    relacion entre si). Si confiaramos en ese numero como codigo,
+    productos distintos terminarian pisandose unos a otros en la
+    base. Por eso, si el numero encontrado tiene menos de 4 digitos,
+    lo descartamos y usamos la URL completa como respaldo - menos
+    prolijo, pero no genera colisiones falsas.
+    """
+    if not url:
+        return "sin_url"
+
+    m = re.search(r"art_(\d+)", url)
+    if m:
+        return f"anonima_{m.group(1)}"
+
+    m = re.search(r"-(\d+)/p$", url)
+    if m:
+        numero = m.group(1)
+        if len(numero) >= 4:
+            return f"vtex_{numero}"
+
+    return url
+
+
+def guardar_catalogo_completo(fecha: str, productos: list[dict]) -> int:
+    """
+    Guarda en historico_catalogo_completo TODOS los productos de una
+    corrida (no solo los de la canasta oficial).
+
+    Cada producto en la lista debe tener:
+        {
+            "tienda": "La Anonima" | "Carrefour" | "Changomas",
+            "categoria": "carniceria" (puede venir vacio),
+            "nombre": "Carne Picada Best x 500 g.",
+            "precio": 7980.0,
+            "precio_lista": 7980.0 (opcional, None si no aplica),
+            "url": "https://...",
+        }
+
+    Es idempotente igual que guardar_foto_dia: si se corre dos veces
+    el mismo dia, actualiza en vez de duplicar (usa fecha + tienda +
+    codigo_producto como clave).
+
+    Devuelve la cantidad de filas insertadas/actualizadas.
+    """
+    filas_procesadas = 0
+
+    with _conectar() as conn:
+        for prod in productos:
+            tienda_id = _id_tienda(conn, prod["tienda"])
+            codigo = extraer_codigo_producto(prod.get("url", ""))
+
+            conn.execute(
+                """
+                INSERT INTO historico_catalogo_completo
+                    (fecha, tienda_id, codigo_producto, categoria,
+                     nombre, precio, precio_lista, url)
+                VALUES (?, ?, ?, ?, ?, ?, ?, ?)
+                ON CONFLICT(fecha, tienda_id, codigo_producto) DO UPDATE SET
+                    categoria = excluded.categoria,
+                    nombre = excluded.nombre,
+                    precio = excluded.precio,
+                    precio_lista = excluded.precio_lista,
+                    url = excluded.url
+                """,
+                (
+                    fecha,
+                    tienda_id,
+                    codigo,
+                    prod.get("categoria", ""),
+                    prod["nombre"],
+                    prod["precio"],
+                    prod.get("precio_lista"),
+                    prod.get("url", ""),
+                ),
+            )
+            filas_procesadas += 1
+
+        conn.commit()
+
+    return filas_procesadas
+
+
+def obtener_historico_producto(
+    codigo_producto: str, desde: str | None = None, hasta: str | None = None
+) -> list[dict]:
+    """
+    Devuelve la evolucion de precios de UN producto puntual en el
+    tiempo (identificado por su codigo estable, ver
+    extraer_codigo_producto). Pensado para un futuro buscador de
+    precios - todavia no se usa en ningun lado, pero la funcion ya
+    queda lista para cuando se necesite.
+
+    Devuelve una lista de dicts:
+        [
+            {"fecha": "2026-06-24", "tienda": "La Anonima",
+             "nombre": "...", "precio": 7980.0, "precio_lista": None,
+             "categoria": "carniceria", "url": "..."},
+            ...
+        ]
+    """
+    condiciones = ["hc.codigo_producto = ?"]
+    parametros = [codigo_producto]
+
+    if desde:
+        condiciones.append("hc.fecha >= ?")
+        parametros.append(desde)
+
+    if hasta:
+        condiciones.append("hc.fecha <= ?")
+        parametros.append(hasta)
+
+    where = " AND ".join(condiciones)
+
+    with _conectar() as conn:
+        conn.row_factory = sqlite3.Row
+        filas = conn.execute(
+            f"""
+            SELECT hc.fecha, t.nombre AS tienda, hc.nombre,
+                   hc.precio, hc.precio_lista, hc.categoria, hc.url
+            FROM historico_catalogo_completo hc
+            JOIN tiendas t ON t.id = hc.tienda_id
+            WHERE {where}
+            ORDER BY hc.fecha ASC
+            """,
+            parametros,
         ).fetchall()
 
     return [dict(fila) for fila in filas]
