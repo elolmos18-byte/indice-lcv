@@ -63,3 +63,4 @@ te|https://www.masonline.com.ar/desayunos-y-meriendas/te/te-clasico
 gaseosa-cola|https://www.masonline.com.ar/gaseosas/cola
 agua-sin-gas|https://www.masonline.com.ar/aguas/sin-gas
 jugo-en-polvo|https://www.masonline.com.ar/jugos/en-polvo
+carniceria|https://www.masonline.com.ar/carniceria/carnes
