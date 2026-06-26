@@ -149,11 +149,36 @@ def _extraer_productos_json_ld(html: str) -> list[dict]:
             oferta = item.get("offers", {})
             productos.append({
                 "nombre": item.get("name"),
-                "precio": oferta.get("price"),
+                "precio": _precio_de_lista(oferta),
                 "url": item.get("url"),
             })
 
     return productos
+
+
+def _precio_de_lista(oferta: dict) -> float | None:
+    """
+    Devuelve el precio de lista (sin descuentos de tarjeta/promo) de
+    una oferta del JSON-LD de La Anonima.
+
+    El sitio publica dos precios distintos en el mismo bloque "offers":
+    - "price": el precio promocional/con descuento de tarjeta, que es
+      el que se ve mas grande en la pagina pero no es el precio real
+      sin tarjeta especifica.
+    - "priceSpecification.price" (con priceType ListPrice): el precio
+      de lista real, el mismo que paga cualquier persona sin
+      necesitar una tarjeta puntual.
+
+    Para comparar de forma pareja contra Carrefour y Changomas (que
+    no siempre distinguen este tipo de descuento de la misma forma),
+    usamos siempre el precio de lista cuando esta disponible. Si no
+    esta (producto sin promo), caemos al "price" normal, que en ese
+    caso es el mismo valor.
+    """
+    spec = oferta.get("priceSpecification")
+    if spec and spec.get("price"):
+        return spec["price"]
+    return oferta.get("price")
 
 
 # --- Orquestacion del catalogo completo ---------------------------------
