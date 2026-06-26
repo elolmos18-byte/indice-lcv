@@ -354,6 +354,21 @@ def cargar_productos() -> list[dict]:
                     precio = float(fila["precio"])
                 except (ValueError, KeyError):
                     continue
+
+                # VTEX expone ademas el precio de lista (sin descuentos
+                # ni promociones de tarjeta) en la columna "precio_lista".
+                # Lo usamos cuando esta disponible, para comparar de
+                # forma pareja contra La Anonima (que tambien se corrige
+                # a precio de lista en corregir_precio_lista_anonima).
+                # Si la columna esta vacia o es 0, nos quedamos con el
+                # "precio" normal tal cual.
+                try:
+                    precio_lista = float(fila.get("precio_lista") or 0)
+                except ValueError:
+                    precio_lista = 0
+                if precio_lista > 0:
+                    precio = precio_lista
+
                 productos.append({
                     "tienda": fila["tienda"],
                     "nombre": fila["nombre"],
