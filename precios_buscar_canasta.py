@@ -201,6 +201,66 @@ def extraer_unidades(nombre_norm: str) -> int | None:
     return None
 
 
+def extraer_metros_totales(nombre_norm: str) -> float | None:
+    """
+    Extrae el total de metros de un producto de papel (servilletas
+    no, pero papel higienico/cocina si vienen en rollos de N metros,
+    vendidos en paquetes de M rollos). El total = metros_por_rollo x
+    cantidad_de_rollos.
+
+    Los catalogos usan 3 formatos distintos para esto:
+      1. "4 x 80 metros"      (cantidad, x, largo)
+      2. "30 m x 4 un"        (largo, x, cantidad)
+      3. "30 m 4 un"          (largo y cantidad sueltos, sin "x")
+         "x4 80 mts"          (cantidad con x pegado, largo despues)
+
+    Si no se encuentra ninguna cantidad de rollos, asumimos 1 rollo
+    (ej. "Elegante megamax x 120 mts" - un solo rollo grande, el "x"
+    ahi no es multiplicador sino que acompaña al numero de metros).
+    Ese ultimo caso es justamente el que hay que tener cuidado de NO
+    confundir con el formato 3 - ver el negative lookahead mas abajo.
+    """
+    UNIDAD_METROS = r"(?:mts?\.?|metros?|m)\b"
+
+    # Formato 1: "N x M mts" (cantidad antes del x, largo despues)
+    m = re.search(rf"(\d+)\s*x\s*(\d+(?:[.,]\d+)?)\s*{UNIDAD_METROS}", nombre_norm)
+    if m:
+        rollos = float(m.group(1))
+        metros_por_rollo = float(m.group(2).replace(",", "."))
+        return rollos * metros_por_rollo
+
+    # Formato 2: "M mts x N" (largo antes del x, cantidad despues)
+    m = re.search(rf"(\d+(?:[.,]\d+)?)\s*{UNIDAD_METROS}\s*x\s*(\d+)", nombre_norm)
+    if m:
+        metros_por_rollo = float(m.group(1).replace(",", "."))
+        rollos = float(m.group(2))
+        return metros_por_rollo * rollos
+
+    # Formato 3: largo y cantidad sueltos (sin "x" entre ellos).
+    # Primero buscamos el largo por rollo en cualquier parte del nombre.
+    m_largo = re.search(rf"(\d+(?:[.,]\d+)?)\s*{UNIDAD_METROS}", nombre_norm)
+    if not m_largo:
+        return None
+    metros_por_rollo = float(m_largo.group(1).replace(",", "."))
+
+    # Despues buscamos la cantidad de rollos, en dos pasadas:
+    # primero "N un/uni" (forma mas explicita), y si no aparece,
+    # "xN" suelto (ej. "x4 80 mts"). El negative lookahead en el
+    # segundo intento es clave: evita que "x 120 mts" (un solo rollo
+    # de 120m, sin cantidad separada) se interprete como "120 rollos"
+    # - si el numero que sigue al "x" es inmediatamente el mismo que
+    # ya usamos como largo (seguido directo por la unidad de metros),
+    # no es una cantidad, es parte de la expresion del largo.
+    m_rollos = re.search(r"(\d+)\s*(?:unidades?|uni|un|u)\b", nombre_norm)
+    if m_rollos:
+        rollos = float(m_rollos.group(1))
+    else:
+        m_x = re.search(rf"\bx\s*(\d+)\b(?!\s*{UNIDAD_METROS})", nombre_norm)
+        rollos = float(m_x.group(1)) if m_x else 1.0
+
+    return metros_por_rollo * rollos
+
+
 def calcular_precio_normalizado(precio: float, nombre_norm: str, rubro: dict) -> float | None:
     """
     Calcula el precio por unidad estandar (por kg, por L, o por unidad)
@@ -238,6 +298,11 @@ def calcular_precio_normalizado(precio: float, nombre_norm: str, rubro: dict) ->
         # Esto cubre "Jugo en polvo Tang Naranja 15g" que es un sobre
         # suelto sin indicador "x1".
         return precio  # 1 unidad = el precio del envase
+
+    elif unidad == "m":
+        metros = extraer_metros_totales(nombre_norm)
+        if metros and metros > 0:
+            return precio / metros  # precio por metro
 
     return None
 
@@ -544,6 +609,8 @@ def imprimir_resumen(resultados_por_rubro: list[dict], rubros: list[dict]):
                     celdas[tienda] = f"${pn:.0f}/L"
                 elif unidad == "unidad":
                     celdas[tienda] = f"${pn:.0f}/u"
+                elif unidad == "m":
+                    celdas[tienda] = f"${pn:.0f}/m"
                 else:
                     celdas[tienda] = f"${pn:.0f}"
 
@@ -650,6 +717,8 @@ def imprimir_resumen(resultados_por_rubro: list[dict], rubros: list[dict]):
                     precio_str = f"${pn:.0f}/L"
                 elif unidad == "unidad":
                     precio_str = f"${pn:.0f}/u"
+                elif unidad == "m":
+                    precio_str = f"${pn:.0f}/m"
                 else:
                     precio_str = f"${pn:.0f}"
                 envase_str = f"(envase ${precio_abs:.0f})"
@@ -685,6 +754,10 @@ def _costo_referencia(precio_normalizado: float, rubro: dict) -> float:
     elif unidad == "unidad":
         unidades = rubro.get("tamano_objetivo_unidades", 1)
         return precio_normalizado * unidades
+
+    elif unidad == "m":
+        metros = rubro.get("tamano_objetivo_m", 30)
+        return precio_normalizado * metros
 
     # Si no hay unidad definida, devolvemos el precio tal cual
     return precio_normalizado

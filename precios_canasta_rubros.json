@@ -770,6 +770,42 @@
       ],
       "tamano_objetivo_g": 1000,
       "unidad": "kg"
+    },
+    {
+      "id": 44,
+      "nombre": "Servilletas de papel",
+      "grupo": "Limpieza",
+      "claves": [
+        "servilleta"
+      ],
+      "excluir": [],
+      "tamano_objetivo_unidades": 80,
+      "unidad": "unidad"
+    },
+    {
+      "id": 45,
+      "nombre": "Desodorante de ambientes",
+      "grupo": "Limpieza",
+      "claves": [
+        "desodorante",
+        "ambiente"
+      ],
+      "excluir": [
+        "humedad"
+      ],
+      "tamano_objetivo_ml": 360,
+      "unidad": "L"
+    },
+    {
+      "id": 46,
+      "nombre": "Papel higienico",
+      "grupo": "Limpieza",
+      "claves": [
+        "papel higi"
+      ],
+      "excluir": [],
+      "tamano_objetivo_m": 120,
+      "unidad": "m"
     }
   ]
 }
