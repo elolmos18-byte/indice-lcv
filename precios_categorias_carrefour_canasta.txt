@@ -60,3 +60,4 @@ agua-sin-gas|https://www.carrefour.com.ar/bebidas/aguas/aguas-minerales-y-de-mes
 jugo-en-polvo|https://www.carrefour.com.ar/bebidas/jugos/jugos-en-polvo
 carniceria|https://www.carrefour.com.ar/carnes-y-pescados
 limpieza|https://www.carrefour.com.ar/limpieza
+frutas-y-verduras|https://www.carrefour.com.ar/frutas-y-verduras

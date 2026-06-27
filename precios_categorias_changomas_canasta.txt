@@ -67,3 +67,5 @@ carniceria|https://www.masonline.com.ar/carniceria/carnes
 limpieza|https://www.masonline.com.ar/limpieza
 papel-higienico|https://www.masonline.com.ar/papeles-bolsas-y-films/papel-higienico
 rollos-de-cocina|https://www.masonline.com.ar/papeles-bolsas-y-films/rollos-de-cocina
+frutas|https://www.masonline.com.ar/frutas/frutas-frescas
+verduras|https://www.masonline.com.ar/verduras
