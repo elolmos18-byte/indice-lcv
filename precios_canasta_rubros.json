@@ -746,6 +746,30 @@
       ],
       "tamano_objetivo_g": 1000,
       "unidad": "kg"
+    },
+    {
+      "id": 42,
+      "nombre": "Carnaza",
+      "grupo": "Carniceria",
+      "claves": [
+        "carnaza"
+      ],
+      "excluir": [],
+      "tamano_objetivo_g": 1000,
+      "unidad": "kg"
+    },
+    {
+      "id": 43,
+      "nombre": "Paleta",
+      "grupo": "Carniceria",
+      "claves": [
+        "paleta"
+      ],
+      "excluir": [
+        "chuleta"
+      ],
+      "tamano_objetivo_g": 1000,
+      "unidad": "kg"
     }
   ]
 }
