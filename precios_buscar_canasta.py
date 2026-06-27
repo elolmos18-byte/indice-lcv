@@ -515,6 +515,15 @@ def imprimir_resumen(resultados_por_rubro: list[dict], rubros: list[dict]):
         rubro_def = rubros_por_id.get(rubro_id, {})
         unidad = rubro_def.get("unidad", "")
 
+        # Un rubro solo suma al total si esta completo en los 3
+        # supers. Si le falta uno (ej. "Pollo" en Changomas), lo
+        # seguimos mostrando en la tabla con su "---", pero no se
+        # incluye en el total - de lo contrario, al super al que le
+        # falta ese producto le "ahorrariamos" sumarlo, y parecería
+        # mas barato en total sin serlo realmente. Asi el total
+        # siempre compara la misma canasta entre los 3.
+        rubro_completo = len(precios) == len(TIENDAS)
+
         celdas = {}
         min_pn = float("inf")
         min_tienda = ""
@@ -542,9 +551,11 @@ def imprimir_resumen(resultados_por_rubro: list[dict], rubros: list[dict]):
                 # de referencia del rubro usando el precio normalizado.
                 # Ej: si el rubro es "Harina 000" con tamano_objetivo_g=1000
                 # y el precio normalizado es $690/kg, sumamos $690.
-                costo_referencia = _costo_referencia(pn, rubro_def)
-                total_por_tienda[tienda] += costo_referencia
-                rubros_con_precio[tienda] += 1
+                # Solo si el rubro esta completo en los 3 (ver arriba).
+                if rubro_completo:
+                    costo_referencia = _costo_referencia(pn, rubro_def)
+                    total_por_tienda[tienda] += costo_referencia
+                    rubros_con_precio[tienda] += 1
 
                 if pn < min_pn:
                     min_pn = pn
@@ -552,8 +563,9 @@ def imprimir_resumen(resultados_por_rubro: list[dict], rubros: list[dict]):
             else:
                 # Si no pudimos normalizar, usamos precio absoluto
                 celdas[tienda] = f"${precio_abs:.0f}*"
-                total_por_tienda[tienda] += precio_abs
-                rubros_con_precio[tienda] += 1
+                if rubro_completo:
+                    total_por_tienda[tienda] += precio_abs
+                    rubros_con_precio[tienda] += 1
 
                 if precio_abs < min_pn:
                     min_pn = precio_abs
@@ -709,6 +721,10 @@ def guardar_json_web(resumen: list[dict], rubros: list[dict], fecha: str):
         rubro_def = rubros_por_id.get(rubro_id, {})
         unidad = rubro_def.get("unidad", "")
 
+        # Mismo criterio que en imprimir_resumen: un rubro solo suma
+        # al total si esta completo en los 3 supers.
+        rubro_completo = len(dato["precios"]) == len(TIENDAS)
+
         precios_json = {}
         for tienda in TIENDAS:
             if tienda not in dato["precios"]:
@@ -725,13 +741,14 @@ def guardar_json_web(resumen: list[dict], rubros: list[dict], fecha: str):
                 "url": prod.get("url", ""),
             }
 
-            # Sumar al total usando precio normalizado × referencia
-            if pn is not None:
-                costo = _costo_referencia(pn, rubro_def)
-                totales[tienda] += costo
-                rubros_con_precio[tienda] += 1
-            else:
-                totales[tienda] += precio_abs
+            # Sumar al total usando precio normalizado × referencia,
+            # solo si el rubro esta completo en los 3 supers.
+            if rubro_completo:
+                if pn is not None:
+                    costo = _costo_referencia(pn, rubro_def)
+                    totales[tienda] += costo
+                else:
+                    totales[tienda] += precio_abs
                 rubros_con_precio[tienda] += 1
 
         rubros_json.append({
