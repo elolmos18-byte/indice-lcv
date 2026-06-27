@@ -59,3 +59,4 @@ gaseosa-cola|https://www.carrefour.com.ar/bebidas/gaseosas/gaseosas-cola
 agua-sin-gas|https://www.carrefour.com.ar/bebidas/aguas/aguas-minerales-y-de-mesa
 jugo-en-polvo|https://www.carrefour.com.ar/bebidas/jugos/jugos-en-polvo
 carniceria|https://www.carrefour.com.ar/carnes-y-pescados
+limpieza|https://www.carrefour.com.ar/limpieza

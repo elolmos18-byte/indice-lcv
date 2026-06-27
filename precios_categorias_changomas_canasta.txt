@@ -64,3 +64,4 @@ gaseosa-cola|https://www.masonline.com.ar/gaseosas/cola
 agua-sin-gas|https://www.masonline.com.ar/aguas/sin-gas
 jugo-en-polvo|https://www.masonline.com.ar/jugos/en-polvo
 carniceria|https://www.masonline.com.ar/carniceria/carnes
+limpieza|https://www.masonline.com.ar/limpieza
