@@ -807,6 +807,98 @@
       "excluir": [],
       "tamano_objetivo_m": 120,
       "unidad": "m"
+    },
+    {
+      "id": 47,
+      "nombre": "Lavandina",
+      "grupo": "Limpieza",
+      "claves": [
+        "lavandina"
+      ],
+      "excluir": [
+        "limpiador",
+        "promo",
+        "pack"
+      ],
+      "tamano_objetivo_ml": 1000,
+      "unidad": "L"
+    },
+    {
+      "id": 48,
+      "nombre": "Detergente lavaplatos",
+      "grupo": "Limpieza",
+      "claves": [
+        "detergente"
+      ],
+      "excluir": [
+        "woolite",
+        "ropa",
+        "ace",
+        "finish",
+        "tableta",
+        "maquina",
+        "lavarropas",
+        "ecovita"
+      ],
+      "tamano_objetivo_ml": 500,
+      "unidad": "L"
+    },
+    {
+      "id": 49,
+      "nombre": "Limpiador de pisos",
+      "grupo": "Limpieza",
+      "claves": [
+        "limpiador",
+        "piso"
+      ],
+      "excluir": [],
+      "tamano_objetivo_ml": 900,
+      "unidad": "L"
+    },
+    {
+      "id": 50,
+      "nombre": "Jabon de ropa liquido",
+      "grupo": "Limpieza",
+      "claves": [
+        "jabon",
+        "ropa"
+      ],
+      "excluir": [
+        "polvo"
+      ],
+      "tamano_objetivo_ml": 800,
+      "unidad": "L"
+    },
+    {
+      "id": 51,
+      "nombre": "Jabon de ropa en polvo",
+      "grupo": "Limpieza",
+      "claves": [
+        "jabon",
+        "polvo"
+      ],
+      "excluir": [],
+      "tamano_objetivo_g": 800,
+      "unidad": "kg"
+    },
+    {
+      "id": 52,
+      "nombre": "Insecticida",
+      "grupo": "Limpieza",
+      "claves": [
+        "insecticida"
+      ],
+      "excluir": [
+        "tableta",
+        "espiral",
+        "electrico",
+        "cebo",
+        "jeringa",
+        "gel",
+        "repuesto"
+      ],
+      "tamano_objetivo_ml": 360,
+      "unidad": "L"
     }
   ]
 }
