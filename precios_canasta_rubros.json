@@ -773,14 +773,15 @@
     },
     {
       "id": 44,
-      "nombre": "Servilletas de papel",
+      "nombre": "Rollo de cocina",
       "grupo": "Limpieza",
       "claves": [
-        "servilleta"
+        "rollo",
+        "cocina"
       ],
       "excluir": [],
-      "tamano_objetivo_unidades": 80,
-      "unidad": "unidad"
+      "tamano_objetivo_panos": 150,
+      "unidad": "panos"
     },
     {
       "id": 45,

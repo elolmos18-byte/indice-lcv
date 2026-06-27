@@ -261,6 +261,42 @@ def extraer_metros_totales(nombre_norm: str) -> float | None:
     return metros_por_rollo * rollos
 
 
+def extraer_panos_totales(nombre_norm: str) -> float | None:
+    """
+    Misma logica que extraer_metros_totales(), pero para rollo de
+    cocina, que se mide en "paños" en vez de metros (ej. "3 x 60
+    paños", "200 paños x 1 un"). Ver esa funcion para el detalle de
+    cada formato.
+    """
+    UNIDAD_PANOS = r"panos?\b"
+
+    m = re.search(rf"(\d+)\s*x\s*(\d+)\s*{UNIDAD_PANOS}", nombre_norm)
+    if m:
+        rollos = float(m.group(1))
+        panos_por_rollo = float(m.group(2))
+        return rollos * panos_por_rollo
+
+    m = re.search(rf"(\d+)\s*{UNIDAD_PANOS}\s*x\s*(\d+)", nombre_norm)
+    if m:
+        panos_por_rollo = float(m.group(1))
+        rollos = float(m.group(2))
+        return panos_por_rollo * rollos
+
+    m_largo = re.search(rf"(\d+)\s*{UNIDAD_PANOS}", nombre_norm)
+    if not m_largo:
+        return None
+    panos_por_rollo = float(m_largo.group(1))
+
+    m_rollos = re.search(r"(\d+)\s*(?:unidades?|uni|un|u)\b", nombre_norm)
+    if m_rollos:
+        rollos = float(m_rollos.group(1))
+    else:
+        m_x = re.search(rf"\bx\s*(\d+)\b(?!\s*{UNIDAD_PANOS})", nombre_norm)
+        rollos = float(m_x.group(1)) if m_x else 1.0
+
+    return panos_por_rollo * rollos
+
+
 def calcular_precio_normalizado(precio: float, nombre_norm: str, rubro: dict) -> float | None:
     """
     Calcula el precio por unidad estandar (por kg, por L, o por unidad)
@@ -303,6 +339,11 @@ def calcular_precio_normalizado(precio: float, nombre_norm: str, rubro: dict) ->
         metros = extraer_metros_totales(nombre_norm)
         if metros and metros > 0:
             return precio / metros  # precio por metro
+
+    elif unidad == "panos":
+        panos = extraer_panos_totales(nombre_norm)
+        if panos and panos > 0:
+            return precio / panos  # precio por pano
 
     return None
 
@@ -611,6 +652,8 @@ def imprimir_resumen(resultados_por_rubro: list[dict], rubros: list[dict]):
                     celdas[tienda] = f"${pn:.0f}/u"
                 elif unidad == "m":
                     celdas[tienda] = f"${pn:.0f}/m"
+                elif unidad == "panos":
+                    celdas[tienda] = f"${pn:.0f}/pano"
                 else:
                     celdas[tienda] = f"${pn:.0f}"
 
@@ -719,6 +762,8 @@ def imprimir_resumen(resultados_por_rubro: list[dict], rubros: list[dict]):
                     precio_str = f"${pn:.0f}/u"
                 elif unidad == "m":
                     precio_str = f"${pn:.0f}/m"
+                elif unidad == "panos":
+                    precio_str = f"${pn:.0f}/pano"
                 else:
                     precio_str = f"${pn:.0f}"
                 envase_str = f"(envase ${precio_abs:.0f})"
@@ -758,6 +803,10 @@ def _costo_referencia(precio_normalizado: float, rubro: dict) -> float:
     elif unidad == "m":
         metros = rubro.get("tamano_objetivo_m", 30)
         return precio_normalizado * metros
+
+    elif unidad == "panos":
+        panos = rubro.get("tamano_objetivo_panos", 150)
+        return precio_normalizado * panos
 
     # Si no hay unidad definida, devolvemos el precio tal cual
     return precio_normalizado
