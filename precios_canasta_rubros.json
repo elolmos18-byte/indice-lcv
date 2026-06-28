@@ -899,6 +899,210 @@
       ],
       "tamano_objetivo_ml": 360,
       "unidad": "L"
+    },
+    {
+      "id": 53,
+      "nombre": "Papa",
+      "grupo": "Verduleria",
+      "claves": [
+        "papa"
+      ],
+      "excluir": [
+        "papaya",
+        "noqui"
+      ],
+      "tamano_objetivo_g": 1000,
+      "unidad": "kg"
+    },
+    {
+      "id": 54,
+      "nombre": "Cebolla",
+      "grupo": "Verduleria",
+      "claves": [
+        "cebolla"
+      ],
+      "excluir": [
+        "chips",
+        "deshidratada",
+        "escamas",
+        "relleno",
+        "verdeo"
+      ],
+      "tamano_objetivo_g": 1000,
+      "unidad": "kg"
+    },
+    {
+      "id": 55,
+      "nombre": "Ajo",
+      "grupo": "Verduleria",
+      "claves": [
+        "ajo"
+      ],
+      "excluir": [
+        "aceite",
+        "mayonesa",
+        "aderezo",
+        "salsa",
+        "hummus",
+        "polvo",
+        "triturado",
+        "granulado",
+        "molinillo"
+      ],
+      "tamano_objetivo_g": 1000,
+      "unidad": "kg"
+    },
+    {
+      "id": 56,
+      "nombre": "Batata",
+      "grupo": "Verduleria",
+      "claves": [
+        "batata"
+      ],
+      "excluir": [
+        "galletita",
+        "pepa",
+        "bizcocho"
+      ],
+      "tamano_objetivo_g": 1000,
+      "unidad": "kg"
+    },
+    {
+      "id": 57,
+      "nombre": "Zanahoria",
+      "grupo": "Verduleria",
+      "claves": [
+        "zanahoria"
+      ],
+      "excluir": [
+        "fideos",
+        "deshidratada",
+        "relleno",
+        "rallada",
+        "lata"
+      ],
+      "tamano_objetivo_g": 1000,
+      "unidad": "kg"
+    },
+    {
+      "id": 58,
+      "nombre": "Tomate",
+      "grupo": "Verduleria",
+      "claves": [
+        "tomate"
+      ],
+      "excluir": [
+        "salsa",
+        "pure",
+        "pulpa",
+        "extracto",
+        "triturado",
+        "cubeteado",
+        "pelado",
+        "deshidratado",
+        "seco",
+        "lata",
+        "frasco",
+        "botella",
+        "brick",
+        "tetra",
+        "sardinas",
+        "caballa",
+        "passata"
+      ],
+      "tamano_objetivo_g": 1000,
+      "unidad": "kg"
+    },
+    {
+      "id": 59,
+      "nombre": "Manzana",
+      "grupo": "Verduleria",
+      "claves": [
+        "manzana"
+      ],
+      "excluir": [
+        "vinagre",
+        "jugo",
+        "gaseosa",
+        "agua",
+        "aromatizador",
+        "aromatizante",
+        "detergente",
+        "galletita",
+        "chips",
+        "snack",
+        "deshidratada",
+        "pure",
+        "yogur",
+        "saquito"
+      ],
+      "tamano_objetivo_g": 1000,
+      "unidad": "kg"
+    },
+    {
+      "id": 60,
+      "nombre": "Banana",
+      "grupo": "Verduleria",
+      "claves": [
+        "banana"
+      ],
+      "excluir": [
+        "yogur",
+        "jugo",
+        "galletita",
+        "oblea",
+        "chip"
+      ],
+      "tamano_objetivo_g": 1000,
+      "unidad": "kg"
+    },
+    {
+      "id": 61,
+      "nombre": "Naranja",
+      "grupo": "Verduleria",
+      "claves": [
+        "naranja"
+      ],
+      "excluir": [
+        "mermelada",
+        "gaseosa",
+        "agua",
+        "polvo",
+        "te",
+        "yerba",
+        "galletita",
+        "oblea",
+        "lavandina",
+        "rejilla",
+        "mopa",
+        "trapo",
+        "lustramueble",
+        "aromatizador",
+        "detergente",
+        "esponja",
+        "guante",
+        "batata",
+        "actimel"
+      ],
+      "tamano_objetivo_g": 1000,
+      "unidad": "kg"
+    },
+    {
+      "id": 62,
+      "nombre": "Pera",
+      "grupo": "Verduleria",
+      "claves": [
+        "pera"
+      ],
+      "excluir": [
+        "mermelada",
+        "agua",
+        "jugo",
+        "galletita",
+        "oblea"
+      ],
+      "tamano_objetivo_g": 1000,
+      "unidad": "kg"
     }
   ]
 }
