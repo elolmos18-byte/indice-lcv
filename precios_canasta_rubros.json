@@ -912,7 +912,12 @@
         "noqui"
       ],
       "tamano_objetivo_g": 1000,
-      "unidad": "kg"
+      "unidad": "kg",
+      "categorias_permitidas": [
+        "verduras",
+        "frutas",
+        "frutas-y-verduras"
+      ]
     },
     {
       "id": 54,
@@ -929,7 +934,12 @@
         "verdeo"
       ],
       "tamano_objetivo_g": 1000,
-      "unidad": "kg"
+      "unidad": "kg",
+      "categorias_permitidas": [
+        "verduras",
+        "frutas",
+        "frutas-y-verduras"
+      ]
     },
     {
       "id": 55,
@@ -950,7 +960,12 @@
         "molinillo"
       ],
       "tamano_objetivo_g": 1000,
-      "unidad": "kg"
+      "unidad": "kg",
+      "categorias_permitidas": [
+        "verduras",
+        "frutas",
+        "frutas-y-verduras"
+      ]
     },
     {
       "id": 56,
@@ -965,7 +980,12 @@
         "bizcocho"
       ],
       "tamano_objetivo_g": 1000,
-      "unidad": "kg"
+      "unidad": "kg",
+      "categorias_permitidas": [
+        "verduras",
+        "frutas",
+        "frutas-y-verduras"
+      ]
     },
     {
       "id": 57,
@@ -982,7 +1002,12 @@
         "lata"
       ],
       "tamano_objetivo_g": 1000,
-      "unidad": "kg"
+      "unidad": "kg",
+      "categorias_permitidas": [
+        "verduras",
+        "frutas",
+        "frutas-y-verduras"
+      ]
     },
     {
       "id": 58,
@@ -1011,7 +1036,12 @@
         "passata"
       ],
       "tamano_objetivo_g": 1000,
-      "unidad": "kg"
+      "unidad": "kg",
+      "categorias_permitidas": [
+        "verduras",
+        "frutas",
+        "frutas-y-verduras"
+      ]
     },
     {
       "id": 59,
@@ -1037,7 +1067,12 @@
         "saquito"
       ],
       "tamano_objetivo_g": 1000,
-      "unidad": "kg"
+      "unidad": "kg",
+      "categorias_permitidas": [
+        "verduras",
+        "frutas",
+        "frutas-y-verduras"
+      ]
     },
     {
       "id": 60,
@@ -1054,7 +1089,12 @@
         "chip"
       ],
       "tamano_objetivo_g": 1000,
-      "unidad": "kg"
+      "unidad": "kg",
+      "categorias_permitidas": [
+        "verduras",
+        "frutas",
+        "frutas-y-verduras"
+      ]
     },
     {
       "id": 61,
@@ -1085,7 +1125,12 @@
         "actimel"
       ],
       "tamano_objetivo_g": 1000,
-      "unidad": "kg"
+      "unidad": "kg",
+      "categorias_permitidas": [
+        "verduras",
+        "frutas",
+        "frutas-y-verduras"
+      ]
     },
     {
       "id": 62,
@@ -1102,7 +1147,12 @@
         "oblea"
       ],
       "tamano_objetivo_g": 1000,
-      "unidad": "kg"
+      "unidad": "kg",
+      "categorias_permitidas": [
+        "verduras",
+        "frutas",
+        "frutas-y-verduras"
+      ]
     }
   ]
 }

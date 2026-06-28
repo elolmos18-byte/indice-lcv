@@ -453,6 +453,7 @@ def cargar_productos() -> list[dict]:
                     continue
                 productos.append({
                     "tienda": "La Anonima",
+                    "categoria": fila.get("categoria", ""),
                     "nombre": fila["nombre"],
                     "precio": precio,
                     "url": fila.get("url", ""),
@@ -485,6 +486,7 @@ def cargar_productos() -> list[dict]:
 
                 productos.append({
                     "tienda": fila["tienda"],
+                    "categoria": fila.get("categoria", ""),
                     "nombre": fila["nombre"],
                     "precio": precio,
                     "url": fila.get("url", ""),
@@ -525,13 +527,30 @@ def buscar_mas_barato(productos: list[dict], rubro: dict) -> dict[str, dict]:
     Para La Anonima, antes de devolver el resultado, corrige el
     precio del ganador con corregir_precio_lista_anonima() - ver esa
     funcion para el porque.
+
+    Si el rubro tiene "categorias_permitidas" (una lista de nombres
+    de categoria, ej. ["verduras", "frutas"]), solo se consideran
+    productos cuya categoria de origen este en esa lista - ademas de
+    matchear las palabras clave. Esto es mas robusto que solo excluir
+    palabras: por ejemplo "tomate" matchea tanto el tomate fresco
+    (categoria "verduras") como el pure/salsa de tomate envasado
+    (categoria "tomates-y-salsas"), y muchos productos de salsa no
+    tienen ninguna palabra detectable en el nombre para excluirlos
+    (ej. "Tomate perita Arcor 400 g." es en realidad una lata). Si el
+    rubro no define "categorias_permitidas", no se filtra por
+    categoria (comportamiento de siempre, solo palabras clave).
     """
     claves = [normalizar(c) for c in rubro["claves"]]
     excluir = [normalizar(e) for e in rubro["excluir"]]
+    categorias_permitidas = rubro.get("categorias_permitidas")
 
     candidatos_por_tienda: dict[str, list] = {t: [] for t in TIENDAS}
 
     for prod in productos:
+        if categorias_permitidas is not None:
+            if prod.get("categoria", "") not in categorias_permitidas:
+                continue
+
         nombre_norm = normalizar(prod["nombre"])
 
         if not all(_contiene_palabra(c, nombre_norm) for c in claves):
