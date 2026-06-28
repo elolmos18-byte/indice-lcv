@@ -297,14 +297,34 @@ def extraer_panos_totales(nombre_norm: str) -> float | None:
     return panos_por_rollo * rollos
 
 
-def calcular_precio_normalizado(precio: float, nombre_norm: str, rubro: dict) -> float | None:
+def calcular_precio_normalizado(
+    precio: float, nombre_norm: str, rubro: dict, medida: str = "un"
+) -> float | None:
     """
     Calcula el precio por unidad estandar (por kg, por L, o por unidad)
     para poder comparar presentaciones distintas del mismo rubro.
 
+    El parametro "medida" viene de VTEX (measurementUnit, ver
+    precios_armar_catalogo_vtex.py). Cuando un producto es "pesable"
+    (measurementUnit == "kg", tipico en frutas/verduras sueltas tipo
+    "Tomate Perita 500 G" con compra minima de 0.5kg), el precio que
+    entrega la API YA ES por kilo - no es el precio de ese paquete de
+    500g puntual. Si igual le aplicaramos la extraccion de gramos del
+    nombre, estariamos dividiendo un precio que ya esta normalizado,
+    duplicando el precio por error. Por eso, si medida coincide con la
+    unidad del rubro, devolvemos el precio tal cual, sin tocar nada.
+    La Anonima no expone esta info, asi que siempre llega medida="un"
+    para sus productos (comportamiento de siempre, sin cambios).
+
     Devuelve None si no puede calcular (no detecta el tamano).
     """
     unidad = rubro.get("unidad", "")
+
+    if unidad == "kg" and medida == "kg":
+        return precio  # VTEX ya entrega el precio por kg
+
+    if unidad == "L" and medida in ("l", "L"):
+        return precio  # VTEX ya entrega el precio por litro
 
     if unidad == "kg":
         gramos = extraer_gramos(nombre_norm)
@@ -456,6 +476,7 @@ def cargar_productos() -> list[dict]:
                     "categoria": fila.get("categoria", ""),
                     "nombre": fila["nombre"],
                     "precio": precio,
+                    "medida": "un",
                     "url": fila.get("url", ""),
                 })
     except FileNotFoundError:
@@ -489,6 +510,7 @@ def cargar_productos() -> list[dict]:
                     "categoria": fila.get("categoria", ""),
                     "nombre": fila["nombre"],
                     "precio": precio,
+                    "medida": fila.get("medida", "un"),
                     "url": fila.get("url", ""),
                 })
     except FileNotFoundError:
@@ -560,7 +582,7 @@ def buscar_mas_barato(productos: list[dict], rubro: dict) -> dict[str, dict]:
             continue
 
         precio_norm = calcular_precio_normalizado(
-            prod["precio"], nombre_norm, rubro
+            prod["precio"], nombre_norm, rubro, prod.get("medida", "un")
         )
 
         candidatos_por_tienda[prod["tienda"]].append({

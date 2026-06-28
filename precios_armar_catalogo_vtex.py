@@ -176,11 +176,23 @@ def buscar_categoria(dominio: str, categoria: str) -> list[dict]:
                 if not precio or not disponible or cantidad_disponible <= 0:
                     continue
 
+                # measurementUnit indica como vende VTEX este producto.
+                # Cuando es "kg" (tipico en frutas/verduras "pesables",
+                # ej. "Tomate Perita 500 G" con minimo de compra 0.5kg),
+                # el precio que devuelve la API YA ES por kilo - no es
+                # el precio de un paquete de 500g. Si normalizaramos
+                # ese precio dividiendo por los gramos del nombre,
+                # estariamos duplicando el precio por error. Guardamos
+                # este dato para que precios_buscar_canasta.py sepa
+                # cuando NO tiene que normalizar de nuevo.
+                medida = item["items"][0].get("measurementUnit", "un")
+
                 productos.append({
                     "nombre": item.get("productName"),
                     "marca": item.get("brand"),
                     "precio": precio,
                     "precio_lista": oferta.get("ListPrice"),
+                    "medida": medida,
                     "url": f"https://{dominio}/{item.get('linkText')}/p",
                 })
             except (KeyError, IndexError):
@@ -225,7 +237,7 @@ def armar_catalogo() -> list[dict]:
 
 
 def guardar_csv(catalogo: list[dict], ruta_salida: str):
-    columnas = ["tienda", "categoria", "nombre", "marca", "precio", "precio_lista", "url"]
+    columnas = ["tienda", "categoria", "nombre", "marca", "precio", "precio_lista", "medida", "url"]
     with open(ruta_salida, "w", newline="", encoding="utf-8-sig") as archivo:
         escritor = csv.DictWriter(archivo, fieldnames=columnas)
         escritor.writeheader()
