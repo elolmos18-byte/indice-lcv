@@ -407,7 +407,9 @@
       ],
       "excluir": [
         "seca",
-        "partida"
+        "partida",
+        "congelada",
+        "congeladas"
       ],
       "tamano_objetivo_g": 350,
       "unidad": "kg"
@@ -699,6 +701,9 @@
         "vegetal",
         "vegetariana"
       ],
+      "categorias_permitidas": [
+        "carniceria"
+      ],
       "tamano_objetivo_g": 1000,
       "unidad": "kg"
     },
@@ -713,6 +718,9 @@
         "carbon",
         "cerdo",
         "envasado"
+      ],
+      "categorias_permitidas": [
+        "carniceria"
       ],
       "tamano_objetivo_g": 1000,
       "unidad": "kg"
@@ -730,6 +738,9 @@
         "arrollado",
         "salchicha"
       ],
+      "categorias_permitidas": [
+        "carniceria"
+      ],
       "tamano_objetivo_g": 1000,
       "unidad": "kg"
     },
@@ -744,29 +755,30 @@
         "milanesa",
         "cerdo"
       ],
+      "categorias_permitidas": [
+        "carniceria"
+      ],
       "tamano_objetivo_g": 1000,
       "unidad": "kg"
     },
     {
       "id": 42,
-      "nombre": "Carnaza",
+      "nombre": "Carnaza / Paleta",
       "grupo": "Carniceria",
-      "claves": [
-        "carnaza"
-      ],
-      "excluir": [],
-      "tamano_objetivo_g": 1000,
-      "unidad": "kg"
-    },
-    {
-      "id": 43,
-      "nombre": "Paleta",
-      "grupo": "Carniceria",
-      "claves": [
-        "paleta"
+      "nota": "Rubro fusionado (ver precios_CANASTA.md, seccion 'Rubros fusionados'). La Anonima no distingue carnaza de paleta en su catalogo - un solo producto ('Carnaza de Paleta Fraccionada...') es a la vez las dos cosas. Matchea si el nombre dice 'carnaza' O si dice 'paleta', no hace falta que diga las dos. El link a cada producto en la web muestra exactamente cual de los dos corto se eligio en cada super.",
+      "claves_alternativas": [
+        [
+          "carnaza"
+        ],
+        [
+          "paleta"
+        ]
       ],
       "excluir": [
         "chuleta"
+      ],
+      "categorias_permitidas": [
+        "carniceria"
       ],
       "tamano_objetivo_g": 1000,
       "unidad": "kg"
