@@ -1,4 +1,4 @@
-# INDICE LCV — CANASTA v2.1
+# INDICE LCV — CANASTA v2.2
 
 > Definicion de la Canasta Comunidad del Viento (CCV-37): que
 > productos se miden cada corrida, con que criterio se elige uno
@@ -104,7 +104,7 @@ categorias no relacionadas (condimentos con sabor a X, verduras
 picadas, etc.) — no es opcional "para prolijidad", es lo que
 reemplaza al control que se perdio al abandonar la marca fija.
 
-### Rubros fusionados: cuando dos cortes conviven en un solo rubro
+### Rubros fusionados y variantes de escritura
 
 Algunos cortes de carne no tienen presencia pareja en los tres
 catalogos — un super vende "Carnaza" y "Paleta" como productos
@@ -133,11 +133,27 @@ cada super para ese rubro y puede decidir si le sirve como
 referencia, en vez de que el indice le oculte la diferencia detras
 de un nombre generico.
 
-Se usa este mecanismo unicamente cuando dos cortes:
-- Son razonablemente equivalentes como referencia de gasto (ambos
-  son carne vacuna de guiso/relleno, no un lomo contra un asado)
-- No es posible mantenerlos como rubros separados sin dejar
-  sistematicamente afuera a algun super por como arma su catalogo
+**El mismo mecanismo (`claves_alternativas`) tambien se usa para
+variantes de escritura de un mismo producto**, cuando los tres
+catalogos no coinciden en como lo escriben. Caso real: "Fideos
+spaguetti" solo tenia como clave la forma "spaguetti" (con gu, la
+forma mas comun en los catalogos de Carrefour y Changomas), pero la
+mayoria del catalogo de La Anonima escribe "spaghetti" (con gh, a la
+italiana) — con una sola clave, La Anonima quedaba con un unico
+producto candidato en todo su catalogo, y si ese se daba de baja el
+rubro quedaba sin dato pese a tener mas de una decena de spaghettis
+distintos en gondola. La solucion es la misma logica O entre grupos:
+`[["spaguetti"], ["spaghetti"]]`. La diferencia con el caso de
+Carnaza/Paleta es solo el motivo (ortografia en vez de catalogo que
+no distingue dos cortes) — el mecanismo y la garantia de
+transparencia via el link al producto son los mismos.
+
+Se usa este mecanismo cuando:
+- Dos conceptos (cortes, o formas de escribir el mismo producto) son
+  razonablemente equivalentes como referencia de gasto o son
+  literalmente el mismo producto
+- No es posible cubrir los tres supers con una sola lista de
+  palabras clave sin dejar sistematicamente afuera a alguno
 
 No es un mecanismo para "rellenar" rubros que simplemente no
 encuentran match — para eso existe la regla de rubro incompleto (ver
@@ -199,7 +215,8 @@ lo que mantiene la integridad de la serie historica del Indice LCV.
 | 2026-06-23 | Creacion de la canasta CCV-37 v1.0 | Definicion inicial del proyecto (marca fija, misma marca en los 3 supers) |
 | 2026-07-01 | Reescritura v2.0: se documenta Camino B (mas barato por super, sin marca fija) y precio de lista sin descuentos/promociones | La v1.0 describia una metodologia que el codigo ya no implementaba. Se corrige el documento para reflejar el criterio real vigente, y se deja de duplicar la lista de rubros (ahora unica fuente: `precios_canasta_rubros.json`) |
 | 2026-07-01 | v2.1: se agrega `categorias_permitidas` a los rubros de Carniceria (Carne picada, Asado, Pollo, Nalga, Carnaza/Paleta) y se documenta el mecanismo de "rubro fusionado" | Se detectaron matches de otra categoria (cebolla picada, mayonesa sabor asado) por falta de restriccion de categoria en Carniceria. Carnaza y Paleta se fusionan en un solo rubro porque La Anonima no distingue esos dos cortes en su catalogo — ver seccion "Rubros fusionados" |
+| 2026-07-01 | v2.2: se extiende `claves_alternativas` a "Fideos spaguetti" para cubrir la variante "spaghetti" (con gh) | La Anonima escribe la mayoria de sus fideos largos como "Spaghetti", no "Spaguetti" — con una sola clave, el rubro dependia de un unico producto candidato en su catalogo. De paso se corrigio que Changomas no traia su opcion mas barata por el mismo motivo de ortografia |
 
 ---
 
-*Version: 2.1 — Julio 2026*
+*Version: 2.2 — Julio 2026*

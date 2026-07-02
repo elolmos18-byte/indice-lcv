@@ -43,12 +43,18 @@
       "id": 3,
       "nombre": "Fideos spaguetti",
       "grupo": "Almacen",
-      "claves": [
-        "spaguetti"
+      "claves_alternativas": [
+        [
+          "spaguetti"
+        ],
+        [
+          "spaghetti"
+        ]
       ],
       "excluir": [
         "huevo",
-        "relleno"
+        "relleno",
+        "spaghettini"
       ],
       "tamano_objetivo_g": 500,
       "unidad": "kg"
