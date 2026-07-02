@@ -561,8 +561,30 @@ def buscar_mas_barato(productos: list[dict], rubro: dict) -> dict[str, dict]:
     (ej. "Tomate perita Arcor 400 g." es en realidad una lata). Si el
     rubro no define "categorias_permitidas", no se filtra por
     categoria (comportamiento de siempre, solo palabras clave).
+
+    RUBROS FUSIONADOS (ver precios_CANASTA.md, seccion "Rubros
+    fusionados"): si el rubro tiene "claves_alternativas" en vez de
+    "claves", es una lista de GRUPOS de palabras en vez de una sola
+    lista. El producto matchea si TODAS las palabras de ALGUN grupo
+    estan presentes - no hace falta que esten todos los grupos
+    juntos. Ejemplo: Carnaza/Paleta usa
+    claves_alternativas = [["carnaza"], ["paleta"]], asi que matchea
+    un producto que diga "carnaza" o uno que diga "paleta", sin
+    exigir que diga las dos. Esto existe porque un super puede vender
+    esos dos cortes por separado y otro tenerlos fusionados en un
+    solo producto - ver el .md para el porque completo. Un rubro
+    normal (sin "claves_alternativas") se trata como un unico grupo,
+    asi que la logica de siempre (todas las palabras de "claves"
+    presentes) queda identica, sin cambios de comportamiento.
     """
-    claves = [normalizar(c) for c in rubro["claves"]]
+    claves_alternativas = rubro.get("claves_alternativas")
+    if claves_alternativas is not None:
+        grupos_claves = [
+            [normalizar(c) for c in grupo] for grupo in claves_alternativas
+        ]
+    else:
+        grupos_claves = [[normalizar(c) for c in rubro["claves"]]]
+
     excluir = [normalizar(e) for e in rubro["excluir"]]
     categorias_permitidas = rubro.get("categorias_permitidas")
 
@@ -575,7 +597,14 @@ def buscar_mas_barato(productos: list[dict], rubro: dict) -> dict[str, dict]:
 
         nombre_norm = normalizar(prod["nombre"])
 
-        if not all(_contiene_palabra(c, nombre_norm) for c in claves):
+        # Matchea si TODAS las palabras de ALGUN grupo estan
+        # presentes (Y adentro del grupo, O entre grupos). Para
+        # rubros normales hay un solo grupo, asi que esto equivale
+        # a la logica de siempre.
+        if not any(
+            all(_contiene_palabra(c, nombre_norm) for c in grupo)
+            for grupo in grupos_claves
+        ):
             continue
 
         if any(_contiene_palabra(e, nombre_norm) for e in excluir):

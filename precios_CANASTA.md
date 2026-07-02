@@ -1,184 +1,205 @@
-# INDICE LCV — CANASTA v1.0
+# INDICE LCV — CANASTA v2.1
 
 > Definicion de la Canasta Comunidad del Viento (CCV-37): que
-> productos puntuales se miden cada semana, con que marca y tamano,
-> y como se eligieron.
+> productos se miden cada corrida, con que criterio se elige uno
+> entre varios candidatos, y que precio se usa para compararlos.
 
 Este documento es independiente de `precios_MAESTRO.md`. El MAESTRO
-define el proyecto Indice LCV en general; este define solo los 37
-productos concretos que componen la canasta y los criterios usados
-para elegirlos. Si la composicion de la canasta cambia (un producto
-se discontinua, una marca desaparece de un super), se actualiza
-este archivo con su changelog.
+define el proyecto Indice LCV en general; este define la metodologia
+de seleccion de productos y el criterio de precio. La lista concreta
+de rubros (claves de busqueda, exclusiones, categorias permitidas,
+tamano de referencia) vive en `precios_canasta_rubros.json` — ver
+"Donde esta la definicion real de cada rubro" mas abajo. Este
+archivo no duplica esa lista para evitar que las dos queden
+desincronizadas.
+
+**El nombre "CCV-37" quedo como nombre del proyecto por motivos
+historicos** (asi arranco en Junio 2026), aunque la canasta ya tiene
+mas rubros que 37 — el numero no se actualiza cada vez que se suma
+un rubro nuevo, ver `precios_canasta_rubros.json` para el conteo
+real vigente.
 
 ---
 
-## Metodologia de seleccion
+## Metodologia de seleccion (v2.0 — reemplaza la v1.0)
 
-Para que el Indice LCV sea honesto y comparable entre supers y entre
-semanas, todos los productos se eligen siguiendo estos siete
-criterios:
+### Por que se cambio la v1.0
 
-### 1. Una marca y un tamano por rubro
+La version original de este documento (Junio 2026) definia una
+canasta de **marca fija**: un solo producto puntual por rubro, que
+debia existir en los tres supers, y que se mantenia igual semana a
+semana salvo que se discontinuara.
 
-Para cada uno de los 37 rubros de la CCV-37 se elige UN producto
-especifico (no "leche" en general, sino "Leche entera La Serenisima
-sachet 1L"). Ese producto se fija y queda igual semana a semana.
-Asi, lo que mide el Indice LCV es la variacion de precios del MISMO
-producto en el tiempo, no la variacion del rubro en general.
+En la practica, ese criterio dejaba la mayoria de los rubros vacios
+— muy pocas marcas puntuales estan presentes en los tres catalogos a
+la vez (La Anonima, Carrefour y Changomas tienen surtidos distintos,
+con sus propias segundas marcas y proveedores locales). El codigo
+(`precios_buscar_canasta.py`) paso a implementar otra logica, pero
+este documento nunca se actualizo para reflejarlo — quedo
+describiendo una metodologia que ya no corria. Esta version corrige
+eso.
 
-### 2. La marca debe existir en los tres supers
+### Que hace el sistema hoy
 
-Si una marca esta presente solo en dos supers, no sirve - no podemos
-comparar lo que un super no vende. La eleccion se hace cruzando los
-tres catalogos y quedandose solo con marcas presentes en los tres.
+**Para cada rubro, en cada super, se busca el producto mas barato
+que matchee la definicion del rubro — de forma independiente en
+cada uno.** La marca no tiene que coincidir entre supers, y puede
+cambiar de una corrida a otra si aparece una opcion mas barata.
 
-### 3. Calidad pareja, no nos importa cual es "la mejor"
+Esto significa que el Indice LCV no compara "la misma marca en tres
+lugares", sino "cuanto cuesta resolver esta necesidad puntual (1kg
+de harina 000, una docena de huevos, etc.) comprando lo mas barato
+disponible en cada super". Es una diferencia de fondo con la v1.0, y
+es intencional: asi la canasta se puede mantener completa en los
+tres supers en vez de ir perdiendo rubros por falta de una marca
+compartida.
 
-El objetivo no es opinar sobre que marca es superior. El objetivo es
-comparar el precio del MISMO producto entre tres supers. Si la marca
-elegida es de primera linea, ok. Si es segunda marca, tambien ok. Lo
-que importa es que sea la misma en los tres.
+### Precio de lista, sin descuentos ni promociones
 
-### 4. Cuando hay varias marcas posibles, preferencia por las mas vendidas o conocidas
+**El precio que se registra es el precio de lista/gondola, nunca un
+precio con descuento, promocion, cupon o beneficio de tarjeta.**
 
-Razon practica: si la marca elegida desaparece de un super, queremos
-que sea facil reemplazarla por otra equivalente. Las marcas chicas
-tienen mas riesgo de discontinuarse de un momento al otro.
+El Indice LCV mide la variacion de precios reales de una canasta de
+referencia — no las estrategias comerciales puntuales de cada
+cadena (dia del descuento, 2x1, reintegro con banco X). Si se
+mezclaran precios promocionales, el indice terminaria midiendo que
+super tuvo mejor campaña de marketing esa semana, no que super tiene
+el precio mas bajo real. El precio con descuento es un beneficio
+condicional (dia, medio de pago, tope de reintegro); el precio de
+lista es el que cualquier persona paga sin condiciones.
 
-### 5. Si para un rubro no hay marca compartida entre los tres, ese rubro queda "sin canasta"
+En la practica, esto se resuelve distinto segun el origen del dato:
 
-No inventamos comparaciones que no son validas. Si mas adelante
-aparece una marca compatible, se suma con changelog. El Indice LCV
-prefiere ser incompleto antes que mentiroso.
+- **Carrefour y Changomas (VTEX):** la API expone ademas del precio
+  mostrado un campo de precio de lista sin promociones
+  (`precio_lista` en `catalogo_vtex.csv`). Cuando ese campo esta
+  disponible, se usa en vez del precio con descuento.
+- **La Anonima:** el listado de categoria del sitio a veces expone
+  un precio promocional en vez del precio de lista real. Como
+  visitar la pagina individual de cada producto del catalogo entero
+  seria muy pesado, el compromiso es visitar solo la pagina del
+  producto que ya gano como "mas barato" en su rubro, y confirmar/
+  corregir su precio ahi antes de guardar el resultado final (ver
+  `corregir_precio_lista_anonima()` en `precios_buscar_canasta.py`).
 
-### 6. Si una marca elegida desaparece de uno de los supers, se reemplaza por la siguiente que tambien este en los tres
+### El reemplazo del control de calidad: categorias_permitidas
 
-Y se anota la fecha del cambio en el changelog al final de este
-archivo. No se mezclan precios de productos distintos en la misma
-serie historica - eso destrozaria el Indice LCV.
+La v1.0 tenia un control de calidad implicito: si una marca no
+estaba en los tres supers, ese rubro quedaba "sin canasta" — no se
+mostraba un dato dudoso. Al pasar a Camino B (cada super busca su
+propio mas barato, sin cruce), ese control desaparecio. Sin el, un
+rubro con palabras clave demasiado generales puede matchear un
+producto de otra categoria por completo: "picada" matcheando
+"Cebolla picada" en vez de carne picada, o "asado" matcheando una
+mayonesa con sabor a asado en vez de un corte de carne.
 
-### 7. Cada rubro tiene una unidad de comparacion estandar
+El control de calidad que reemplaza al cruce de marca es el campo
+**`categorias_permitidas`** en `precios_canasta_rubros.json`: ademas
+de las palabras clave, el producto tiene que pertenecer a una de las
+categorias de catalogo permitidas para ese rubro (por ejemplo,
+`"carniceria"` para los cortes de carne, o `"verduras"` /
+`"frutas"` para la verduleria). Este campo es obligatorio para
+cualquier rubro cuyas palabras clave puedan aparecer en productos de
+categorias no relacionadas (condimentos con sabor a X, verduras
+picadas, etc.) — no es opcional "para prolijidad", es lo que
+reemplaza al control que se perdio al abandonar la marca fija.
 
-Aunque la marca sea la misma, los tamanos no siempre coinciden entre
-supers (un super puede tener sachet 1L y otro botella 900cc). Para
-que la comparacion sea honesta, cada rubro define una unidad
-estandar de comparacion: por kilo, por litro, o por unidad.
+### Rubros fusionados: cuando dos cortes conviven en un solo rubro
 
-- El **precio real** (el de gondola) es el que se muestra en la
-  pagina, porque es lo que la persona va a pagar.
-- El **precio normalizado** (por kg / L / unidad) es el que se usa
-  para decidir cual super es el mas barato del rubro.
+Algunos cortes de carne no tienen presencia pareja en los tres
+catalogos — un super vende "Carnaza" y "Paleta" como productos
+separados, y otro solo tiene un unico corte que es a la vez las dos
+cosas (ej. "Carnaza de Paleta Fraccionada..."). Exigir que ambos
+conceptos existan por separado en los tres supers, como se hacia con
+rubros normales, dejaria ese super afuera del rubro para siempre —
+no por un error de busqueda, sino porque su catalogo genuinamente no
+distingue el corte de esa forma.
 
-Ejemplo: si Carrefour vende Yerba Cruz de Malta 500g a $4500 y
-La Anonima vende la misma marca pero en 1kg a $8500, comparar
-$4500 contra $8500 directo es enganoso - en realidad el primero
-sale $9000/kg y el segundo $8500/kg, asi que La Anonima es 5%
-mas barata aunque su precio absoluto sea casi el doble.
+Para estos casos existe el **rubro fusionado**: un rubro que se
+define con dos (o mas) grupos de palabras clave en vez de uno solo,
+y matchea un producto si **cualquiera** de los grupos esta presente
+en el nombre — no hace falta que esten todos juntos, a diferencia de
+la logica normal de `claves` (donde todas las palabras tienen que
+aparecer).
+
+**Un rubro fusionado no promedia ni combina precios de conceptos
+distintos.** En cada super se elige el mas barato entre todos los
+productos que matchean cualquiera de los grupos — puede ser una
+"Carnaza" en un super y una "Paleta" en otro. La ganancia de
+transparencia esta en que la pagina publica siempre muestra el
+nombre exacto y el link al producto elegido (ver `MAPA.md` — el link
+"Ver producto →"): quien mire la tabla ve exactamente que compro
+cada super para ese rubro y puede decidir si le sirve como
+referencia, en vez de que el indice le oculte la diferencia detras
+de un nombre generico.
+
+Se usa este mecanismo unicamente cuando dos cortes:
+- Son razonablemente equivalentes como referencia de gasto (ambos
+  son carne vacuna de guiso/relleno, no un lomo contra un asado)
+- No es posible mantenerlos como rubros separados sin dejar
+  sistematicamente afuera a algun super por como arma su catalogo
+
+No es un mecanismo para "rellenar" rubros que simplemente no
+encuentran match — para eso existe la regla de rubro incompleto (ver
+mas abajo), que es la respuesta correcta cuando un super no vende
+algo en absoluto.
+
+### Rubros incompletos
+
+Si un super no tiene ningun producto que matchee un rubro (clave +
+exclusiones + categoria permitida), ese rubro queda con el dato de
+ese super vacio — no se inventa ni se aproxima. El total de la
+canasta de ese super solo suma los rubros donde estan los tres
+supers completos, para que la comparacion de totales sea siempre
+sobre la misma canasta (ver `_costo_referencia()` y el uso de
+`rubro_completo` en `precios_buscar_canasta.py`).
+
+### Unidad de comparacion estandar
+
+Cada rubro define una unidad estandar (`kg`, `L`, `unidad`, `m`,
+`panos`) para poder comparar presentaciones de tamano distinto entre
+supers de forma honesta. El **precio de gondola** (`precio_envase`)
+es el que efectivamente se paga por ese envase puntual; el **precio
+normalizado** (`precio_normalizado`) es el que se usa para decidir
+cual super es mas barato y para calcular el total de la canasta.
+
+Ejemplo: si un super vende un producto de 500g a $800 y otro vende
+el mismo tipo de producto en 1kg a $1200, comparar $800 contra
+$1200 directo es enganoso — normalizado es $1600/kg contra
+$1200/kg, y el segundo es el mas barato aunque su precio de gondola
+sea mayor.
 
 ---
 
-## Los 37 rubros de la CCV-37
+## Donde esta la definicion real de cada rubro
 
-Tabla por completar en Fase 1. Mientras "marca" y "tamano" esten en
-blanco, ese rubro todavia no esta operativo. Una vez completos los
-37, se genera `canasta.json` y arranca Fase 2.
+La lista completa de rubros — nombre, grupo, palabras clave,
+exclusiones, categorias permitidas cuando aplica, tamano de
+referencia y unidad — vive en **`precios_canasta_rubros.json`**. Ese
+archivo es la unica fuente de verdad operativa; este documento no lo
+duplica para que no puedan quedar desincronizados (que es
+exactamente lo que le paso a la tabla de la v1.0 de este mismo
+archivo).
 
-### Pan, harinas y derivados (8 rubros)
-
-| # | Rubro | Unidad de comparacion | Marca | Tamano |
-|---|---|---|---|---|
-| 1 | Harina 000 | por kg | | |
-| 2 | Harina leudante | por kg | | |
-| 3 | Fideos largos (spaguetti) | por kg | | |
-| 4 | Fideos cortos (mostachol) | por kg | | |
-| 5 | Arroz | por kg | | |
-| 6 | Polenta | por kg | | |
-| 7 | Galletitas dulces | por kg | | |
-| 8 | Galletitas saladas | por kg | | |
-
-### Azucar y dulces (3 rubros)
-
-| # | Rubro | Unidad de comparacion | Marca | Tamano |
-|---|---|---|---|---|
-| 9 | Azucar | por kg | | |
-| 10 | Dulce de leche | por kg | | |
-| 11 | Mermelada | por kg | | |
-
-### Aceites y grasas (3 rubros)
-
-| # | Rubro | Unidad de comparacion | Marca | Tamano |
-|---|---|---|---|---|
-| 12 | Aceite de girasol | por litro | | |
-| 13 | Aceite de mezcla | por litro | | |
-| 14 | Manteca | por kg | | |
-
-### Lacteos (5 rubros)
-
-| # | Rubro | Unidad de comparacion | Marca | Tamano |
-|---|---|---|---|---|
-| 15 | Leche entera | por litro | | |
-| 16 | Leche descremada | por litro | | |
-| 17 | Yogur firme | por litro | | |
-| 18 | Yogur bebible | por litro | | |
-| 19 | Queso untable | por kg | | |
-
-### Huevos (1 rubro)
-
-| # | Rubro | Unidad de comparacion | Marca | Tamano |
-|---|---|---|---|---|
-| 20 | Huevos | por unidad | | |
-
-### Legumbres y conservas (5 rubros)
-
-| # | Rubro | Unidad de comparacion | Marca | Tamano |
-|---|---|---|---|---|
-| 21 | Arvejas en lata | por kg drenado | | |
-| 22 | Lentejas | por kg | | |
-| 23 | Atun en lata | por kg drenado | | |
-| 24 | Salsa de tomate | por litro | | |
-| 25 | Pure de tomate | por litro | | |
-
-### Condimentos y aderezos (6 rubros)
-
-| # | Rubro | Unidad de comparacion | Marca | Tamano |
-|---|---|---|---|---|
-| 26 | Sal fina | por kg | | |
-| 27 | Sal gruesa | por kg | | |
-| 28 | Vinagre | por litro | | |
-| 29 | Mayonesa | por kg | | |
-| 30 | Ketchup | por kg | | |
-| 31 | Mostaza | por kg | | |
-
-### Infusiones (3 rubros)
-
-| # | Rubro | Unidad de comparacion | Marca | Tamano |
-|---|---|---|---|---|
-| 32 | Yerba | por kg | | |
-| 33 | Cafe | por kg | | |
-| 34 | Te | por unidad (saquito) | | |
-
-### Bebidas no alcoholicas (3 rubros)
-
-| # | Rubro | Unidad de comparacion | Marca | Tamano |
-|---|---|---|---|---|
-| 35 | Gaseosa cola | por litro | | |
-| 36 | Agua mineral sin gas | por litro | | |
-| 37 | Jugo en polvo | por unidad (sobre) | | |
+Cualquier cambio a un rubro (agregar una palabra a `excluir`, sumar
+`categorias_permitidas`, agregar un rubro nuevo) se hace directo en
+ese `.json`, y se anota en el changelog de mas abajo con fecha y
+motivo — igual que antes.
 
 ---
 
 ## Changelog de la canasta
 
-Cada vez que se modifica la composicion de la canasta (se reemplaza
-una marca, se discontinua un producto, se ajusta un tamano), se
-anota aca con fecha y motivo. Sin excepciones - el changelog es lo
-que mantiene la integridad de la serie historica del Indice LCV.
+Cada vez que se modifica la composicion o la logica de la canasta,
+se anota aca con fecha y motivo. Sin excepciones — el changelog es
+lo que mantiene la integridad de la serie historica del Indice LCV.
 
 | Fecha | Cambio | Motivo |
 |---|---|---|
-| 2026-06-23 | Creacion de la canasta CCV-37 v1.0 | Definicion inicial del proyecto |
+| 2026-06-23 | Creacion de la canasta CCV-37 v1.0 | Definicion inicial del proyecto (marca fija, misma marca en los 3 supers) |
+| 2026-07-01 | Reescritura v2.0: se documenta Camino B (mas barato por super, sin marca fija) y precio de lista sin descuentos/promociones | La v1.0 describia una metodologia que el codigo ya no implementaba. Se corrige el documento para reflejar el criterio real vigente, y se deja de duplicar la lista de rubros (ahora unica fuente: `precios_canasta_rubros.json`) |
+| 2026-07-01 | v2.1: se agrega `categorias_permitidas` a los rubros de Carniceria (Carne picada, Asado, Pollo, Nalga, Carnaza/Paleta) y se documenta el mecanismo de "rubro fusionado" | Se detectaron matches de otra categoria (cebolla picada, mayonesa sabor asado) por falta de restriccion de categoria en Carniceria. Carnaza y Paleta se fusionan en un solo rubro porque La Anonima no distingue esos dos cortes en su catalogo — ver seccion "Rubros fusionados" |
 
 ---
 
-*Version: 1.0 — Junio 2026*
+*Version: 2.1 — Julio 2026*
