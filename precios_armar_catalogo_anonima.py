@@ -63,6 +63,28 @@ HEADERS = {
     "Accept-Language": "es-AR,es;q=0.9",
 }
 
+# Cookies de sucursal. Sin esto, La Anonima devuelve el catalogo de
+# una sucursal por defecto que no es Puerto Madryn - confirmado con
+# diagnostico_cookie_sucursal.py: sin estas cookies, "Fideos Spaguetti
+# Pastasole" (y otros productos) no aparecen en el listado, aunque
+# existen en el catalogo real de la sucursal de Puerto Madryn.
+# Sacado del panel de cookies del navegador (DevTools -> Application
+# -> Storage -> Cookies -> laanonima.com.ar) con la sucursal "Puerto
+# Madryn (9120)" fijada. Se usa el set completo en vez de aislar la
+# minima necesaria, para replicar exactamente el estado de un
+# navegador real en vez de adivinar cual cookie sola alcanza.
+COOKIES = {
+    "descripcionLocalidadCabezal": "Puerto Madryn",
+    "Id-Sucursal-Super": "41",
+    "Id-Sucursal-Super-DisponibleYa": "41",
+    "idZonaPrecio": "8",
+    "operadorLogistico": "AND",
+    "provincia": "Neuquén",
+    "provincia_id": "16",
+    "seleccionocp": "1",
+    "tipoEnvioUnificado": "3",
+}
+
 # Pausa entre pedidos a cada categoria. No es por miedo a que nos
 # bloqueen - es simplemente buena practica no golpear un servidor
 # ajeno con pedidos uno detras de otro sin pausa.
@@ -115,7 +137,7 @@ def obtener_productos_de_categoria(url: str) -> list[dict]:
         return []
 
     try:
-        respuesta = requests.get(url, headers=HEADERS, timeout=10)
+        respuesta = requests.get(url, headers=HEADERS, cookies=COOKIES, timeout=10)
         respuesta.raise_for_status()
     except requests.RequestException as error:
         print(f"  No se pudo acceder: {error}")
