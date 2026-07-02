@@ -1,4 +1,4 @@
-# INDICE LCV — CANASTA v2.2
+# INDICE LCV — CANASTA v2.3
 
 > Definicion de la Canasta Comunidad del Viento (CCV-37): que
 > productos se miden cada corrida, con que criterio se elige uno
@@ -73,14 +73,52 @@ En la practica, esto se resuelve distinto segun el origen del dato:
 - **Carrefour y Changomas (VTEX):** la API expone ademas del precio
   mostrado un campo de precio de lista sin promociones
   (`precio_lista` en `catalogo_vtex.csv`). Cuando ese campo esta
-  disponible, se usa en vez del precio con descuento.
+  disponible, se usa en vez del precio con descuento — para TODOS
+  los candidatos del rubro, antes de elegir el mas barato. La
+  comparacion siempre es pareja.
 - **La Anonima:** el listado de categoria del sitio a veces expone
-  un precio promocional en vez del precio de lista real. Como
-  visitar la pagina individual de cada producto del catalogo entero
-  seria muy pesado, el compromiso es visitar solo la pagina del
-  producto que ya gano como "mas barato" en su rubro, y confirmar/
-  corregir su precio ahi antes de guardar el resultado final (ver
-  `corregir_precio_lista_anonima()` en `precios_buscar_canasta.py`).
+  un precio promocional en vez del precio de lista real, y no todos
+  los productos tienen promocion al mismo tiempo. Elegir el "mas
+  barato" comparando precios de listado sin corregir es una
+  comparacion invalida: un producto con promo puede aparecer mas
+  barato que otro sin promo, aunque su precio de lista real sea
+  mayor. La version anterior de este mecanismo corregia unicamente
+  al que ya habia ganado con el precio de listado — lo cual no
+  arregla el problema, porque el que gano pudo haber ganado *por
+  culpa* de una promocion que lo hacia ver mas barato de lo que
+  realmente es.
+
+  La forma correcta es corregir a precio de lista a TODOS los
+  candidatos antes de elegir — pero eso significa visitar la pagina
+  individual de cada uno (un rubro puede tener 15-20 candidatos), lo
+  que multiplicaria por muchas veces la cantidad de pedidos HTTP a
+  La Anonima en cada corrida, con riesgo de que el sitio empiece a
+  bloquear el scraper por exceso de trafico.
+
+  El compromiso que se usa (ver `_elegir_mas_barato_anonima()` en
+  `precios_buscar_canasta.py`) aprovecha que **una promocion nunca
+  puede hacer que el precio de lista sea MENOR al precio de listado**
+  — en el peor caso son iguales (si el producto no tiene promo). Con
+  esa garantia:
+
+  1. Se ordenan los candidatos de menor a mayor precio de listado
+     (sin corregir, dato que ya se tiene, sin pedir nada a nadie).
+  2. Se corrige el primero (el mas barato aparente) visitando su
+     pagina individual, y se guarda como "mejor candidato hasta
+     ahora".
+  3. Antes de corregir al siguiente, se compara: si el precio ya
+     corregido del mejor candidato es menor o igual al precio de
+     listado (sin corregir) del que sigue, se corta ahi — ese
+     siguiente candidato, en el mejor caso posible para el (si no
+     tuviera ninguna promocion), no puede bajar de su propio precio
+     de listado, asi que no le puede ganar al que ya se confirmo.
+  4. Si no se puede cortar, se corrige tambien al siguiente, se
+     compara contra el mejor hasta ahora, y se repite.
+
+  Esto da la misma garantia que corregir a todos (el resultado final
+  es siempre el verdadero mas barato por precio de lista), pero en la
+  practica corrige solo 2 o 3 candidatos por rubro en la gran mayoria
+  de los casos, en vez de los 15-20 completos.
 
 ### El reemplazo del control de calidad: categorias_permitidas
 
@@ -216,7 +254,8 @@ lo que mantiene la integridad de la serie historica del Indice LCV.
 | 2026-07-01 | Reescritura v2.0: se documenta Camino B (mas barato por super, sin marca fija) y precio de lista sin descuentos/promociones | La v1.0 describia una metodologia que el codigo ya no implementaba. Se corrige el documento para reflejar el criterio real vigente, y se deja de duplicar la lista de rubros (ahora unica fuente: `precios_canasta_rubros.json`) |
 | 2026-07-01 | v2.1: se agrega `categorias_permitidas` a los rubros de Carniceria (Carne picada, Asado, Pollo, Nalga, Carnaza/Paleta) y se documenta el mecanismo de "rubro fusionado" | Se detectaron matches de otra categoria (cebolla picada, mayonesa sabor asado) por falta de restriccion de categoria en Carniceria. Carnaza y Paleta se fusionan en un solo rubro porque La Anonima no distingue esos dos cortes en su catalogo — ver seccion "Rubros fusionados" |
 | 2026-07-01 | v2.2: se extiende `claves_alternativas` a "Fideos spaguetti" para cubrir la variante "spaghetti" (con gh) | La Anonima escribe la mayoria de sus fideos largos como "Spaghetti", no "Spaguetti" — con una sola clave, el rubro dependia de un unico producto candidato en su catalogo. De paso se corrigio que Changomas no traia su opcion mas barata por el mismo motivo de ortografia |
+| 2026-07-02 | v2.3: se reemplaza la correccion de precio de lista de La Anonima (antes solo corregia al ganador por precio de listado) por seleccion ordenada con corte temprano, que corrige varios candidatos hasta garantizar el verdadero mas barato | Se detecto que un producto con promocion podia ganar la seleccion inicial por precio de listado aunque su precio de lista real fuera mayor al de otro candidato sin promocion — el mecanismo viejo solo corregia al que ya habia ganado, sin volver a comparar. Caso real: en "Fideos spaguetti", "Pastasole" (lista $2400/kg, sin promo) perdia contra otro candidato con promocion que parecia mas barato por precio de listado |
 
 ---
 
-*Version: 2.2 — Julio 2026*
+*Version: 2.3 — Julio 2026*

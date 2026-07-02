@@ -538,6 +538,91 @@ def _contiene_palabra(clave: str, texto_norm: str) -> bool:
     return re.search(patron, texto_norm) is not None
 
 
+def _elegir_mas_barato_anonima(candidatos: list[dict]) -> dict:
+    """
+    Elige el candidato mas barato de La Anonima para un rubro,
+    garantizando que la comparacion sea siempre por precio de lista
+    (nunca precio de listado de categoria, que a veces es
+    promocional) - ver precios_CANASTA.md, seccion "Precio de lista,
+    sin descuentos ni promociones".
+
+    Por que no alcanza con elegir el mas barato por precio de
+    listado y corregir solo a ese: el precio de listado puede ser
+    promocional para algunos candidatos y no para otros, asi que
+    compararlos sin corregir es una comparacion invalida. El que
+    "gana" por precio de listado puede haber ganado justamente
+    porque tiene una promocion que lo hace ver mas barato de lo que
+    realmente es.
+
+    Por que no se corrige a TODOS los candidatos antes de comparar
+    (que seria lo mas simple de entender): un rubro puede tener 15-20
+    candidatos, y corregir a todos multiplicaria por mucho la
+    cantidad de pedidos HTTP a La Anonima en cada corrida - con
+    riesgo de que el sitio empiece a bloquear el scraper.
+
+    La solucion intermedia se apoya en una garantia matematica: una
+    promocion nunca puede hacer que el precio de lista sea MENOR al
+    precio de listado - en el peor caso son iguales (producto sin
+    promo). Entonces:
+
+    1. Se ordenan los candidatos de menor a mayor precio de listado
+       (dato que ya se tiene, sin pedir nada a nadie todavia).
+    2. Se corrige el primero (el mas barato aparente) visitando su
+       pagina individual, y se guarda como "mejor candidato hasta
+       ahora".
+    3. Antes de corregir al siguiente, se compara: si el precio ya
+       corregido del mejor candidato es menor o igual al precio de
+       listado (SIN corregir) del que sigue, se corta ahi - ese
+       siguiente candidato, en el mejor caso posible para el (sin
+       ninguna promocion), no puede bajar de su propio precio de
+       listado, asi que no le puede ganar al que ya se confirmo.
+    4. Si no se puede cortar, se corrige tambien al siguiente, se
+       compara contra el mejor hasta ahora, y se repite desde el
+       paso 3.
+
+    Esto da la misma garantia que corregir a todos (el resultado
+    final es siempre el verdadero mas barato por precio de lista),
+    pero en la practica corrige solo 2 o 3 candidatos por rubro en la
+    gran mayoria de los casos.
+
+    Devuelve el candidato elegido, con su precio ya corregido a
+    precio de lista.
+    """
+    # Igual que en la seleccion de Carrefour/Changomas: si hay
+    # candidatos con precio_normalizado, se compara por ese (permite
+    # comparar presentaciones de tamano distinto); si ninguno lo
+    # tiene, se compara por precio de listado tal cual. Nunca se
+    # mezclan las dos unidades entre candidatos del mismo rubro.
+    con_norm = [c for c in candidatos if c["precio_normalizado"] is not None]
+    pool = con_norm if con_norm else candidatos
+    clave = (
+        (lambda c: c["precio_normalizado"]) if con_norm
+        else (lambda c: c["precio"])
+    )
+
+    candidatos_ordenados = sorted(pool, key=clave)
+
+    mejor = None
+    for candidato in candidatos_ordenados:
+        # Corte temprano: si el mejor candidato confirmado hasta
+        # ahora ya tiene un precio corregido menor o igual al precio
+        # de listado (sin corregir) de este siguiente, ninguno de
+        # los que quedan por revisar le puede ganar. Cortamos sin
+        # gastar mas pedidos HTTP.
+        if mejor is not None:
+            precio_mejor = clave(mejor)
+            if precio_mejor <= clave(candidato):
+                break
+
+        corregido = corregir_precio_lista_anonima(dict(candidato))
+        time.sleep(1)  # cortesia: no golpear el sitio sin pausa
+
+        if mejor is None or clave(corregido) < clave(mejor):
+            mejor = corregido
+
+    return mejor
+
+
 def buscar_mas_barato(productos: list[dict], rubro: dict) -> dict[str, dict]:
     """
     Para un rubro dado, busca en cada tienda el producto mas barato
@@ -546,9 +631,10 @@ def buscar_mas_barato(productos: list[dict], rubro: dict) -> dict[str, dict]:
     Devuelve un dict {tienda: {nombre, precio, precio_normalizado, url}}.
     Solo incluye tiendas donde encontro al menos un match.
 
-    Para La Anonima, antes de devolver el resultado, corrige el
-    precio del ganador con corregir_precio_lista_anonima() - ver esa
-    funcion para el porque.
+    Para La Anonima, la eleccion del mas barato usa
+    _elegir_mas_barato_anonima() en vez de un simple min() - ver esa
+    funcion para el porque (precios de listado a veces promocionales,
+    corregidos con una busqueda ordenada y corte temprano).
 
     Si el rubro tiene "categorias_permitidas" (una lista de nombres
     de categoria, ej. ["verduras", "frutas"]), solo se consideran
@@ -629,15 +715,14 @@ def buscar_mas_barato(productos: list[dict], rubro: dict) -> dict[str, dict]:
         if not candidatos:
             continue
 
-        con_norm = [c for c in candidatos if c["precio_normalizado"] is not None]
-        if con_norm:
-            elegido = min(con_norm, key=lambda c: c["precio_normalizado"])
-        else:
-            elegido = min(candidatos, key=lambda c: c["precio"])
-
         if tienda == "La Anonima":
-            elegido = corregir_precio_lista_anonima(elegido)
-            time.sleep(1)  # cortesia: no golpear el sitio sin pausa
+            elegido = _elegir_mas_barato_anonima(candidatos)
+        else:
+            con_norm = [c for c in candidatos if c["precio_normalizado"] is not None]
+            if con_norm:
+                elegido = min(con_norm, key=lambda c: c["precio_normalizado"])
+            else:
+                elegido = min(candidatos, key=lambda c: c["precio"])
 
         resultado[tienda] = elegido
 
