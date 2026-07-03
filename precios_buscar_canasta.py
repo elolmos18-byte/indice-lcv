@@ -87,6 +87,27 @@ HEADERS_ANONIMA = {
     "Accept-Language": "es-AR,es;q=0.9",
 }
 
+# Cookies de sucursal, mismas que usa precios_armar_catalogo_anonima.py.
+# Sin esto, la pagina individual del producto (usada en
+# corregir_precio_lista_anonima) puede devolver el catalogo/precio de
+# una sucursal distinta a Puerto Madryn - lo que hacia que la
+# correccion de precio de lista fallara en silencio (devolvia None) y
+# el sistema se quedara con el precio de listado sin corregir, aunque
+# tuviera promocion real. Confirmado con "Fideos Spaghetti Best":
+# el listado mostraba $790 (promo), pero el precio de lista real con
+# sesion de Puerto Madryn es $1300.
+COOKIES = {
+    "descripcionLocalidadCabezal": "Puerto Madryn",
+    "Id-Sucursal-Super": "41",
+    "Id-Sucursal-Super-DisponibleYa": "41",
+    "idZonaPrecio": "8",
+    "operadorLogistico": "AND",
+    "provincia": "Neuquén",
+    "provincia_id": "16",
+    "seleccionocp": "1",
+    "tipoEnvioUnificado": "3",
+}
+
 
 # --- Normalizacion de texto --------------------------------------------
 # Este es el fix critico que encontramos: sin normalizar acentos,
@@ -389,7 +410,7 @@ def _precio_lista_de_pagina_individual(url: str) -> float | None:
     debe seguir usando el precio que ya tenia del listado.
     """
     try:
-        respuesta = requests.get(url, headers=HEADERS_ANONIMA, timeout=10)
+        respuesta = requests.get(url, headers=HEADERS_ANONIMA, cookies=COOKIES, timeout=10)
         respuesta.raise_for_status()
     except requests.RequestException:
         return None
