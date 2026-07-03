@@ -91,8 +91,31 @@
         .hero .fecha {
             color: var(--gold-dim);
             font-size: 0.85rem;
-            margin-bottom: 1.5rem;
+            margin-bottom: 0.75rem;
         }
+
+        .hero .narrativa {
+            color: var(--cream-dark);
+            font-size: 0.85rem;
+            font-style: italic;
+            max-width: 520px;
+            margin: 0 auto 1.5rem;
+            line-height: 1.6;
+        }
+
+        /* --------------------------------------------------------
+           TENDENCIA — flecha de variacion de precio
+           -------------------------------------------------------- */
+        .tendencia {
+            display: inline-block;
+            font-size: 0.75em;
+            font-weight: 700;
+            margin-left: 0.15rem;
+        }
+
+        .tendencia.baja { color: var(--green); }
+        .tendencia.igual { color: var(--green); }
+        .tendencia.sube { color: var(--red-soft); }
 
         .totales {
             display: flex;
@@ -449,6 +472,7 @@
     <div class="container">
         <h2>¿Cuál es el súper más barato hoy?</h2>
         <p class="fecha" id="fecha">Cargando...</p>
+        <p class="narrativa" id="narrativa"></p>
         <div class="totales" id="totales"></div>
     </div>
 </section>
@@ -518,6 +542,42 @@
     };
 
     const UNIDADES = { "kg": "/kg", "L": "/L", "unidad": "/u", "m": "/m", "panos": "/paño" };
+
+    // Frases del Señor de los Vientos, narrador de LCdV. Se elige
+    // una al azar en cada carga de la página para que el hero se
+    // sienta tan vivo como los precios que muestra, y para sembrar
+    // la idea de que el índice de los 3 súper es solo una parte del
+    // panorama — el resto lo traen los Guardianes.
+    const FRASES_NARRATIVA = [
+        "El viento nos trajo estos precios de los tres grandes. Los tesoros escondidos de la ciudad, solo los Guardianes los encuentran.",
+        "El viento sopla desde los súper grandes... pero los verdaderos tesoros de Madryn los guardan los comercios de barrio. Andá y encontralos.",
+        "Esto es lo que el viento trajo de los grandes súper. Lo que se esconde en los negocios de tu barrio, solo un Guardián lo descubre.",
+        "Esto es lo que sopló el viento hoy desde los súper grandes. Lo que se esconde en los negocios de la esquina, andá a buscarlo.",
+        "Los grandes súper no se esconden — el viento los vigila solo. Los verdaderos hallazgos de Madryn los guardan los Guardianes.",
+        "El Señor de los Vientos trae estos precios sin pedir nada a cambio. Lo que vale de verdad, hay que salir a buscarlo por la ciudad.",
+        "Tres súper, un viento que nunca duerme. Pero las mejores ofertas de Madryn viven donde el viento no llega solo."
+    ];
+
+    // Iconos de tendencia: comparan el precio de hoy contra la
+    // corrida anterior (ver _calcular_tendencia en
+    // precios_buscar_canasta.py). "igual" también va en verde: no
+    // haber subido ya es una buena noticia para el bolsillo.
+    const ICONOS_TENDENCIA = {
+        "baja": "▼",
+        "igual": "＝",
+        "sube": "▲"
+    };
+
+    function renderNarrativa() {
+        const p = document.getElementById("narrativa");
+        const frase = FRASES_NARRATIVA[Math.floor(Math.random() * FRASES_NARRATIVA.length)];
+        p.textContent = frase;
+    }
+
+    function iconoTendencia(tendencia) {
+        if (!tendencia || !ICONOS_TENDENCIA[tendencia]) return "";
+        return '<span class="tendencia ' + tendencia + '">' + ICONOS_TENDENCIA[tendencia] + '</span>';
+    }
 
     // Orden fijo en que se muestran los grupos en la tabla, como los
     // pasillos de un super. Los grupos sin productos todavia (ej.
@@ -659,7 +719,8 @@
                     const medalla = MEDALLAS[posicion] || "";
                     const esBarato = posicion === 1;
                     celdas += '<td class="' + (esBarato ? 'mas-barato' : '') + '">' +
-                        '<span class="medalla">' + medalla + '</span> ' + precio + '</td>';
+                        '<span class="medalla">' + medalla + '</span> ' + precio +
+                        iconoTendencia(info.tendencia) + '</td>';
                 });
                 tr.innerHTML = celdas;
 
@@ -702,6 +763,8 @@
             }
         }
     }
+
+    renderNarrativa();
 
     // Cargar datos
     fetch("precios_ultimo.json")

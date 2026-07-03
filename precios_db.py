@@ -213,6 +213,48 @@ def obtener_historico(
     return [dict(fila) for fila in filas]
 
 
+def obtener_fecha_anterior(fecha_actual: str) -> str | None:
+    """
+    Devuelve la fecha mas reciente guardada en el historico que sea
+    ANTERIOR a fecha_actual, o None si no hay ninguna (primera
+    corrida). Sirve para saber contra que dia comparar y calcular si
+    un precio subio, bajo o quedo igual (ver tendencia en la web).
+    """
+    with _conectar() as conn:
+        fila = conn.execute(
+            "SELECT MAX(fecha) FROM historico_precios WHERE fecha < ?",
+            (fecha_actual,),
+        ).fetchone()
+
+    return fila[0] if fila and fila[0] else None
+
+
+def obtener_precios_fecha(fecha: str) -> dict:
+    """
+    Devuelve todos los precios_normalizado guardados para una fecha
+    puntual, como un diccionario facil de consultar:
+
+        {(rubro_id, "Carrefour"): 819.0, (rubro_id, "La Anonima"): 1100.0, ...}
+
+    Pensado para comparar "hoy" contra "la corrida anterior" sin
+    tener que reconstruir todo el resumen del dia (a diferencia de
+    obtener_resumen_dia, que devuelve mas datos de los que hacen
+    falta solo para comparar precios).
+    """
+    with _conectar() as conn:
+        filas = conn.execute(
+            """
+            SELECT hp.rubro_id, t.nombre AS tienda, hp.precio_normalizado
+            FROM historico_precios hp
+            JOIN tiendas t ON t.id = hp.tienda_id
+            WHERE hp.fecha = ?
+            """,
+            (fecha,),
+        ).fetchall()
+
+    return {(rubro_id, tienda): pn for rubro_id, tienda, pn in filas}
+
+
 def obtener_ultima_fecha() -> str | None:
     """
     Devuelve la fecha mas reciente que tiene datos en el historico,

@@ -993,6 +993,32 @@ def _costo_referencia(precio_normalizado: float, rubro: dict) -> float:
 ARCHIVO_JSON_WEB = "precios_ultimo.json"
 
 
+def _calcular_tendencia(precio_hoy: float | None, precio_ayer: float | None) -> str | None:
+    """
+    Compara el precio normalizado de hoy contra el de la corrida
+    anterior y devuelve "sube", "baja" o "igual". Devuelve None si
+    falta alguno de los dos datos (primera vez que aparece el
+    producto, o el super no tenia ese rubro el dia anterior) - en
+    ese caso la web simplemente no muestra flecha.
+
+    El margen de "igual" no es una comparacion exacta 1 a 1: un
+    redondeo de centavos no deberia disparar una flecha roja o verde
+    sin sentido, asi que se considera "igual" cualquier variacion
+    menor al 0.5%.
+    """
+    if precio_hoy is None or precio_ayer is None or precio_ayer == 0:
+        return None
+
+    variacion = (precio_hoy - precio_ayer) / precio_ayer
+
+    if variacion > 0.005:
+        return "sube"
+    elif variacion < -0.005:
+        return "baja"
+    else:
+        return "igual"
+
+
 def guardar_json_web(resumen: list[dict], rubros: list[dict], fecha: str):
     """
     Genera precios_ultimo.json — el archivo que la pagina web lee
@@ -1007,8 +1033,21 @@ def guardar_json_web(resumen: list[dict], rubros: list[dict], fecha: str):
       "totales": { "La Anonima": 62972, ... },
       "mas_barato": "Carrefour"
     }
+
+    Cada producto dentro de "precios" ahora incluye tambien
+    "tendencia" ("sube" | "baja" | "igual" | null), calculada
+    comparando contra la corrida anterior guardada en
+    precios_historico.db. Ver _calcular_tendencia().
     """
     rubros_por_id = {r["id"]: r for r in rubros}
+
+    # Buscamos contra que fecha comparar (la corrida anterior a la
+    # de hoy) y traemos sus precios de una sola vez, para no golpear
+    # la base una vez por cada rubro/tienda.
+    fecha_anterior = precios_db.obtener_fecha_anterior(fecha)
+    precios_anteriores = (
+        precios_db.obtener_precios_fecha(fecha_anterior) if fecha_anterior else {}
+    )
 
     rubros_json = []
     totales = {t: 0.0 for t in TIENDAS}
@@ -1032,11 +1071,15 @@ def guardar_json_web(resumen: list[dict], rubros: list[dict], fecha: str):
             pn = prod.get("precio_normalizado")
             precio_abs = prod["precio"]
 
+            precio_anterior = precios_anteriores.get((rubro_id, tienda))
+            tendencia = _calcular_tendencia(pn, precio_anterior)
+
             precios_json[tienda] = {
                 "precio_normalizado": round(pn, 2) if pn is not None else None,
                 "precio_envase": round(precio_abs, 2),
                 "producto": prod["nombre"],
                 "url": prod.get("url", ""),
+                "tendencia": tendencia,
             }
 
             # Sumar al total usando precio normalizado × referencia,
