@@ -557,7 +557,7 @@
             </a>
         </div>
 
-        <details class="tips">
+        <details class="tips" id="tips" open>
             <summary>💡 Tips para leer esta tabla</summary>
             <div class="tips-contenido">
                 <ul>
@@ -650,6 +650,28 @@
         const p = document.getElementById("narrativa");
         const frase = FRASES_NARRATIVA[Math.floor(Math.random() * FRASES_NARRATIVA.length)];
         p.textContent = frase;
+    }
+
+    // Los "Tips para leer esta tabla" arrancan siempre desplegados
+    // para quien entra por primera vez. Pero si un Guardián los
+    // cierra, respetamos esa decision: guardamos la preferencia en
+    // su navegador (localStorage) y no se los volvemos a abrir en
+    // sus proximas visitas.
+    function iniciarTips() {
+        const detalle = document.getElementById("tips");
+        const CLAVE = "lcv_tips_cerrados";
+
+        if (localStorage.getItem(CLAVE) === "1") {
+            detalle.removeAttribute("open");
+        }
+
+        detalle.addEventListener("toggle", function() {
+            if (detalle.open) {
+                localStorage.removeItem(CLAVE);
+            } else {
+                localStorage.setItem(CLAVE, "1");
+            }
+        });
     }
 
     function iconoTendencia(tendencia) {
@@ -843,6 +865,7 @@
     }
 
     renderNarrativa();
+    iniciarTips();
 
     // Cargar datos
     fetch("precios_ultimo.json")
