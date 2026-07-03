@@ -64,7 +64,10 @@ gaseosa-cola|https://www.masonline.com.ar/gaseosas/cola
 agua-sin-gas|https://www.masonline.com.ar/aguas/sin-gas
 jugo-en-polvo|https://www.masonline.com.ar/jugos/en-polvo
 carniceria|https://www.masonline.com.ar/carniceria/carnes
+carniceria|https://www.masonline.com.ar/carniceria/pollo-y-pavo
 limpieza|https://www.masonline.com.ar/limpieza
+desodorante-ambientes|https://www.masonline.com.ar/desodorante-de-ambientes
+jabon-polvo|https://www.masonline.com.ar/ropa/jabones
 papel-higienico|https://www.masonline.com.ar/papeles-bolsas-y-films/papel-higienico
 rollos-de-cocina|https://www.masonline.com.ar/papeles-bolsas-y-films/rollos-de-cocina
 frutas|https://www.masonline.com.ar/frutas/frutas-frescas
