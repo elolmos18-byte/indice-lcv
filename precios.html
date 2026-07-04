@@ -108,13 +108,14 @@
            -------------------------------------------------------- */
         .tendencia {
             display: inline-block;
-            font-size: 0.75em;
+            font-size: 1.15em;
             font-weight: 700;
-            margin-left: 0.15rem;
+            margin-left: 0.3rem;
+            vertical-align: middle;
         }
 
         .tendencia.baja { color: var(--green); }
-        .tendencia.igual { color: var(--green); }
+        .tendencia.igual { color: var(--green); font-size: 1.3em; }
         .tendencia.sube { color: var(--red-soft); }
 
         /* --------------------------------------------------------
@@ -642,7 +643,7 @@
     // haber subido ya es una buena noticia para el bolsillo.
     const ICONOS_TENDENCIA = {
         "baja": "▼",
-        "igual": "＝",
+        "igual": "=",
         "sube": "▲"
     };
 
