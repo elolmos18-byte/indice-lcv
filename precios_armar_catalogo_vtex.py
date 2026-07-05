@@ -68,6 +68,11 @@ TIENDAS = [
         "dominio": "www.carrefour.com.ar",
         "archivo_categorias": "precios_categorias_carrefour_canasta.txt",
     },
+    {
+        "nombre": "Vea",
+        "dominio": "www.vea.com.ar",
+        "archivo_categorias": "precios_categorias_vea_canasta.txt",
+    },
 ]
 
 # Cache para no pedir el robots.txt de cada dominio mas de una vez.

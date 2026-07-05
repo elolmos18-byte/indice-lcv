@@ -1,0 +1,81 @@
+# precios_categorias_vea_canasta.txt - Indice LCV
+#
+# Subset filtrado de categorias de Vea que necesitamos para la
+# canasta CCV-37. Sale del archivo completo (219 categorias) generado
+# por precios_descubrir_arbol_vtex.py, recortado a solo lo relevante.
+#
+# Usa las MISMAS claves (nombre|url) que ya usan
+# precios_categorias_carrefour_canasta.txt y
+# precios_categorias_changomas_canasta.txt, para que el resto del
+# sistema (que ya sabe interpretar esos nombres) funcione sin
+# cambios. Solo cambia la URL, que apunta al equivalente en Vea.
+#
+# OJO - diferencias de estructura entre Vea y Carrefour a tener en
+# cuenta si algun rubro sale con pocos o ningun producto:
+#   - Vea no separa "polenta" como categoria propia (queda dentro
+#     de Harinas) - se usa la misma URL que "harinas".
+#   - Vea no separa leches por "entera"/"descremada" en la URL
+#     (usa Leches Larga Vida / Refrigeradas / Saborizadas), asi que
+#     leches-enteras y leches-descremadas apuntan a la misma
+#     categoria amplia "lacteos/leches" y se filtran por nombre.
+#   - "salsa-y-pure-de-tomate" no tiene categoria dedicada en Vea;
+#     se usa "Salsas" dentro de Pastas Secas y Salsas como mejor
+#     aproximacion - revisar el resultado real la primera corrida.
+#   - "aderezos" usa el departamento completo (sin sub-categoria)
+#     para agrupar mayonesa/ketchup/mostaza/salsas, igual que hace
+#     Carrefour con su categoria amplia "salsas-y-aderezos".
+
+
+# === Pan, harinas y derivados ===
+harinas|https://www.vea.com.ar/almacen/harinas/harinas
+polenta|https://www.vea.com.ar/almacen/harinas/harinas
+fideos-largos|https://www.vea.com.ar/almacen/pastas-secas-y-salsas/pastas-secas-largas
+fideos-cortos|https://www.vea.com.ar/almacen/pastas-secas-y-salsas/pastas-secas-guiseras
+arroz|https://www.vea.com.ar/almacen/arroz-y-legumbres/arroz
+galletitas-dulces|https://www.vea.com.ar/almacen/desayuno-y-merienda/galletitas-dulces
+galletitas-saladas|https://www.vea.com.ar/almacen/desayuno-y-merienda/galletitas-saladas
+
+# === Azucar y dulces ===
+azucar|https://www.vea.com.ar/almacen/desayuno-y-merienda/azucar-y-edulcorantes
+dulce-de-leche|https://www.vea.com.ar/lacteos/dulce-de-leche
+mermelada|https://www.vea.com.ar/almacen/desayuno-y-merienda/mermeladas-y-jaleas
+
+# === Aceites y grasas ===
+aceites|https://www.vea.com.ar/almacen/aceites-y-vinagres/aceites-comunes
+manteca|https://www.vea.com.ar/lacteos/mantecas-y-margarinas/manteca
+
+# === Lacteos ===
+leches-enteras|https://www.vea.com.ar/lacteos/leches
+leches-descremadas|https://www.vea.com.ar/lacteos/leches
+yogures-enteros|https://www.vea.com.ar/lacteos/yogures/yogures-enteros
+yogures-descremados|https://www.vea.com.ar/lacteos/yogures/yogures-descremados
+queso-untable|https://www.vea.com.ar/quesos-y-fiambres/quesos/quesos-untables
+
+# === Huevos ===
+huevos|https://www.vea.com.ar/frutas-y-verduras/huevos
+
+# === Legumbres y conservas ===
+legumbres-en-lata|https://www.vea.com.ar/almacen/conservas/conservas-de-verduras-y-legumbres
+legumbres-secas|https://www.vea.com.ar/almacen/arroz-y-legumbres/legumbres
+atun|https://www.vea.com.ar/almacen/conservas/conservas-de-pescado
+salsa-y-pure-de-tomate|https://www.vea.com.ar/almacen/pastas-secas-y-salsas/salsas
+
+# === Condimentos y aderezos ===
+sal|https://www.vea.com.ar/almacen/sal-pimienta-y-especias/sal
+vinagre|https://www.vea.com.ar/almacen/aceites-y-vinagres/vinagres
+aderezos|https://www.vea.com.ar/almacen/aderezos
+
+# === Infusiones ===
+yerba|https://www.vea.com.ar/almacen/desayuno-y-merienda/yerbas
+cafe|https://www.vea.com.ar/almacen/desayuno-y-merienda/cafes
+te|https://www.vea.com.ar/almacen/desayuno-y-merienda/tes
+
+# === Bebidas no alcoholicas ===
+gaseosa-cola|https://www.vea.com.ar/bebidas/gaseosas/cola
+agua-sin-gas|https://www.vea.com.ar/bebidas/aguas/aguas-sin-gas
+jugo-en-polvo|https://www.vea.com.ar/bebidas/jugos/en-polvo
+
+# === Categorias amplias (multi-rubro, igual que en Carrefour) ===
+carniceria|https://www.vea.com.ar/carnes
+limpieza|https://www.vea.com.ar/limpieza
+frutas-y-verduras|https://www.vea.com.ar/frutas-y-verduras

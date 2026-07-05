@@ -134,3 +134,4 @@ CREATE INDEX IF NOT EXISTS idx_catalogo_completo_fecha
 INSERT OR IGNORE INTO tiendas (nombre) VALUES ('La Anonima');
 INSERT OR IGNORE INTO tiendas (nombre) VALUES ('Carrefour');
 INSERT OR IGNORE INTO tiendas (nombre) VALUES ('Changomas');
+INSERT OR IGNORE INTO tiendas (nombre) VALUES ('Vea');

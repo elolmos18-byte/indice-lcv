@@ -73,7 +73,7 @@ ARCHIVO_RUBROS = "precios_canasta_rubros.json"
 ARCHIVO_ANONIMA = "catalogo_anonima.csv"
 ARCHIVO_VTEX = "catalogo_vtex.csv"
 
-TIENDAS = ["La Anonima", "Carrefour", "Changomas"]
+TIENDAS = ["La Anonima", "Carrefour", "Changomas", "Vea"]
 
 # Headers para visitar paginas individuales de producto de La Anonima
 # (corregir_precio_lista_anonima). Los mismos que usa
