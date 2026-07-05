@@ -49,6 +49,7 @@ HEADERS = {
 DOMINIOS = {
     "changomas": "www.masonline.com.ar",
     "carrefour": "www.carrefour.com.ar",
+    "vea": "www.vea.com.ar",
 }
 
 # Nombres de departamentos (nivel 1) que SI nos interesan. Es una
@@ -91,7 +92,19 @@ DEPARTAMENTOS_RELEVANTES = [
     "gaseosas",                      # Changomas las separa
     "aguas",
     "jugos",
+
+    # --- Nombres extra que usa Vea ---
+    "quesos y fiambres",
+    "fiambres y quesos",
+    "carnes y pescados",
+    "carniceria",
+    "pescaderia",
+    "limpieza",
+    "frutas y verduras",
+    "verduleria",
 ]
+
+
 
 # Palabras que, si aparecen en el nombre de la categoria, hacen que
 # la descartemos. Son restos del sistema viejo o categorias internas.
