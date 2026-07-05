@@ -102,8 +102,8 @@ DEPARTAMENTOS_RELEVANTES = [
     "limpieza",
     "frutas y verduras",
     "verduleria",
+    "carnes"
 ]
-
 
 
 # Palabras que, si aparecen en el nombre de la categoria, hacen que
