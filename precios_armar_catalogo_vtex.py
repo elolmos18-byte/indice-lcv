@@ -234,6 +234,17 @@ def armar_catalogo() -> list[dict]:
             for producto in productos:
                 producto["tienda"] = tienda["nombre"]
                 producto["categoria"] = nombre_categoria
+
+                # La API de VTEX de Vea (Cencosud) devuelve el precio
+                # en centavos en vez de pesos - a diferencia de
+                # Carrefour y Changomas, que devuelven pesos
+                # directamente. Sin este ajuste, todos los precios de
+                # Vea salen ~100 veces mas altos que los reales.
+                if tienda["nombre"] == "Vea":
+                    producto["precio"] = round(producto["precio"] / 100, 2)
+                    if producto.get("precio_lista"):
+                        producto["precio_lista"] = round(producto["precio_lista"] / 100, 2)
+
                 catalogo.append(producto)
 
             time.sleep(SEGUNDOS_ENTRE_PEDIDOS)

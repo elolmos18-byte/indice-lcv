@@ -1187,7 +1187,7 @@ def main():
     completos = sum(1 for r in resumen if len(r["precios"]) == 3)
     parciales = sum(1 for r in resumen if 0 < len(r["precios"]) < 3)
     vacios = sum(1 for r in resumen if len(r["precios"]) == 0)
-    print(f"\n  Rubros completos (3/3): {completos}")
+    print(f"\n  Rubros completos ({len(TIENDAS)}/{len(TIENDAS)}): {completos}")
     if parciales:
         print(f"  Rubros parciales:       {parciales}")
     if vacios:
