@@ -1,0 +1,270 @@
+# Categorias descubiertas automaticamente
+# Total: 130 categorias
+# Revisar y filtrar segun los 37 productos de la CCV-37.
+
+
+# === ALMACÉN (73) ===
+# Aceites y Vinagres > Aceites Comunes
+https://www.vea.com.ar/almacen/aceites-y-vinagres/aceites-comunes
+# Aceites y Vinagres > Aceites Especiales
+https://www.vea.com.ar/almacen/aceites-y-vinagres/aceites-especiales
+# Aceites y Vinagres > Acetos
+https://www.vea.com.ar/almacen/aceites-y-vinagres/acetos
+# Aceites y Vinagres > Jugos de Limón
+https://www.vea.com.ar/almacen/aceites-y-vinagres/jugos-de-limon
+# Aceites y Vinagres > Vinagres
+https://www.vea.com.ar/almacen/aceites-y-vinagres/vinagres
+# Aderezos > Mayonesas
+https://www.vea.com.ar/almacen/aderezos/mayonesas
+# Aderezos > Ketchup
+https://www.vea.com.ar/almacen/aderezos/ketchup
+# Aderezos > Mostazas
+https://www.vea.com.ar/almacen/aderezos/mostazas
+# Aderezos > Salsas Golf
+https://www.vea.com.ar/almacen/aderezos/salsas-golf
+# Aderezos > Salsas Frías
+https://www.vea.com.ar/almacen/aderezos/salsas-frias
+# Aderezos > Otros Condimentos
+https://www.vea.com.ar/almacen/aderezos/otros-condimentos
+# Arroz y Legumbres > Arroz
+https://www.vea.com.ar/almacen/arroz-y-legumbres/arroz
+# Arroz y Legumbres > Arroz Listos
+https://www.vea.com.ar/almacen/arroz-y-legumbres/arroz-listos
+# Arroz y Legumbres > Legumbres
+https://www.vea.com.ar/almacen/arroz-y-legumbres/legumbres
+# Conservas > Conservas de Carne
+https://www.vea.com.ar/almacen/conservas/conservas-de-carne
+# Conservas > Conservas de Frutas
+https://www.vea.com.ar/almacen/conservas/conservas-de-frutas
+# Conservas > Conservas de Pescado
+https://www.vea.com.ar/almacen/conservas/conservas-de-pescado
+# Conservas > Conservas de Verduras y Legumbres
+https://www.vea.com.ar/almacen/conservas/conservas-de-verduras-y-legumbres
+# Desayuno y Merienda > Azúcar y Edulcorantes
+https://www.vea.com.ar/almacen/desayuno-y-merienda/azucar-y-edulcorantes
+# Desayuno y Merienda > Bizcochuelos, Budines y Magdalenas
+https://www.vea.com.ar/almacen/desayuno-y-merienda/bizcochuelos-budines-y-magdalenas
+# Desayuno y Merienda > Cacao y Saborizantes
+https://www.vea.com.ar/almacen/desayuno-y-merienda/cacao-y-saborizantes
+# Desayuno y Merienda > Cafés
+https://www.vea.com.ar/almacen/desayuno-y-merienda/cafes
+# Desayuno y Merienda > Cereales
+https://www.vea.com.ar/almacen/desayuno-y-merienda/cereales
+# Desayuno y Merienda > Galletitas Dulces
+https://www.vea.com.ar/almacen/desayuno-y-merienda/galletitas-dulces
+# Desayuno y Merienda > Galletitas Saladas
+https://www.vea.com.ar/almacen/desayuno-y-merienda/galletitas-saladas
+# Desayuno y Merienda > Leches
+https://www.vea.com.ar/almacen/desayuno-y-merienda/leches
+# Desayuno y Merienda > Mermeladas y Jaleas
+https://www.vea.com.ar/almacen/desayuno-y-merienda/mermeladas-y-jaleas
+# Desayuno y Merienda > Piononos
+https://www.vea.com.ar/almacen/desayuno-y-merienda/piononos
+# Desayuno y Merienda > Tés
+https://www.vea.com.ar/almacen/desayuno-y-merienda/tes
+# Desayuno y Merienda > Yerbas
+https://www.vea.com.ar/almacen/desayuno-y-merienda/yerbas
+# Golosinas y Chocolates > Alfajores
+https://www.vea.com.ar/almacen/golosinas-y-chocolates/alfajores
+# Golosinas y Chocolates > Bocaditos y Postres
+https://www.vea.com.ar/almacen/golosinas-y-chocolates/bocaditos-y-postres
+# Golosinas y Chocolates > Bombones
+https://www.vea.com.ar/almacen/golosinas-y-chocolates/bombones
+# Golosinas y Chocolates > Caramelos y Chicles
+https://www.vea.com.ar/almacen/golosinas-y-chocolates/caramelos-y-chicles
+# Golosinas y Chocolates > Chocolates
+https://www.vea.com.ar/almacen/golosinas-y-chocolates/chocolates
+# Golosinas y Chocolates > Turrones y Grageas
+https://www.vea.com.ar/almacen/golosinas-y-chocolates/turrones-y-grageas
+# Harinas > Harinas
+https://www.vea.com.ar/almacen/harinas/harinas
+# Harinas > Avenas y Sémolas
+https://www.vea.com.ar/almacen/harinas/avenas-y-semolas
+# Panificados > Lacteados
+https://www.vea.com.ar/almacen/panificados/lacteados
+# Panificados > Pan Para Hamburguesas y Panchos
+https://www.vea.com.ar/almacen/panificados/pan-para-hamburguesas-y-panchos
+# Panificados > Tostadas y Grisines
+https://www.vea.com.ar/almacen/panificados/tostadas-y-grisines
+# Panificados > Pan Rallado y Rebozador
+https://www.vea.com.ar/almacen/panificados/pan-rallado-y-rebozador
+# Panificados > Integral y Salvado
+https://www.vea.com.ar/almacen/panificados/integral-y-salvado
+# Para Preparar > Bizcochuelos, Brownies y Tortas
+https://www.vea.com.ar/almacen/para-preparar/bizcochuelos-brownies-y-tortas
+# Para Preparar > Comidas
+https://www.vea.com.ar/almacen/para-preparar/comidas
+# Para Preparar > Flanes
+https://www.vea.com.ar/almacen/para-preparar/flanes
+# Para Preparar > Gelatinas
+https://www.vea.com.ar/almacen/para-preparar/gelatinas
+# Para Preparar > Helados
+https://www.vea.com.ar/almacen/para-preparar/helados
+# Para Preparar > Mousse
+https://www.vea.com.ar/almacen/para-preparar/mousse
+# Para Preparar > Pastelería
+https://www.vea.com.ar/almacen/para-preparar/pasteleria
+# Para Preparar > Postres
+https://www.vea.com.ar/almacen/para-preparar/postres
+# Pastas Secas y Salsas > Pastas Secas Guiseras
+https://www.vea.com.ar/almacen/pastas-secas-y-salsas/pastas-secas-guiseras
+# Pastas Secas y Salsas > Pastas Secas Largas
+https://www.vea.com.ar/almacen/pastas-secas-y-salsas/pastas-secas-largas
+# Pastas Secas y Salsas > Pastas Listas
+https://www.vea.com.ar/almacen/pastas-secas-y-salsas/pastas-listas
+# Pastas Secas y Salsas > Salsas
+https://www.vea.com.ar/almacen/pastas-secas-y-salsas/salsas
+# Sal, Pimienta y Especias > Sal
+https://www.vea.com.ar/almacen/sal-pimienta-y-especias/sal
+# Sal, Pimienta y Especias > Especias
+https://www.vea.com.ar/almacen/sal-pimienta-y-especias/especias
+# Snacks > Frutas Secas y Disecadas
+https://www.vea.com.ar/almacen/snacks/frutas-secas-y-disecadas
+# Snacks > Maní
+https://www.vea.com.ar/almacen/snacks/mani
+# Snacks > Nachos
+https://www.vea.com.ar/almacen/snacks/nachos
+# Snacks > Palitos de Maíz
+https://www.vea.com.ar/almacen/snacks/palitos-de-maiz
+# Snacks > Palitos Salados
+https://www.vea.com.ar/almacen/snacks/palitos-salados
+# Snacks > Papas Fritas
+https://www.vea.com.ar/almacen/snacks/papas-fritas
+# Snacks > Pochoclos
+https://www.vea.com.ar/almacen/snacks/pochoclos
+# Snacks > Snacks
+https://www.vea.com.ar/almacen/snacks/snacks
+# Caldos, Sopas, Puré y Bolsas para Horno > Puré
+https://www.vea.com.ar/almacen/caldos-sopas-pure-y-bolsas-para-horno/pure
+# Caldos, Sopas, Puré y Bolsas para Horno > Sopas
+https://www.vea.com.ar/almacen/caldos-sopas-pure-y-bolsas-para-horno/sopas
+# Caldos, Sopas, Puré y Bolsas para Horno > Caldos
+https://www.vea.com.ar/almacen/caldos-sopas-pure-y-bolsas-para-horno/caldos
+# Libre de Gluten
+https://www.vea.com.ar/almacen/libre-de-gluten
+# Importados
+https://www.vea.com.ar/almacen/importados
+# Mesa Dulce Navideña
+https://www.vea.com.ar/almacen/mesa-dulce-navidena
+# Cajas Navidenas
+https://www.vea.com.ar/almacen/cajas-navidenas
+# Vivi Saludable
+https://www.vea.com.ar/almacen/vivi-saludable
+
+# === BEBIDAS (33) ===
+# Aguas > Aguas Sin Gas
+https://www.vea.com.ar/bebidas/aguas/aguas-sin-gas
+# Aguas > Aguas Con Gas
+https://www.vea.com.ar/bebidas/aguas/aguas-con-gas
+# Aguas > Aguas Saborizadas
+https://www.vea.com.ar/bebidas/aguas/aguas-saborizadas
+# Gaseosas > Cola
+https://www.vea.com.ar/bebidas/gaseosas/cola
+# Gaseosas > Lima Limón
+https://www.vea.com.ar/bebidas/gaseosas/lima-limon
+# Gaseosas > Naranja
+https://www.vea.com.ar/bebidas/gaseosas/naranja
+# Gaseosas > Pomelo
+https://www.vea.com.ar/bebidas/gaseosas/pomelo
+# Gaseosas > Tónica
+https://www.vea.com.ar/bebidas/gaseosas/tonica
+# Gaseosas > Guaraná
+https://www.vea.com.ar/bebidas/gaseosas/guarana
+# Jugos > En Polvo
+https://www.vea.com.ar/bebidas/jugos/en-polvo
+# Jugos > Listos
+https://www.vea.com.ar/bebidas/jugos/listos
+# Jugos > Granadina
+https://www.vea.com.ar/bebidas/jugos/granadina
+# Jugos > Frescos
+https://www.vea.com.ar/bebidas/jugos/frescos
+# A Base de Hierbas
+https://www.vea.com.ar/bebidas/a-base-de-hierbas
+# Aperitivos
+https://www.vea.com.ar/bebidas/aperitivos
+# Bebidas Blancas
+https://www.vea.com.ar/bebidas/bebidas-blancas
+# Cervezas
+https://www.vea.com.ar/bebidas/cervezas
+# Espumantes > Chardonnay IV
+https://www.vea.com.ar/bebidas/espumantes/chardonnay-iv
+# Energizantes
+https://www.vea.com.ar/bebidas/energizantes
+# Generosos
+https://www.vea.com.ar/bebidas/generosos
+# Isotónicas
+https://www.vea.com.ar/bebidas/isotonicas
+# Licores
+https://www.vea.com.ar/bebidas/licores
+# Sidras
+https://www.vea.com.ar/bebidas/sidras
+# Vinos > Vinos Blancos
+https://www.vea.com.ar/bebidas/vinos/vinos-blancos
+# Vinos > Vinos Tintos
+https://www.vea.com.ar/bebidas/vinos/vinos-tintos
+# Vinos > Vinos Rosados
+https://www.vea.com.ar/bebidas/vinos/vinos-rosados
+# Vinos > Vinos Frizantes
+https://www.vea.com.ar/bebidas/vinos/vinos-frizantes
+# Whiskys
+https://www.vea.com.ar/bebidas/whiskys
+# Hielo
+https://www.vea.com.ar/bebidas/hielo
+# Sin Alcohol I
+https://www.vea.com.ar/bebidas/sin-alcohol-i
+# Ananá/Frutilla/Uva
+https://www.vea.com.ar/bebidas/anana-frutilla-uva
+# Varios espumantes
+https://www.vea.com.ar/bebidas/varios-espumantes
+# Vodka ll
+https://www.vea.com.ar/bebidas/vodka-ll
+
+# === LÁCTEOS (24) ===
+# Cremas
+https://www.vea.com.ar/lacteos/cremas
+# Dulce de Leche
+https://www.vea.com.ar/lacteos/dulce-de-leche
+# Leches > Leches Larga Vida
+https://www.vea.com.ar/lacteos/leches/leches-larga-vida
+# Leches > Leches Refrigeradas
+https://www.vea.com.ar/lacteos/leches/leches-refrigeradas
+# Leches > Leches Saborizadas
+https://www.vea.com.ar/lacteos/leches/leches-saborizadas
+# Leches > Bebidas Vegetales
+https://www.vea.com.ar/lacteos/leches/bebidas-vegetales
+# Mantecas y Margarinas > Manteca
+https://www.vea.com.ar/lacteos/mantecas-y-margarinas/manteca
+# Mantecas y Margarinas > Margarinas
+https://www.vea.com.ar/lacteos/mantecas-y-margarinas/margarinas
+# Pastas y Tapas > Fideos y Ñoquis
+https://www.vea.com.ar/lacteos/pastas-y-tapas/fideos-y-noquis
+# Pastas y Tapas > Grasas
+https://www.vea.com.ar/lacteos/pastas-y-tapas/grasas
+# Pastas y Tapas > Masas y Levaduras
+https://www.vea.com.ar/lacteos/pastas-y-tapas/masas-y-levaduras
+# Pastas y Tapas > Pastas Rellenas
+https://www.vea.com.ar/lacteos/pastas-y-tapas/pastas-rellenas
+# Pastas y Tapas > Tapas
+https://www.vea.com.ar/lacteos/pastas-y-tapas/tapas
+# Postres
+https://www.vea.com.ar/lacteos/postres
+# Yogures > Yogures Descremados
+https://www.vea.com.ar/lacteos/yogures/yogures-descremados
+# Yogures > Yogures Enteros
+https://www.vea.com.ar/lacteos/yogures/yogures-enteros
+# Productos Veganos > Cremas
+https://www.vea.com.ar/lacteos/productos-veganos/cremas
+# Productos Veganos > Dulce de leche
+https://www.vea.com.ar/lacteos/productos-veganos/dulce-de-leche
+# Productos Veganos > Yogurt
+https://www.vea.com.ar/lacteos/productos-veganos/yogurt
+# Productos Veganos > Manteca
+https://www.vea.com.ar/lacteos/productos-veganos/manteca
+# Productos Veganos > Postres vegetales
+https://www.vea.com.ar/lacteos/productos-veganos/postres-vegetales
+# Productos Veganos > Queso
+https://www.vea.com.ar/lacteos/productos-veganos/queso
+# Productos Veganos > Embutido
+https://www.vea.com.ar/lacteos/productos-veganos/embutido
+# Productos Veganos > Hummus y Otros
+https://www.vea.com.ar/lacteos/productos-veganos/hummus-y-otros
