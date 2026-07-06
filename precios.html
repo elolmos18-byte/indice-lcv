@@ -352,6 +352,10 @@
         thead th:first-child {
             text-align: left;
             padding-left: 1rem;
+            position: sticky;
+            left: 0;
+            background: var(--navy);
+            z-index: 2;
         }
 
         tbody tr {
@@ -377,6 +381,14 @@
             font-weight: 700;
             color: var(--navy);
             white-space: normal;
+            position: sticky;
+            left: 0;
+            background: var(--white);
+            z-index: 1;
+        }
+
+        tbody tr:hover td:first-child {
+            background: var(--cream);
         }
 
         td.mas-barato {
@@ -507,13 +519,23 @@
         /* --------------------------------------------------------
            RESPONSIVE
            -------------------------------------------------------- */
+
+        /* Tablet: la tabla ya tiene 5 columnas (Producto + 4 super),
+           asi que aca achicamos un poco antes de llegar al breakpoint
+           de celular, para que entren mejor sin scroll horizontal. */
+        @media (max-width: 900px) {
+            table { font-size: 0.8rem; }
+            thead th { padding: 0.65rem 0.4rem; }
+            tbody td { padding: 0.55rem 0.4rem; }
+        }
+
         @media (max-width: 600px) {
             .total-card { min-width: 130px; padding: 1rem; }
             .total-card .super-total { font-size: 1.3rem; }
             .hero h2 { font-size: 1.1rem; }
-            table { font-size: 0.78rem; }
-            thead th { font-size: 0.65rem; padding: 0.6rem 0.35rem; }
-            tbody td { padding: 0.5rem 0.35rem; }
+            table { font-size: 0.72rem; }
+            thead th { font-size: 0.62rem; padding: 0.55rem 0.3rem; }
+            tbody td { padding: 0.45rem 0.3rem; }
             tbody td:first-child { padding-left: 0.5rem; }
             .detalle-producto .tienda-label { width: 80px; }
         }
@@ -797,7 +819,7 @@
 
             const trGrupo = document.createElement("tr");
             trGrupo.className = "grupo-header";
-            trGrupo.innerHTML = '<td colspan="4">' +
+            trGrupo.innerHTML = '<td colspan="' + (TIENDAS.length + 1) + '">' +
                 (GRUPOS_DISPLAY[grupo] || grupo) + '</td>';
             tbody.appendChild(trGrupo);
 
@@ -840,7 +862,7 @@
                 trDetalle.className = "detalle";
                 trDetalle.id = "detalle-" + rubro.id;
 
-                let detalleHtml = '<td colspan="4">';
+                let detalleHtml = '<td colspan="' + (TIENDAS.length + 1) + '">';
                 TIENDAS.forEach(tienda => {
                     const info = rubro.precios[tienda];
                     if (!info) return;
