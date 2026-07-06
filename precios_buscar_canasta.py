@@ -297,11 +297,26 @@ def extraer_panos_totales(nombre_norm: str) -> float | None:
         panos_por_rollo = float(m.group(2))
         return rollos * panos_por_rollo
 
-    m = re.search(rf"(\d+)\s*{UNIDAD_PANOS}\s*x\s*(\d+)", nombre_norm)
+    # Formato 2: "M paños x N ..." - aca hay una ambiguedad real segun
+    # el super: a veces "M" ya es el total del pack y "x N un" es solo
+    # una etiqueta describiendo que viene en N unidades (ej. Vea:
+    # "360 Panos x 3 Un" = 360 paños TOTALES, en 3 rollos - el propio
+    # Vea confirma esto en su pagina, dividiendo el precio por 360).
+    # Si en cambio el numero despues del x NO esta etiquetado como
+    # unidad (nada de "un/uni/unidad" a continuacion), asumimos que es
+    # un multiplicador real (M paños POR rollo, x N rollos) y multiplicamos,
+    # como ya se hacia antes.
+    m = re.search(rf"(\d+)\s*{UNIDAD_PANOS}\s*x\s*(\d+)\s*(unidades?|uni|un|u)?\b", nombre_norm)
     if m:
-        panos_por_rollo = float(m.group(1))
-        rollos = float(m.group(2))
-        return panos_por_rollo * rollos
+        total_declarado = float(m.group(1))
+        etiquetado_como_unidad = m.group(3) is not None
+        if etiquetado_como_unidad:
+            # "360 panos x 3 UN" -> 360 ya es el total del pack.
+            return total_declarado
+        else:
+            # "180 panos x 3" (sin "un" despues) -> multiplicador real.
+            multiplicador = float(m.group(2))
+            return total_declarado * multiplicador
 
     m_largo = re.search(rf"(\d+)\s*{UNIDAD_PANOS}", nombre_norm)
     if not m_largo:
