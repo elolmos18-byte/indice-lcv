@@ -1,0 +1,465 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Índice LCV — Dashboard</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;700&family=Lato:wght@300;400;700&display=swap" rel="stylesheet">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
+    <style>
+        /* --------------------------------------------------------
+           TOKENS — misma paleta que precios.html (navy/gold)
+           -------------------------------------------------------- */
+        :root {
+            --navy:       #0a1628;
+            --navy-light: #142238;
+            --gold:       #c9a84c;
+            --gold-dim:   #a08636;
+            --cream:      #f5f0e8;
+            --cream-dark: #e8e0d0;
+            --green:      #2d6a4f;
+            --green-light:#40916c;
+            --red-soft:   #b85450;
+            --text:       #2c2c2c;
+            --text-light: #6b6b6b;
+            --white:      #ffffff;
+            --carrefour:  #3a7ca5;
+            --changomas:  #b85450;
+            --anonima:    #6b6b6b;
+            --vea:        #2d6a4f;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            font-family: 'Lato', sans-serif;
+            color: var(--text);
+            background: var(--cream);
+            line-height: 1.5;
+            -webkit-font-smoothing: antialiased;
+        }
+
+        .container {
+            max-width: 960px;
+            margin: 0 auto;
+            padding: 0 1rem;
+        }
+
+        header {
+            background: var(--navy);
+            padding: 1.25rem 0;
+            text-align: center;
+            border-bottom: 3px solid var(--gold);
+        }
+
+        header h1 {
+            font-family: 'Cinzel', serif;
+            color: var(--gold);
+            font-size: 1.1rem;
+            font-weight: 400;
+            letter-spacing: 0.15em;
+            text-transform: uppercase;
+        }
+
+        header p {
+            color: var(--cream-dark);
+            font-size: 0.8rem;
+            margin-top: 0.25rem;
+            font-weight: 300;
+        }
+
+        header nav {
+            margin-top: 0.75rem;
+        }
+
+        header nav a {
+            color: var(--gold-dim);
+            font-size: 0.75rem;
+            text-decoration: underline;
+        }
+
+        /* --------------------------------------------------------
+           ESTADO GENERAL
+           -------------------------------------------------------- */
+        .estado-section {
+            padding: 1.5rem 0;
+        }
+
+        .estado-titulo {
+            font-family: 'Cinzel', serif;
+            font-size: 0.9rem;
+            color: var(--navy);
+            margin-bottom: 0.75rem;
+            text-align: center;
+        }
+
+        .estado-grid {
+            display: flex;
+            gap: 0.75rem;
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+
+        .estado-card {
+            background: var(--white);
+            border: 1px solid var(--cream-dark);
+            border-radius: 8px;
+            padding: 0.9rem 1.1rem;
+            min-width: 140px;
+            flex: 1;
+            max-width: 190px;
+            text-align: center;
+        }
+
+        .estado-card .valor {
+            font-family: 'Cinzel', serif;
+            font-size: 1.2rem;
+            color: var(--navy);
+        }
+
+        .estado-card .etiqueta {
+            font-size: 0.68rem;
+            color: var(--text-light);
+            text-transform: uppercase;
+            letter-spacing: 0.04em;
+            margin-top: 0.2rem;
+        }
+
+        .estado-card .cobertura-barra {
+            height: 5px;
+            background: var(--cream-dark);
+            border-radius: 3px;
+            margin-top: 0.5rem;
+            overflow: hidden;
+        }
+
+        .estado-card .cobertura-relleno {
+            height: 100%;
+            background: var(--green-light);
+        }
+
+        /* --------------------------------------------------------
+           GRAFICOS
+           -------------------------------------------------------- */
+        .grafico-section {
+            padding: 1.5rem 0;
+        }
+
+        .grafico-card {
+            background: var(--white);
+            border-radius: 8px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+            padding: 1.25rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .grafico-card h3 {
+            font-family: 'Cinzel', serif;
+            font-size: 1rem;
+            color: var(--navy);
+            margin-bottom: 0.25rem;
+        }
+
+        .grafico-card .subtitulo {
+            font-size: 0.78rem;
+            color: var(--text-light);
+            margin-bottom: 1rem;
+        }
+
+        .grafico-wrapper {
+            position: relative;
+            height: 280px;
+        }
+
+        select {
+            font-family: 'Lato', sans-serif;
+            font-size: 0.85rem;
+            padding: 0.5rem 0.75rem;
+            border-radius: 5px;
+            border: 1px solid var(--cream-dark);
+            background: var(--white);
+            color: var(--text);
+            margin-bottom: 1rem;
+            width: 100%;
+            max-width: 380px;
+        }
+
+        .sin-historico {
+            text-align: center;
+            padding: 3rem 1rem;
+            color: var(--text-light);
+            font-size: 0.85rem;
+        }
+
+        .estado {
+            text-align: center;
+            padding: 3rem;
+            color: var(--text-light);
+            font-size: 0.9rem;
+        }
+
+        footer {
+            text-align: center;
+            padding: 1.5rem 0 2.5rem;
+        }
+
+        footer a {
+            color: var(--gold-dim);
+            font-size: 0.75rem;
+        }
+
+        @media (max-width: 600px) {
+            .estado-card { min-width: 120px; padding: 0.75rem; }
+            .grafico-wrapper { height: 240px; }
+        }
+    </style>
+</head>
+<body>
+
+<header>
+    <div class="container">
+        <h1>Índice LCV — Dashboard</h1>
+        <p>Evolución de precios · Puerto Madryn</p>
+        <nav><a href="precios.html">← Volver a la tabla de precios</a></nav>
+    </div>
+</header>
+
+<section class="estado-section">
+    <div class="container">
+        <div class="estado-titulo">Estado general del sistema</div>
+        <div class="estado-grid" id="estadoGrid">
+            <div class="estado">Cargando...</div>
+        </div>
+    </div>
+</section>
+
+<section class="grafico-section">
+    <div class="container">
+
+        <div class="grafico-card">
+            <h3>Evolución de la canasta completa</h3>
+            <p class="subtitulo">Costo total de los ~62 productos de la canasta, por súper, a lo largo del tiempo.</p>
+            <div class="grafico-wrapper">
+                <canvas id="graficoTotales"></canvas>
+            </div>
+        </div>
+
+        <div class="grafico-card">
+            <h3>Evolución por producto</h3>
+            <p class="subtitulo">Elegí un producto para ver cómo cambió su precio en cada súper.</p>
+            <select id="selectorRubro"></select>
+            <div class="grafico-wrapper">
+                <canvas id="graficoRubro"></canvas>
+            </div>
+        </div>
+
+    </div>
+</section>
+
+<footer>
+    <a href="precios.html">Índice LCV — Puerto Madryn</a>
+</footer>
+
+<script>
+    const COLORES = {
+        "La Anonima": "#6b6b6b",
+        "Carrefour": "#3a7ca5",
+        "Changomas": "#b85450",
+        "Vea": "#2d6a4f"
+    };
+
+    function formatearFecha(fechaISO) {
+        const [anio, mes, dia] = fechaISO.split("-");
+        return `${dia}/${mes}`;
+    }
+
+    function formatearMoneda(valor) {
+        if (valor === null || valor === undefined) return "-";
+        return "$" + Math.round(valor).toLocaleString("es-AR");
+    }
+
+    function renderEstadoGeneral(estado) {
+        const grid = document.getElementById("estadoGrid");
+
+        if (!estado || !estado.fecha_ultima_corrida) {
+            grid.innerHTML = '<div class="estado">Todavía no hay datos de estado.</div>';
+            return;
+        }
+
+        let html = `
+            <div class="estado-card">
+                <div class="valor">${estado.fecha_ultima_corrida}</div>
+                <div class="etiqueta">Última actualización</div>
+            </div>
+            <div class="estado-card">
+                <div class="valor">${estado.total_rubros}</div>
+                <div class="etiqueta">Productos en la canasta</div>
+            </div>
+            <div class="estado-card">
+                <div class="valor">${estado.mas_barato_hoy || "-"}</div>
+                <div class="etiqueta">Más barato hoy</div>
+            </div>
+        `;
+
+        const cobertura = estado.cobertura_por_tienda || {};
+        for (const tienda of Object.keys(cobertura)) {
+            const c = cobertura[tienda];
+            html += `
+                <div class="estado-card">
+                    <div class="valor">${c.porcentaje}%</div>
+                    <div class="etiqueta">${tienda} — cobertura</div>
+                    <div class="cobertura-barra">
+                        <div class="cobertura-relleno" style="width:${c.porcentaje}%"></div>
+                    </div>
+                </div>
+            `;
+        }
+
+        grid.innerHTML = html;
+    }
+
+    function renderGraficoTotales(evolucion) {
+        const canvas = document.getElementById("graficoTotales");
+        const fechas = evolucion.fechas || [];
+
+        if (fechas.length < 2) {
+            canvas.parentElement.innerHTML =
+                '<div class="sin-historico">Todavía no hay suficiente historial acumulado ' +
+                '(hace falta más de una corrida guardada) para mostrar una evolución. ' +
+                'Volvé a revisar en unos días.</div>';
+            return;
+        }
+
+        const datasets = Object.keys(evolucion.por_tienda || {}).map(tienda => ({
+            label: tienda,
+            data: evolucion.por_tienda[tienda],
+            borderColor: COLORES[tienda] || "#999",
+            backgroundColor: COLORES[tienda] || "#999",
+            tension: 0.25,
+            spanGaps: true,
+            pointRadius: 3,
+        }));
+
+        new Chart(canvas, {
+            type: "line",
+            data: {
+                labels: fechas.map(formatearFecha),
+                datasets: datasets,
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                    legend: { position: "bottom", labels: { font: { size: 11 } } },
+                    tooltip: {
+                        callbacks: {
+                            label: ctx => `${ctx.dataset.label}: ${formatearMoneda(ctx.parsed.y)}`
+                        }
+                    }
+                },
+                scales: {
+                    y: { ticks: { callback: v => formatearMoneda(v) } }
+                }
+            }
+        });
+    }
+
+    function poblarSelectorRubros(rubros, evolucionPorRubro) {
+        const selector = document.getElementById("selectorRubro");
+
+        // Solo mostramos rubros que efectivamente tienen historico
+        // guardado - no tiene sentido ofrecer un producto sin datos.
+        const rubrosConDatos = rubros.filter(r => evolucionPorRubro[String(r.id)]);
+
+        if (rubrosConDatos.length === 0) {
+            selector.parentElement.querySelector(".grafico-wrapper").innerHTML =
+                '<div class="sin-historico">Todavía no hay historico por producto guardado.</div>';
+            selector.style.display = "none";
+            return;
+        }
+
+        selector.innerHTML = rubrosConDatos
+            .map(r => `<option value="${r.id}">${r.nombre}</option>`)
+            .join("");
+
+        selector.addEventListener("change", () => {
+            renderGraficoRubro(rubrosConDatos.find(r => r.id == selector.value), evolucionPorRubro);
+        });
+
+        renderGraficoRubro(rubrosConDatos[0], evolucionPorRubro);
+    }
+
+    let graficoRubroActual = null;
+
+    function renderGraficoRubro(rubro, evolucionPorRubro) {
+        if (!rubro) return;
+
+        const datosRubro = evolucionPorRubro[String(rubro.id)] || {};
+        const canvas = document.getElementById("graficoRubro");
+
+        // Unificamos todas las fechas que aparecen en cualquier tienda
+        // para este rubro, para que el eje X quede parejo.
+        const fechasSet = new Set();
+        Object.values(datosRubro).forEach(serie =>
+            serie.forEach(punto => fechasSet.add(punto.fecha))
+        );
+        const fechas = Array.from(fechasSet).sort();
+
+        const datasets = Object.keys(datosRubro).map(tienda => {
+            const mapa = Object.fromEntries(datosRubro[tienda].map(p => [p.fecha, p.precio]));
+            return {
+                label: tienda,
+                data: fechas.map(f => mapa[f] ?? null),
+                borderColor: COLORES[tienda] || "#999",
+                backgroundColor: COLORES[tienda] || "#999",
+                tension: 0.25,
+                spanGaps: true,
+                pointRadius: 3,
+            };
+        });
+
+        if (graficoRubroActual) graficoRubroActual.destroy();
+
+        graficoRubroActual = new Chart(canvas, {
+            type: "line",
+            data: {
+                labels: fechas.map(formatearFecha),
+                datasets: datasets,
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                    legend: { position: "bottom", labels: { font: { size: 11 } } },
+                    tooltip: {
+                        callbacks: {
+                            label: ctx => `${ctx.dataset.label}: ${formatearMoneda(ctx.parsed.y)}/${rubro.unidad}`
+                        }
+                    }
+                },
+                scales: {
+                    y: { ticks: { callback: v => formatearMoneda(v) } }
+                }
+            }
+        });
+    }
+
+    fetch("dashboard_datos.json")
+        .then(r => r.json())
+        .then(datos => {
+            renderEstadoGeneral(datos.estado_general);
+            renderGraficoTotales(datos.evolucion_totales || {});
+            poblarSelectorRubros(datos.rubros || [], datos.evolucion_por_rubro || {});
+        })
+        .catch(err => {
+            document.getElementById("estadoGrid").innerHTML =
+                '<div class="estado">No se pudo cargar dashboard_datos.json todavía. ' +
+                'Corré precios_exportar_dashboard.py en el servidor.</div>';
+            console.error(err);
+        });
+</script>
+
+</body>
+</html>

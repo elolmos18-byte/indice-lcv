@@ -2,12 +2,15 @@
 #
 # precios_corrida_diaria.sh
 #
-# Encadena los 4 pasos de la actualizacion diaria de precios:
+# Encadena los pasos de la actualizacion diaria de precios:
 #   1. Scrapea La Anonima       -> catalogo_anonima.csv
-#   2. Scrapea Carrefour+Chango -> catalogo_vtex.csv
+#   2. Scrapea Carrefour+Chango+Vea -> catalogo_vtex.csv
 #   3. Busca el mas barato      -> CSV + JSON web + base de datos
 #   4. Guarda el catalogo completo (~5500 productos) en el historico,
 #      backend-only, no se muestra en la web (ver precios_MAESTRO.md)
+#   5. Exporta los datos del dashboard (evolucion historica + estado
+#      general) a dashboard_datos.json, para que dashboard.html no
+#      tenga que consultar la base de datos en cada visita.
 #
 # Pensado para ser llamado por cron, dos veces al dia. La base de
 # datos es idempotente (ver precios_schema.sql, UNIQUE(fecha,
@@ -31,10 +34,12 @@ echo "Corrida iniciada: $(date '+%Y-%m-%d %H:%M:%S')" >> "$ARCHIVO_LOG"
 echo "========================================" >> "$ARCHIVO_LOG"
 echo "--- Paso 1: catalogo La Anonima ---" >> "$ARCHIVO_LOG"
 python3 precios_armar_catalogo_anonima.py categorias.txt >> "$ARCHIVO_LOG" 2>&1
-echo "--- Paso 2: catalogo VTEX (Carrefour + Changomas) ---" >> "$ARCHIVO_LOG"
+echo "--- Paso 2: catalogo VTEX (Carrefour + Changomas + Vea) ---" >> "$ARCHIVO_LOG"
 python3 precios_armar_catalogo_vtex.py >> "$ARCHIVO_LOG" 2>&1
 echo "--- Paso 3: buscar canasta y guardar ---" >> "$ARCHIVO_LOG"
 python3 precios_buscar_canasta.py >> "$ARCHIVO_LOG" 2>&1
 echo "--- Paso 4: guardar catalogo completo (historico backend) ---" >> "$ARCHIVO_LOG"
 python3 precios_guardar_catalogo_completo.py >> "$ARCHIVO_LOG" 2>&1
+echo "--- Paso 5: exportar datos del dashboard ---" >> "$ARCHIVO_LOG"
+python3 precios_exportar_dashboard.py >> "$ARCHIVO_LOG" 2>&1
 echo "Corrida finalizada: $(date '+%Y-%m-%d %H:%M:%S')" >> "$ARCHIVO_LOG"

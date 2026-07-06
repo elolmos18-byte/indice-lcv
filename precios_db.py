@@ -255,6 +255,115 @@ def obtener_precios_fecha(fecha: str) -> dict:
     return {(rubro_id, tienda): pn for rubro_id, tienda, pn in filas}
 
 
+def obtener_rubros() -> list[dict]:
+    """
+    Devuelve la lista completa de rubros de la canasta (id, nombre,
+    unidad), ordenada por id. Pensada para poblar selectores en la
+    web (ej. el dropdown de "elegir producto" del dashboard) sin
+    tener que leer el .json de rubros por separado.
+    """
+    with _conectar() as conn:
+        conn.row_factory = sqlite3.Row
+        filas = conn.execute(
+            "SELECT id, nombre, unidad FROM rubros ORDER BY id"
+        ).fetchall()
+
+    return [dict(fila) for fila in filas]
+
+
+def obtener_evolucion_totales() -> dict:
+    """
+    Devuelve la evolucion del total de la canasta por tienda, dia a
+    dia, sumando el precio_normalizado de todos los rubros
+    disponibles ese dia para esa tienda. Pensada para el grafico de
+    "quien fue mas barato a lo largo del tiempo" del dashboard.
+
+    Solo suma rubros con precio_normalizado valido (no NULL) - un
+    rubro faltante ese dia simplemente no se cuenta, en vez de
+    reventar el total con un cero falso.
+
+    Devuelve:
+        {
+            "fechas": ["2026-07-01", "2026-07-03", ...],
+            "por_tienda": {
+                "La Anonima": [62972.0, 63500.0, ...],
+                "Carrefour": [55000.0, null, ...],   // null = sin datos ese dia
+                ...
+            }
+        }
+    """
+    with _conectar() as conn:
+        conn.row_factory = sqlite3.Row
+        filas = conn.execute(
+            """
+            SELECT hp.fecha, t.nombre AS tienda,
+                   SUM(hp.precio_normalizado) AS total,
+                   COUNT(*) AS rubros_contados
+            FROM historico_precios hp
+            JOIN tiendas t ON t.id = hp.tienda_id
+            WHERE hp.precio_normalizado IS NOT NULL
+            GROUP BY hp.fecha, t.nombre
+            ORDER BY hp.fecha ASC
+            """
+        ).fetchall()
+
+    fechas = sorted({fila["fecha"] for fila in filas})
+    tiendas = sorted({fila["tienda"] for fila in filas})
+
+    indice_fecha = {fecha: i for i, fecha in enumerate(fechas)}
+    por_tienda = {tienda: [None] * len(fechas) for tienda in tiendas}
+
+    for fila in filas:
+        i = indice_fecha[fila["fecha"]]
+        por_tienda[fila["tienda"]][i] = round(fila["total"], 2)
+
+    return {"fechas": fechas, "por_tienda": por_tienda}
+
+
+def obtener_evolucion_todos_los_rubros() -> dict:
+    """
+    Devuelve, para CADA rubro, su evolucion de precio_normalizado por
+    tienda a lo largo del tiempo - todo junto en una sola consulta,
+    para no golpear la base una vez por rubro (61 consultas
+    separadas séria innecesariamente lento).
+
+    Devuelve:
+        {
+            "1": {
+                "La Anonima": [{"fecha": "2026-07-01", "precio": 1100.0}, ...],
+                "Carrefour": [...],
+                ...
+            },
+            "2": { ... },
+            ...
+        }
+    """
+    with _conectar() as conn:
+        conn.row_factory = sqlite3.Row
+        filas = conn.execute(
+            """
+            SELECT hp.rubro_id, hp.fecha, t.nombre AS tienda,
+                   hp.precio_normalizado
+            FROM historico_precios hp
+            JOIN tiendas t ON t.id = hp.tienda_id
+            WHERE hp.precio_normalizado IS NOT NULL
+            ORDER BY hp.rubro_id, hp.fecha ASC
+            """
+        ).fetchall()
+
+    resultado: dict = {}
+    for fila in filas:
+        rubro_id = str(fila["rubro_id"])
+        resultado.setdefault(rubro_id, {})
+        resultado[rubro_id].setdefault(fila["tienda"], [])
+        resultado[rubro_id][fila["tienda"]].append({
+            "fecha": fila["fecha"],
+            "precio": round(fila["precio_normalizado"], 2),
+        })
+
+    return resultado
+
+
 def obtener_ultima_fecha() -> str | None:
     """
     Devuelve la fecha mas reciente que tiene datos en el historico,
