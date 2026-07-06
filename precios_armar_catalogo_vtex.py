@@ -197,6 +197,7 @@ def buscar_categoria(dominio: str, categoria: str) -> list[dict]:
                     "marca": item.get("brand"),
                     "precio": precio,
                     "precio_lista": oferta.get("ListPrice"),
+                    "precio_sin_descuento": oferta.get("PriceWithoutDiscount"),
                     "medida": medida,
                     "url": f"https://{dominio}/{item.get('linkText')}/p",
                 })
@@ -235,15 +236,23 @@ def armar_catalogo() -> list[dict]:
                 producto["tienda"] = tienda["nombre"]
                 producto["categoria"] = nombre_categoria
 
-                # La API de VTEX de Vea (Cencosud) devuelve el precio
-                # en centavos en vez de pesos - a diferencia de
-                # Carrefour y Changomas, que devuelven pesos
-                # directamente. Sin este ajuste, todos los precios de
-                # Vea salen ~100 veces mas altos que los reales.
+                # El campo "ListPrice" (precio_lista) que devuelve la
+                # API de Vea (Cencosud) no es confiable: trae numeros
+                # sin relacion con el precio real mostrado en la
+                # pagina (ej. $72.308 cuando el precio real es $799).
+                # En cambio "PriceWithoutDiscount" SI es confiable y
+                # es justo lo que buscamos: el precio de lista sin
+                # descuentos ni promociones, igual que usamos para
+                # las otras tiendas. Lo usamos como "precio" para Vea
+                # y descartamos ListPrice.
                 if tienda["nombre"] == "Vea":
-                    producto["precio"] = round(producto["precio"] / 100, 2)
-                    if producto.get("precio_lista"):
-                        producto["precio_lista"] = round(producto["precio_lista"] / 100, 2)
+                    if producto.get("precio_sin_descuento"):
+                        producto["precio"] = producto["precio_sin_descuento"]
+                    producto["precio_lista"] = None
+
+                # Este campo interno ya cumplio su funcion - no hace
+                # falta guardarlo en el CSV final.
+                producto.pop("precio_sin_descuento", None)
 
                 catalogo.append(producto)
 
