@@ -51,7 +51,8 @@ def cargar_datos(db_path: str, dias_atras: int) -> pd.DataFrame:
             t.nombre AS tienda_nombre,
             h.codigo_producto,
             h.nombre AS producto_nombre,
-            h.precio
+            h.precio,
+            h.precio_lista
         FROM historico_catalogo_completo h
         JOIN tiendas t ON t.id = h.tienda_id
         WHERE h.fecha >= ?
@@ -67,6 +68,15 @@ def cargar_datos(db_path: str, dias_atras: int) -> pd.DataFrame:
         )
 
     df["fecha"] = pd.to_datetime(df["fecha"])
+
+    # precio_lista es el precio "de lista" (sin promocion) en VTEX.
+    # precio puede incluir descuentos temporales que entran y salen
+    # de un dia a otro y generan subidas/bajadas falsas que no son
+    # ajustes reales -- por eso preferimos precio_lista cuando esta
+    # disponible, y solo caemos a precio si no lo tiene (ej. La
+    # Anonima, que no es VTEX).
+    df["precio_efectivo"] = df["precio_lista"].fillna(df["precio"])
+
     return df
 
 
@@ -78,7 +88,7 @@ def calcular_transiciones(df: pd.DataFrame) -> pd.DataFrame:
     df = df.sort_values(["tienda_id", "codigo_producto", "fecha"])
 
     grupo = df.groupby(["tienda_id", "codigo_producto"], sort=False)
-    df["precio_anterior"] = grupo["precio"].shift(1)
+    df["precio_anterior"] = grupo["precio_efectivo"].shift(1)
     df["fecha_anterior"] = grupo["fecha"].shift(1)
 
     # Descartamos la primera aparicion de cada producto (no tiene
@@ -86,7 +96,7 @@ def calcular_transiciones(df: pd.DataFrame) -> pd.DataFrame:
     transiciones = df.dropna(subset=["precio_anterior"]).copy()
 
     transiciones["variacion_pct"] = (
-        (transiciones["precio"] - transiciones["precio_anterior"])
+        (transiciones["precio_efectivo"] - transiciones["precio_anterior"])
         / transiciones["precio_anterior"] * 100
     )
     transiciones["subio"] = transiciones["variacion_pct"] > 0
@@ -110,12 +120,16 @@ def resumen_por_dia_semana(transiciones: pd.DataFrame, por_tienda: bool = False)
         variacion_pct_promedio_subidas=(
             "variacion_pct", lambda s: s[s > 0].mean()
         ),
+        variacion_pct_mediana_subidas=(
+            "variacion_pct", lambda s: s[s > 0].median()
+        ),
     ).reset_index()
 
     resumen["pct_transiciones_que_suben"] = (
         resumen["subidas"] / resumen["transiciones_totales"] * 100
     ).round(2)
     resumen["variacion_pct_promedio_subidas"] = resumen["variacion_pct_promedio_subidas"].round(2)
+    resumen["variacion_pct_mediana_subidas"] = resumen["variacion_pct_mediana_subidas"].round(2)
 
     orden = ["tienda_nombre"] if por_tienda else []
     resumen = resumen.sort_values(orden + ["dia_semana_num"])
@@ -133,12 +147,16 @@ def resumen_por_dia_mes(transiciones: pd.DataFrame, por_tienda: bool = False) ->
         variacion_pct_promedio_subidas=(
             "variacion_pct", lambda s: s[s > 0].mean()
         ),
+        variacion_pct_mediana_subidas=(
+            "variacion_pct", lambda s: s[s > 0].median()
+        ),
     ).reset_index()
 
     resumen["pct_transiciones_que_suben"] = (
         resumen["subidas"] / resumen["transiciones_totales"] * 100
     ).round(2)
     resumen["variacion_pct_promedio_subidas"] = resumen["variacion_pct_promedio_subidas"].round(2)
+    resumen["variacion_pct_mediana_subidas"] = resumen["variacion_pct_mediana_subidas"].round(2)
 
     orden = ["tienda_nombre"] if por_tienda else []
     resumen = resumen.sort_values(orden + ["dia_mes"])
@@ -154,7 +172,8 @@ def imprimir_top(resumen: pd.DataFrame, columna_dia: str, titulo: str, n: int = 
             f"{tienda}{fila[columna_dia]}: "
             f"{fila['pct_transiciones_que_suben']}% de las veces sube "
             f"(n={int(fila['transiciones_totales'])}, "
-            f"subida promedio {fila['variacion_pct_promedio_subidas']}%)"
+            f"promedio {fila['variacion_pct_promedio_subidas']}%, "
+            f"mediana {fila['variacion_pct_mediana_subidas']}%)"
         )
 
 
