@@ -40,9 +40,9 @@ DIAS_SEMANA_ES = {
 }
 
 
-def cargar_datos(db_path: str, dias_atras: int) -> pd.DataFrame:
+def cargar_datos(db_path: str, dias_atras: int, fecha_desde_manual: str = None) -> pd.DataFrame:
     con = sqlite3.connect(db_path)
-    fecha_desde = (date.today() - timedelta(days=dias_atras)).isoformat()
+    fecha_desde = fecha_desde_manual or (date.today() - timedelta(days=dias_atras)).isoformat()
 
     query = """
         SELECT
@@ -180,12 +180,13 @@ def imprimir_top(resumen: pd.DataFrame, columna_dia: str, titulo: str, n: int = 
 def main():
     ap = argparse.ArgumentParser(description="Analiza que dias suben mas los precios.")
     ap.add_argument("--db", required=True, help="Ruta a precios_historico.db")
-    ap.add_argument("--dias", type=int, default=180, help="Ventana de dias hacia atras a analizar (default 180)")
+    ap.add_argument("--dias", type=int, default=180, help="Ventana de dias hacia atras a analizar (default 180). Ignorado si se pasa --fecha-desde.")
+    ap.add_argument("--fecha-desde", default=None, help="Fecha exacta de inicio (YYYY-MM-DD), para evitar mezclar con periodos donde el catalogo tenia menos productos. Si se pasa, ignora --dias.")
     ap.add_argument("--salida-csv", default=None, help="Si se pasa, guarda el resumen por dia de semana y tienda en este CSV")
     args = ap.parse_args()
 
-    print(f"Cargando historico_catalogo_completo (ultimos {args.dias} dias)...")
-    df = cargar_datos(args.db, args.dias)
+    print(f"Cargando historico_catalogo_completo (desde {args.fecha_desde or f'{args.dias} dias atras'})...")
+    df = cargar_datos(args.db, args.dias, args.fecha_desde)
     print(f"{len(df):,} filas cargadas.")
 
     transiciones = calcular_transiciones(df)
