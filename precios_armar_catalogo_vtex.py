@@ -192,9 +192,20 @@ def buscar_categoria(dominio: str, categoria: str) -> list[dict]:
                 # cuando NO tiene que normalizar de nuevo.
                 medida = item["items"][0].get("measurementUnit", "un")
 
+                # EAN (codigo de barras): confirmado el 19/8/2026 que
+                # VTEX ya lo trae gratis en items[0]["ean"], sin
+                # necesidad de ningun pedido extra (a diferencia de La
+                # Anonima, que solo lo tiene en la pagina individual
+                # de cada producto). Puede venir vacio ("") en
+                # productos que el super no cargo con EAN - lo
+                # convertimos a None para que quede NULL en la base
+                # en vez de guardar un string vacio.
+                ean = item["items"][0].get("ean") or None
+
                 productos.append({
                     "nombre": item.get("productName"),
                     "marca": item.get("brand"),
+                    "ean": ean,
                     "precio": precio,
                     "precio_lista": oferta.get("ListPrice"),
                     "precio_sin_descuento": oferta.get("PriceWithoutDiscount"),
@@ -262,7 +273,7 @@ def armar_catalogo() -> list[dict]:
 
 
 def guardar_csv(catalogo: list[dict], ruta_salida: str):
-    columnas = ["tienda", "categoria", "nombre", "marca", "precio", "precio_lista", "medida", "url"]
+    columnas = ["tienda", "categoria", "nombre", "marca", "ean", "precio", "precio_lista", "medida", "url"]
     with open(ruta_salida, "w", newline="", encoding="utf-8-sig") as archivo:
         escritor = csv.DictWriter(archivo, fieldnames=columnas)
         escritor.writeheader()

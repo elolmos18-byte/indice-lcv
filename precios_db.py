@@ -520,8 +520,10 @@ def guardar_catalogo_completo(fecha: str, productos: list[dict]) -> int:
             filas_procesadas += 1
 
             # Alimenta productos_maestro con lo que ya tenemos gratis
-            # del scraping (nombre, marca). EAN/categoria_ia/
-            # normalizacion se completan despues, por procesos aparte.
+            # del scraping (nombre, marca, y ean para VTEX). El ean de
+            # La Anonima llega despues por el job de tandas aparte
+            # (precios_scrapear_ean_anonima.py) - categoria_ia y
+            # normalizacion se completan por Gemini, tambien aparte.
             #
             # OJO: se le pasa conn=conn (la misma conexion abierta de
             # este for) para NO abrir una segunda conexion aca adentro
@@ -532,6 +534,7 @@ def guardar_catalogo_completo(fecha: str, productos: list[dict]) -> int:
                 tienda_id=tienda_id,
                 nombre=prod["nombre"],
                 marca=prod.get("marca"),
+                ean=prod.get("ean"),
                 conn=conn,
             )
 
@@ -599,6 +602,7 @@ def _upsert_producto_maestro_sql(
     tienda_id: int,
     nombre: str,
     marca: str | None,
+    ean: str | None,
 ) -> None:
     """
     Ejecuta el INSERT/UPDATE de productos_maestro sobre una conexion
@@ -607,17 +611,24 @@ def _upsert_producto_maestro_sql(
     para poder reusarla desde adentro de guardar_catalogo_completo sin
     abrir una segunda conexion (ver comentario mas abajo, bug de
     'database is locked' encontrado el 19/8/2026).
+
+    [19/8/2026] Se le agrego el parametro ean: confirmado que VTEX
+    (Carrefour/Changomas/Vea) lo trae gratis en la misma llamada de
+    catalogo, junto con la marca - a diferencia de La Anonima, que
+    necesita el job de tandas aparte (precios_scrapear_ean_anonima.py)
+    porque su listado no lo incluye.
     """
     conn.execute(
         """
-        INSERT INTO productos_maestro (codigo_producto, tienda_id, nombre, marca)
-        VALUES (?, ?, ?, ?)
+        INSERT INTO productos_maestro (codigo_producto, tienda_id, nombre, marca, ean)
+        VALUES (?, ?, ?, ?, ?)
         ON CONFLICT(codigo_producto) DO UPDATE SET
             nombre = excluded.nombre,
             marca = COALESCE(excluded.marca, productos_maestro.marca),
+            ean = COALESCE(excluded.ean, productos_maestro.ean),
             actualizado_en = CURRENT_TIMESTAMP
         """,
-        (codigo_producto, tienda_id, nombre, marca),
+        (codigo_producto, tienda_id, nombre, marca, ean),
     )
 
 
@@ -626,17 +637,21 @@ def upsert_producto_maestro(
     tienda_id: int,
     nombre: str,
     marca: str | None = None,
+    ean: str | None = None,
     conn: sqlite3.Connection | None = None,
 ) -> None:
     """
     Crea o actualiza la fila basica de un producto en productos_maestro.
 
-    A proposito NO toca ean/categoria_ia/cantidad_normalizada/
-    unidad_normalizada - esos campos los completan procesos aparte
-    (tandas de EAN, clasificacion con Gemini) y no queremos que una
-    corrida diaria de scraping los pise con NULL por accidente. Por
-    eso el UPDATE usa COALESCE en marca (si el scraping no trae marca
-    esta vez, se conserva la que ya estaba guardada).
+    A proposito NO toca categoria_ia/cantidad_normalizada/
+    unidad_normalizada - esos campos los completa Gemini en un
+    proceso aparte, y no queremos que una corrida diaria de scraping
+    los pise con NULL por accidente. marca y ean SI se actualizan
+    aca porque para VTEX vienen gratis en la misma corrida diaria; el
+    UPDATE usa COALESCE en los dos (si el scraping no trae el dato
+    esta vez, se conserva el que ya estaba guardado - por ejemplo el
+    EAN de La Anonima, que llega despues por el job de tandas, nunca
+    por esta funcion con valor real).
 
     Parametro `conn` [agregado 19/8/2026, fix de bug]: si se llama a
     esta funcion SOLA (por ejemplo desde una consola de prueba), abre
@@ -650,11 +665,11 @@ def upsert_producto_maestro(
     abrir una nueva ahi adentro producia "database is locked".
     """
     if conn is not None:
-        _upsert_producto_maestro_sql(conn, codigo_producto, tienda_id, nombre, marca)
+        _upsert_producto_maestro_sql(conn, codigo_producto, tienda_id, nombre, marca, ean)
         return
 
     with _conectar() as conn_propia:
-        _upsert_producto_maestro_sql(conn_propia, codigo_producto, tienda_id, nombre, marca)
+        _upsert_producto_maestro_sql(conn_propia, codigo_producto, tienda_id, nombre, marca, ean)
         conn_propia.commit()
 
 

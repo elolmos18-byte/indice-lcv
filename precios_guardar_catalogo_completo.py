@@ -108,6 +108,7 @@ def cargar_catalogo_vtex() -> list[dict]:
                     "categoria": fila.get("categoria", ""),
                     "nombre": fila["nombre"],
                     "marca": fila.get("marca") or None,
+                    "ean": fila.get("ean") or None,
                     "precio": precio,
                     "precio_lista": precio_lista,
                     "url": fila.get("url", ""),
