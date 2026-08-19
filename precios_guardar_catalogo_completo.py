@@ -19,6 +19,12 @@ este script se muestra en precios.html. Es insumo para el futuro
 (buscador de precios, canastas personalizadas por Guardian - ver
 precios_MAESTRO.md).
 
+[MODIFICADO - sesion 19/8/2026]: cargar_catalogo_vtex ahora tambien
+lee la columna "marca" del CSV y la pasa a guardar_catalogo_completo.
+Antes se leia el CSV pero la marca se descartaba en el camino - VTEX
+ya la trae gratis, y ahora alimenta productos_maestro (ver
+precios_db.upsert_producto_maestro).
+
 Dependencias (tienen que existir ANTES de correr este script):
 - catalogo_anonima.csv (generado por precios_armar_catalogo_anonima.py)
 - catalogo_vtex.csv (generado por precios_armar_catalogo_vtex.py)
@@ -41,6 +47,12 @@ def cargar_catalogo_anonima() -> list[dict]:
     """
     Lee catalogo_anonima.csv tal cual esta, sin transformar nada.
     Columnas del CSV: categoria, nombre, precio, url.
+
+    La Anonima no expone la marca en el listado de categoria (solo
+    en la pagina de cada producto individual, ver investigacion de
+    la sesion del 19/8) - por eso "marca" no se pasa aca, queda en
+    None y productos_maestro.marca se completa despues por otro medio
+    si hace falta.
     """
     productos = []
     try:
@@ -71,6 +83,11 @@ def cargar_catalogo_vtex() -> list[dict]:
     Lee catalogo_vtex.csv tal cual esta, sin transformar nada.
     Columnas del CSV: tienda, categoria, nombre, marca, precio,
     precio_lista, url.
+
+    [FIX 19/8/2026] Antes esta funcion leia el CSV pero no incluia
+    "marca" en el diccionario devuelto, asi que se perdia antes de
+    llegar a la base de datos aunque el dato ya estaba disponible
+    gratis (VTEX lo trae en el campo "brand"). Ahora se pasa.
     """
     productos = []
     try:
@@ -90,6 +107,7 @@ def cargar_catalogo_vtex() -> list[dict]:
                     "tienda": fila["tienda"],
                     "categoria": fila.get("categoria", ""),
                     "nombre": fila["nombre"],
+                    "marca": fila.get("marca") or None,
                     "precio": precio,
                     "precio_lista": precio_lista,
                     "url": fila.get("url", ""),
