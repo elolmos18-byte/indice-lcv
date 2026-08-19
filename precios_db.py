@@ -522,11 +522,17 @@ def guardar_catalogo_completo(fecha: str, productos: list[dict]) -> int:
             # Alimenta productos_maestro con lo que ya tenemos gratis
             # del scraping (nombre, marca). EAN/categoria_ia/
             # normalizacion se completan despues, por procesos aparte.
+            #
+            # OJO: se le pasa conn=conn (la misma conexion abierta de
+            # este for) para NO abrir una segunda conexion aca adentro
+            # - eso causaba "database is locked" (ver docstring de
+            # upsert_producto_maestro).
             upsert_producto_maestro(
                 codigo_producto=codigo,
                 tienda_id=tienda_id,
                 nombre=prod["nombre"],
                 marca=prod.get("marca"),
+                conn=conn,
             )
 
         conn.commit()
@@ -587,13 +593,43 @@ def obtener_historico_producto(
 # del historico diario.  [NUEVO - sesion 19/8/2026]
 # ============================================================
 
+def _upsert_producto_maestro_sql(
+    conn: sqlite3.Connection,
+    codigo_producto: str,
+    tienda_id: int,
+    nombre: str,
+    marca: str | None,
+) -> None:
+    """
+    Ejecuta el INSERT/UPDATE de productos_maestro sobre una conexion
+    YA ABIERTA que me pasan (no abre ni cierra nada, no hace commit -
+    eso lo maneja quien la llama). Separada de upsert_producto_maestro
+    para poder reusarla desde adentro de guardar_catalogo_completo sin
+    abrir una segunda conexion (ver comentario mas abajo, bug de
+    'database is locked' encontrado el 19/8/2026).
+    """
+    conn.execute(
+        """
+        INSERT INTO productos_maestro (codigo_producto, tienda_id, nombre, marca)
+        VALUES (?, ?, ?, ?)
+        ON CONFLICT(codigo_producto) DO UPDATE SET
+            nombre = excluded.nombre,
+            marca = COALESCE(excluded.marca, productos_maestro.marca),
+            actualizado_en = CURRENT_TIMESTAMP
+        """,
+        (codigo_producto, tienda_id, nombre, marca),
+    )
+
+
 def upsert_producto_maestro(
-    codigo_producto: str, tienda_id: int, nombre: str, marca: str | None = None
+    codigo_producto: str,
+    tienda_id: int,
+    nombre: str,
+    marca: str | None = None,
+    conn: sqlite3.Connection | None = None,
 ) -> None:
     """
     Crea o actualiza la fila basica de un producto en productos_maestro.
-    Se llama automaticamente desde guardar_catalogo_completo, con lo
-    que el scraping YA trae gratis (nombre, marca de VTEX/JSON-LD).
 
     A proposito NO toca ean/categoria_ia/cantidad_normalizada/
     unidad_normalizada - esos campos los completan procesos aparte
@@ -601,20 +637,25 @@ def upsert_producto_maestro(
     corrida diaria de scraping los pise con NULL por accidente. Por
     eso el UPDATE usa COALESCE en marca (si el scraping no trae marca
     esta vez, se conserva la que ya estaba guardada).
+
+    Parametro `conn` [agregado 19/8/2026, fix de bug]: si se llama a
+    esta funcion SOLA (por ejemplo desde una consola de prueba), abre
+    su propia conexion y hace commit, como cualquier otra funcion de
+    este modulo. Pero si se llama desde ADENTRO de otra funcion que ya
+    tiene una conexion abierta con cambios sin confirmar (como
+    guardar_catalogo_completo, que llama a esto una vez por producto
+    en un loop) hay que pasarle esa misma conexion con `conn=...` -
+    SQLite no permite que una segunda conexion escriba mientras la
+    primera tiene una transaccion abierta sobre el mismo archivo, y
+    abrir una nueva ahi adentro producia "database is locked".
     """
-    with _conectar() as conn:
-        conn.execute(
-            """
-            INSERT INTO productos_maestro (codigo_producto, tienda_id, nombre, marca)
-            VALUES (?, ?, ?, ?)
-            ON CONFLICT(codigo_producto) DO UPDATE SET
-                nombre = excluded.nombre,
-                marca = COALESCE(excluded.marca, productos_maestro.marca),
-                actualizado_en = CURRENT_TIMESTAMP
-            """,
-            (codigo_producto, tienda_id, nombre, marca),
-        )
-        conn.commit()
+    if conn is not None:
+        _upsert_producto_maestro_sql(conn, codigo_producto, tienda_id, nombre, marca)
+        return
+
+    with _conectar() as conn_propia:
+        _upsert_producto_maestro_sql(conn_propia, codigo_producto, tienda_id, nombre, marca)
+        conn_propia.commit()
 
 
 def guardar_ean(codigo_producto: str, ean: str) -> None:
