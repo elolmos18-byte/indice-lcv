@@ -707,17 +707,32 @@ def obtener_productos_sin_ean(tienda_nombre: str, limite: int = 250) -> list[dic
     (200-300 productos/dia) - cada corrida retoma donde quedo la
     anterior, sin repetir productos ya completados.
 
+    Incluye la URL de cada producto (sacada de la corrida mas
+    reciente en historico_catalogo_completo, cruzando por
+    codigo_producto) porque productos_maestro NO guarda la URL a
+    proposito - hace falta para poder ir a buscar el EAN a la pagina
+    individual del producto.
+
     Devuelve:
-        [{"codigo_producto": "anonima_2318246", "nombre": "..."}, ...]
+        [{"codigo_producto": "anonima_2318246", "nombre": "...",
+          "url": "https://..."}, ...]
     """
     with _conectar() as conn:
         conn.row_factory = sqlite3.Row
         filas = conn.execute(
             """
-            SELECT pm.codigo_producto, pm.nombre
+            SELECT pm.codigo_producto, pm.nombre, hc.url
             FROM productos_maestro pm
             JOIN tiendas t ON t.id = pm.tienda_id
+            JOIN historico_catalogo_completo hc
+                ON hc.codigo_producto = pm.codigo_producto
+                AND hc.tienda_id = pm.tienda_id
+                AND hc.fecha = (
+                    SELECT MAX(fecha) FROM historico_catalogo_completo hc2
+                    WHERE hc2.codigo_producto = pm.codigo_producto
+                )
             WHERE t.nombre = ? AND (pm.ean IS NULL OR pm.ean = '')
+            GROUP BY pm.codigo_producto
             ORDER BY pm.codigo_producto
             LIMIT ?
             """,
