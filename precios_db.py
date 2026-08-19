@@ -17,6 +17,16 @@ web - ver precios_schema.sql, tabla historico_catalogo_completo):
 - extraer_codigo_producto(url)          -> codigo estable de un producto
 - guardar_catalogo_completo(fecha, productos) -> guarda TODO lo scrapeado
 
+Funciones para productos_maestro (backend, datos ESTATICOS por
+producto - marca, EAN, categoria IA, normalizacion. Ver
+precios_schema.sql para el porque de esta tabla separada del
+historico diario) [NUEVO - sesion 19/8/2026]:
+- upsert_producto_maestro(...)          -> crea/actualiza fila basica (auto, desde el scraping)
+- guardar_ean(...)                      -> guarda EAN de un producto (job de tandas)
+- guardar_clasificacion_ia(...)         -> guarda categoria+normalizacion de Gemini
+- obtener_productos_sin_ean(...)        -> productos pendientes de EAN (para el job de tandas)
+- obtener_productos_sin_clasificar(...) -> productos pendientes de clasificar (para el job de Gemini)
+
 Como se usa desde precios_buscar_canasta.py:
 
     import precios_db
@@ -78,7 +88,7 @@ def poblar_rubros(archivo_rubros: str = "precios_canasta_rubros.json") -> int:
 
 
 def _id_tienda(conn: sqlite3.Connection, nombre_tienda: str) -> int:
-    """Busca el id de una tienda por su nombre. Las 3 tiendas ya
+    """Busca el id de una tienda por su nombre. Las tiendas ya
     estan insertadas por precios_schema.sql, asi que esto siempre
     deberia encontrar algo."""
     fila = conn.execute(
@@ -169,8 +179,7 @@ def obtener_historico(
 ) -> list[dict]:
     """
     Devuelve la evolucion de precios de un rubro en el tiempo, para
-    los 3 supers. Util para graficos de evolucion (pendiente de usar
-    todavia, pero la funcion ya queda lista).
+    los supers. Util para graficos de evolucion.
 
     desde/hasta son fechas en formato 'YYYY-MM-DD'. Si se omiten,
     devuelve todo el historico disponible para ese rubro.
@@ -324,8 +333,7 @@ def obtener_evolucion_todos_los_rubros() -> dict:
     """
     Devuelve, para CADA rubro, su evolucion de precio_normalizado por
     tienda a lo largo del tiempo - todo junto en una sola consulta,
-    para no golpear la base una vez por rubro (61 consultas
-    separadas séria innecesariamente lento).
+    para no golpear la base una vez por rubro.
 
     Devuelve:
         {
@@ -456,17 +464,25 @@ def guardar_catalogo_completo(fecha: str, productos: list[dict]) -> int:
 
     Cada producto en la lista debe tener:
         {
-            "tienda": "La Anonima" | "Carrefour" | "Changomas",
+            "tienda": "La Anonima" | "Carrefour" | "Changomas" | "Vea",
             "categoria": "carniceria" (puede venir vacio),
             "nombre": "Carne Picada Best x 500 g.",
             "precio": 7980.0,
             "precio_lista": 7980.0 (opcional, None si no aplica),
             "url": "https://...",
+            "marca": "Best" (opcional, None si no viene - VTEX la trae,
+                              La Anonima no la trae en el listado hoy),
         }
 
     Es idempotente igual que guardar_foto_dia: si se corre dos veces
     el mismo dia, actualiza en vez de duplicar (usa fecha + tienda +
     codigo_producto como clave).
+
+    Ademas de guardar el historico diario, cada producto alimenta
+    automaticamente productos_maestro (crea la fila si no existe, o
+    actualiza nombre/marca si cambiaron) - ver upsert_producto_maestro.
+    Esto NO pisa ean/categoria_ia/normalizacion, que se completan por
+    procesos aparte.
 
     Devuelve la cantidad de filas insertadas/actualizadas.
     """
@@ -503,6 +519,16 @@ def guardar_catalogo_completo(fecha: str, productos: list[dict]) -> int:
             )
             filas_procesadas += 1
 
+            # Alimenta productos_maestro con lo que ya tenemos gratis
+            # del scraping (nombre, marca). EAN/categoria_ia/
+            # normalizacion se completan despues, por procesos aparte.
+            upsert_producto_maestro(
+                codigo_producto=codigo,
+                tienda_id=tienda_id,
+                nombre=prod["nombre"],
+                marca=prod.get("marca"),
+            )
+
         conn.commit()
 
     return filas_procesadas
@@ -514,9 +540,7 @@ def obtener_historico_producto(
     """
     Devuelve la evolucion de precios de UN producto puntual en el
     tiempo (identificado por su codigo estable, ver
-    extraer_codigo_producto). Pensado para un futuro buscador de
-    precios - todavia no se usa en ningun lado, pero la funcion ya
-    queda lista para cuando se necesite.
+    extraer_codigo_producto).
 
     Devuelve una lista de dicts:
         [
@@ -551,6 +575,138 @@ def obtener_historico_producto(
             ORDER BY hc.fecha ASC
             """,
             parametros,
+        ).fetchall()
+
+    return [dict(fila) for fila in filas]
+
+
+# ============================================================
+# productos_maestro: datos ESTATICOS por producto (marca, EAN,
+# categoria IA, normalizacion). Un renglon por producto, no por dia
+# - ver precios_schema.sql para el porque de esta tabla separada
+# del historico diario.  [NUEVO - sesion 19/8/2026]
+# ============================================================
+
+def upsert_producto_maestro(
+    codigo_producto: str, tienda_id: int, nombre: str, marca: str | None = None
+) -> None:
+    """
+    Crea o actualiza la fila basica de un producto en productos_maestro.
+    Se llama automaticamente desde guardar_catalogo_completo, con lo
+    que el scraping YA trae gratis (nombre, marca de VTEX/JSON-LD).
+
+    A proposito NO toca ean/categoria_ia/cantidad_normalizada/
+    unidad_normalizada - esos campos los completan procesos aparte
+    (tandas de EAN, clasificacion con Gemini) y no queremos que una
+    corrida diaria de scraping los pise con NULL por accidente. Por
+    eso el UPDATE usa COALESCE en marca (si el scraping no trae marca
+    esta vez, se conserva la que ya estaba guardada).
+    """
+    with _conectar() as conn:
+        conn.execute(
+            """
+            INSERT INTO productos_maestro (codigo_producto, tienda_id, nombre, marca)
+            VALUES (?, ?, ?, ?)
+            ON CONFLICT(codigo_producto) DO UPDATE SET
+                nombre = excluded.nombre,
+                marca = COALESCE(excluded.marca, productos_maestro.marca),
+                actualizado_en = CURRENT_TIMESTAMP
+            """,
+            (codigo_producto, tienda_id, nombre, marca),
+        )
+        conn.commit()
+
+
+def guardar_ean(codigo_producto: str, ean: str) -> None:
+    """
+    Guarda el EAN de un producto puntual. Pensado para el job de
+    tandas de La Anonima (200-300 productos/dia, ver
+    obtener_productos_sin_ean).
+    """
+    with _conectar() as conn:
+        conn.execute(
+            """
+            UPDATE productos_maestro
+            SET ean = ?, actualizado_en = CURRENT_TIMESTAMP
+            WHERE codigo_producto = ?
+            """,
+            (ean, codigo_producto),
+        )
+        conn.commit()
+
+
+def guardar_clasificacion_ia(
+    codigo_producto: str,
+    categoria_ia: str,
+    cantidad_normalizada: float | None,
+    unidad_normalizada: str | None,
+) -> None:
+    """
+    Guarda el resultado de Gemini (categoria + normalizacion) para
+    un producto puntual. Pensado para el job diario que clasifica
+    productos nuevos (ver obtener_productos_sin_clasificar).
+    """
+    with _conectar() as conn:
+        conn.execute(
+            """
+            UPDATE productos_maestro
+            SET categoria_ia = ?, cantidad_normalizada = ?,
+                unidad_normalizada = ?, actualizado_en = CURRENT_TIMESTAMP
+            WHERE codigo_producto = ?
+            """,
+            (categoria_ia, cantidad_normalizada, unidad_normalizada, codigo_producto),
+        )
+        conn.commit()
+
+
+def obtener_productos_sin_ean(tienda_nombre: str, limite: int = 250) -> list[dict]:
+    """
+    Devuelve hasta `limite` productos de una tienda que todavia no
+    tienen EAN guardado. Pensado para el job de tandas de La Anonima
+    (200-300 productos/dia) - cada corrida retoma donde quedo la
+    anterior, sin repetir productos ya completados.
+
+    Devuelve:
+        [{"codigo_producto": "anonima_2318246", "nombre": "..."}, ...]
+    """
+    with _conectar() as conn:
+        conn.row_factory = sqlite3.Row
+        filas = conn.execute(
+            """
+            SELECT pm.codigo_producto, pm.nombre
+            FROM productos_maestro pm
+            JOIN tiendas t ON t.id = pm.tienda_id
+            WHERE t.nombre = ? AND (pm.ean IS NULL OR pm.ean = '')
+            ORDER BY pm.codigo_producto
+            LIMIT ?
+            """,
+            (tienda_nombre, limite),
+        ).fetchall()
+
+    return [dict(fila) for fila in filas]
+
+
+def obtener_productos_sin_clasificar(limite: int = 500) -> list[dict]:
+    """
+    Devuelve hasta `limite` productos que todavia no tienen
+    categoria_ia asignada (de cualquier tienda). Pensado para el job
+    diario que le manda productos nuevos a Gemini (categoria +
+    normalizacion).
+
+    Devuelve:
+        [{"codigo_producto": "vtex_720108", "nombre": "..."}, ...]
+    """
+    with _conectar() as conn:
+        conn.row_factory = sqlite3.Row
+        filas = conn.execute(
+            """
+            SELECT codigo_producto, nombre
+            FROM productos_maestro
+            WHERE categoria_ia IS NULL
+            ORDER BY codigo_producto
+            LIMIT ?
+            """,
+            (limite,),
         ).fetchall()
 
     return [dict(fila) for fila in filas]

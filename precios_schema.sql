@@ -36,12 +36,12 @@ CREATE TABLE IF NOT EXISTS rubros (
 
 -- ============================================================
 -- Tabla: tiendas
--- Los supermercados que comparamos. Fijo: 3 filas para siempre,
--- salvo que sumemos un cuarto super en el futuro.
+-- Los supermercados que comparamos. Fijo: 4 filas para siempre,
+-- salvo que sumemos otro super en el futuro.
 -- ============================================================
 CREATE TABLE IF NOT EXISTS tiendas (
     id              INTEGER PRIMARY KEY AUTOINCREMENT,
-    nombre          TEXT NOT NULL UNIQUE   -- 'La Anonima' | 'Carrefour' | 'Changomas'
+    nombre          TEXT NOT NULL UNIQUE   -- 'La Anonima' | 'Carrefour' | 'Changomas' | 'Vea'
 );
 
 
@@ -71,9 +71,6 @@ CREATE TABLE IF NOT EXISTS historico_precios (
     UNIQUE(fecha, rubro_id, tienda_id)
 );
 
--- Indices para que las consultas de "evolucion de un rubro en el
--- tiempo" y "todos los precios de una fecha" sean rapidas, incluso
--- con miles de filas acumuladas con el tiempo.
 CREATE INDEX IF NOT EXISTS idx_historico_rubro_fecha
     ON historico_precios(rubro_id, fecha);
 
@@ -85,8 +82,7 @@ CREATE INDEX IF NOT EXISTS idx_historico_fecha
 -- Tabla: historico_catalogo_completo
 -- A diferencia de historico_precios (solo los productos curados
 -- de la canasta oficial), esta tabla guarda TODOS los productos
--- que el scraper trae cada dia en cualquier categoria (~5500
--- productos por corrida), sin filtrar.
+-- que el scraper trae cada dia en cualquier categoria, sin filtrar.
 --
 -- Para que sirve: la canasta oficial de hoy solo usa una fraccion
 -- de todo lo que ya scrapeamos. Guardando todo, el dia que se
@@ -102,7 +98,9 @@ CREATE INDEX IF NOT EXISTS idx_historico_fecha
 -- producto (ver precios_db.extraer_codigo_producto). Sirve para
 -- reconocer el mismo producto dia a dia aunque el nombre cambie un
 -- poco (ej. un espacio, una coma). Si no se pudo extraer un codigo
--- de la URL, se usa la URL completa como fallback.
+-- de la URL, se usa la URL completa como fallback. Es la misma
+-- clave que usa productos_maestro (abajo), asi que las dos tablas
+-- se pueden cruzar con un JOIN simple.
 -- ============================================================
 CREATE TABLE IF NOT EXISTS historico_catalogo_completo (
     id                  INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -129,7 +127,52 @@ CREATE INDEX IF NOT EXISTS idx_catalogo_completo_fecha
 
 
 -- ============================================================
--- Datos iniciales: las 3 tiendas (fijas, se insertan una sola vez)
+-- Tabla: productos_maestro   [NUEVA - sesion 19/8/2026]
+-- Un renglon POR PRODUCTO (no por dia, a diferencia de las tablas
+-- de arriba). Guarda los datos que NO cambian dia a dia: marca,
+-- codigo de barras (EAN), categoria asignada por IA, y la cantidad/
+-- unidad normalizada para calcular precio comparable (precio/kg,
+-- precio/L, etc).
+--
+-- Por que separada de historico_catalogo_completo: esa tabla tiene
+-- una fila NUEVA cada dia por cada producto (es un historico). Si
+-- guardaramos la marca/EAN ahi, se repetirian miles de veces sin
+-- necesidad. Aca en cambio hay una sola fila por producto, que se
+-- va completando de a poco:
+--   - marca: sale gratis del scraping diario (VTEX trae "brand",
+--     La Anonima trae "brand.name" en el JSON-LD de cada producto)
+--   - ean: se completa por tandas (200-300 productos/dia para La
+--     Anonima, que requiere 1 request extra por producto)
+--   - categoria_ia, cantidad_normalizada, unidad_normalizada: los
+--     completa Gemini, una sola vez por producto nuevo
+-- ============================================================
+CREATE TABLE IF NOT EXISTS productos_maestro (
+    codigo_producto       TEXT PRIMARY KEY,
+    tienda_id             INTEGER NOT NULL REFERENCES tiendas(id),
+    nombre                TEXT,                -- ultimo nombre conocido
+    marca                 TEXT,                -- viene del scraping (VTEX/JSON-LD), gratis
+    ean                   TEXT,                -- codigo de barras, se completa por tandas
+    categoria_ia          TEXT,                -- NULL hasta que Gemini la clasifique
+    cantidad_normalizada  REAL,                -- NULL hasta que Gemini la calcule
+    unidad_normalizada    TEXT,                -- 'kg' | 'l' | 'unidad'
+    actualizado_en        TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+
+-- Para buscar rapido productos de una tienda sin importar el resto
+CREATE INDEX IF NOT EXISTS idx_productos_maestro_tienda
+    ON productos_maestro(tienda_id);
+
+-- Para el job de tandas: "dame productos de tal tienda sin EAN"
+CREATE INDEX IF NOT EXISTS idx_productos_maestro_sin_ean
+    ON productos_maestro(tienda_id, ean);
+
+-- Para el job de Gemini: "dame productos sin categoria todavia"
+CREATE INDEX IF NOT EXISTS idx_productos_maestro_sin_categoria
+    ON productos_maestro(categoria_ia);
+
+
+-- ============================================================
+-- Datos iniciales: las 4 tiendas (fijas, se insertan una sola vez)
 -- ============================================================
 INSERT OR IGNORE INTO tiendas (nombre) VALUES ('La Anonima');
 INSERT OR IGNORE INTO tiendas (nombre) VALUES ('Carrefour');
