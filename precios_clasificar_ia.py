@@ -111,6 +111,10 @@ CATEGORIAS_VALIDAS = [
     "Rollos de Cocina",
     "Frutas",
     "Verduras",
+    "Frutos Secos y Semillas",
+    "Bebidas Vegetales",
+    "Pescados y Mariscos",
+    "Carbon y Elementos para Fuego",
     "Otros / Sin Categoria",
 ]
 
