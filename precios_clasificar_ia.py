@@ -144,13 +144,24 @@ evaluando las siguientes:
    NO importa cuantos gramos pesen las 12 juntas - normalizar por
    peso en este caso da un precio por kilo sin sentido real, porque
    nadie compra cafe en capsulas por kilo).
-2. Si NO aplica la regla 1, y el producto se vende por peso (ej.
-   "500 g", "1 Kg", "2,25 Kg"): unidad_normalizada = "kg",
+1.5. Si el producto es un REPUESTO o RECAMBIO chico de un solo uso
+   que se compra como pieza unica y NO se compra "a granel" ni se
+   escala a litros/kilos (ej. "Repuesto de Aromatizante 21 cc",
+   "Aparato + Repuesto de Ambientes"), usa unidad_normalizada =
+   "unidad" y cantidad_normalizada = 1 (a menos que el nombre
+   indique explicitamente que son varios repuestos juntos, en cuyo
+   caso usa esa cantidad y aplica la regla 1). NO conviertas su
+   volumen chico (ej. 21 cc) a litros - un frasquito de 21 cc
+   extrapolado a "precio por litro" da un numero sin sentido real,
+   porque nadie compra un litro entero de esencia de aromatizante.
+2. Si NO aplica ninguna regla anterior, y el producto se vende por
+   peso (ej. "500 g", "1 Kg", "2,25 Kg"): unidad_normalizada = "kg",
    cantidad_normalizada = la cantidad convertida a kilogramos
    (ej. "500 g" -> 0.5).
-3. Si NO aplica la regla 1, y se vende por volumen (ej. "900 cc",
-   "1,5 Lt", "2 L"): unidad_normalizada = "l", cantidad_normalizada
-   = la cantidad convertida a litros (ej. "900 cc" -> 0.9).
+3. Si NO aplica ninguna regla anterior, y se vende por volumen (ej.
+   "900 cc", "1,5 Lt", "2 L"): unidad_normalizada = "l",
+   cantidad_normalizada = la cantidad convertida a litros
+   (ej. "900 cc" -> 0.9).
 4. Si no se puede determinar ninguna cantidad del nombre,
    cantidad_normalizada = null.
 5. EXCEPCION a las reglas 2 y 3 (no a la 1): si la categoria elegida
