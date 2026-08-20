@@ -781,3 +781,98 @@ def obtener_productos_sin_clasificar(limite: int = 500) -> list[dict]:
         ).fetchall()
 
     return [dict(fila) for fila in filas]
+
+
+# ============================================================
+# estadisticas_categoria_diaria: cuartiles/mediana/desvio por
+# categoria y dia, calculados sobre precio_normalizado. Ver
+# precios_schema.sql para el porque de esta tabla.
+# [NUEVO - sesion 20/8/2026]
+# ============================================================
+
+def obtener_precios_normalizados_del_dia(fecha: str) -> dict[str, list[tuple[str, float]]]:
+    """
+    Para una fecha dada, cruza historico_catalogo_completo (precio
+    de ese dia) con productos_maestro (categoria_ia +
+    cantidad_normalizada + unidad_normalizada), y devuelve el precio
+    normalizado (precio / cantidad_normalizada) de cada producto,
+    agrupado por categoria.
+
+    Solo incluye productos que tienen categoria_ia Y
+    cantidad_normalizada validos (> 0) - sin esos dos datos no se
+    puede calcular un precio comparable.
+
+    Devuelve:
+        {
+            "Aceites": [("vtex_720108", 1611.67), ("anonima_2318246", 1400.0), ...],
+            "Gaseosas": [...],
+            ...
+        }
+    """
+    with _conectar() as conn:
+        filas = conn.execute(
+            """
+            SELECT pm.categoria_ia, hc.codigo_producto,
+                   hc.precio / pm.cantidad_normalizada AS precio_normalizado
+            FROM historico_catalogo_completo hc
+            JOIN productos_maestro pm ON pm.codigo_producto = hc.codigo_producto
+            WHERE hc.fecha = ?
+              AND pm.categoria_ia IS NOT NULL
+              AND pm.cantidad_normalizada IS NOT NULL
+              AND pm.cantidad_normalizada > 0
+            """,
+            (fecha,),
+        ).fetchall()
+
+    por_categoria: dict[str, list[tuple[str, float]]] = {}
+    for categoria, codigo_producto, precio_normalizado in filas:
+        por_categoria.setdefault(categoria, []).append((codigo_producto, precio_normalizado))
+
+    return por_categoria
+
+
+def guardar_estadisticas_categoria_diaria(
+    fecha: str,
+    categoria: str,
+    cantidad_productos: int,
+    precio_min: float,
+    precio_q1: float,
+    precio_mediana: float,
+    precio_q3: float,
+    precio_max: float,
+    desvio_estandar: float,
+    producto_q1: str,
+    producto_mediana: str,
+    producto_q3: str,
+) -> None:
+    """
+    Guarda (o actualiza, si se corre 2 veces el mismo dia) las
+    estadisticas de una categoria para una fecha puntual.
+    """
+    with _conectar() as conn:
+        conn.execute(
+            """
+            INSERT INTO estadisticas_categoria_diaria
+                (fecha, categoria, cantidad_productos, precio_min, precio_q1,
+                 precio_mediana, precio_q3, precio_max, desvio_estandar,
+                 producto_q1, producto_mediana, producto_q3)
+            VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+            ON CONFLICT(fecha, categoria) DO UPDATE SET
+                cantidad_productos = excluded.cantidad_productos,
+                precio_min = excluded.precio_min,
+                precio_q1 = excluded.precio_q1,
+                precio_mediana = excluded.precio_mediana,
+                precio_q3 = excluded.precio_q3,
+                precio_max = excluded.precio_max,
+                desvio_estandar = excluded.desvio_estandar,
+                producto_q1 = excluded.producto_q1,
+                producto_mediana = excluded.producto_mediana,
+                producto_q3 = excluded.producto_q3
+            """,
+            (
+                fecha, categoria, cantidad_productos, precio_min, precio_q1,
+                precio_mediana, precio_q3, precio_max, desvio_estandar,
+                producto_q1, producto_mediana, producto_q3,
+            ),
+        )
+        conn.commit()

@@ -174,6 +174,55 @@ CREATE INDEX IF NOT EXISTS idx_productos_maestro_sin_categoria
 -- ============================================================
 -- Datos iniciales: las 4 tiendas (fijas, se insertan una sola vez)
 -- ============================================================
+-- Tabla: estadisticas_categoria_diaria   [NUEVA - sesion 20/8/2026]
+-- Una fila por (categoria, fecha): resume la distribucion de
+-- precio_normalizado (precio/kg, precio/L o precio/unidad segun la
+-- categoria) de TODOS los productos de esa categoria ese dia, en
+-- las 4 tiendas juntas.
+--
+-- Por que una tabla aparte y no calcular todo al vuelo cada vez que
+-- alguien abre el dashboard: con miles de productos por categoria y
+-- pensando en graficos de evolucion historica (ej. "como vino
+-- subiendo la mediana de Gaseosas en los ultimos 3 meses"), calcular
+-- cuartiles on-demand cada visita seria lento. Se calcula UNA vez
+-- por dia (despues de que categoria_ia y normalizacion ya estan
+-- completos para el dia) y se guarda.
+--
+-- Sirve de base para el indice base 100 (ver arquitectura del
+-- Observatorio, seccion 5.4 punto 11) - el indice se calcula sobre
+-- estos valores, no hace falta una fuente de datos aparte.
+--
+-- producto_q1/mediana/q3: el codigo_producto real mas cercano a cada
+-- cuartil ese dia (ver "producto representativo", arquitectura
+-- seccion 5.4 punto 9) - permite mostrar un producto concreto como
+-- ejemplo de cada segmento, no solo el numero.
+-- ============================================================
+CREATE TABLE IF NOT EXISTS estadisticas_categoria_diaria (
+    id                  INTEGER PRIMARY KEY AUTOINCREMENT,
+    fecha               DATE NOT NULL,
+    categoria           TEXT NOT NULL,
+    cantidad_productos  INTEGER NOT NULL,   -- cuantos productos entraron en el calculo ese dia
+    precio_min          REAL,
+    precio_q1           REAL,
+    precio_mediana      REAL,
+    precio_q3           REAL,
+    precio_max          REAL,
+    desvio_estandar     REAL,
+    producto_q1         TEXT,               -- codigo_producto mas cercano a Q1 ese dia
+    producto_mediana    TEXT,               -- codigo_producto mas cercano a la mediana ese dia
+    producto_q3         TEXT,               -- codigo_producto mas cercano a Q3 ese dia
+    creado_en           TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+
+    -- Idempotente: si se corre 2 veces el mismo dia, actualiza en
+    -- vez de duplicar (mismo criterio que el resto de las tablas).
+    UNIQUE(fecha, categoria)
+);
+
+CREATE INDEX IF NOT EXISTS idx_estadisticas_categoria_fecha
+    ON estadisticas_categoria_diaria(categoria, fecha);
+
+
+-- ============================================================
 INSERT OR IGNORE INTO tiendas (nombre) VALUES ('La Anonima');
 INSERT OR IGNORE INTO tiendas (nombre) VALUES ('Carrefour');
 INSERT OR IGNORE INTO tiendas (nombre) VALUES ('Changomas');
