@@ -796,23 +796,35 @@ def obtener_precios_normalizados_del_dia(fecha: str) -> dict[str, list[tuple[str
     de ese dia) con productos_maestro (categoria_ia +
     cantidad_normalizada + unidad_normalizada), y devuelve el precio
     normalizado (precio / cantidad_normalizada) de cada producto,
-    agrupado por categoria.
+    agrupado por categoria + unidad de venta.
+
+    [FIX 20/8/2026] La clave de agrupacion ahora es
+    "categoria_ia (unidad)", no solo categoria_ia. Motivo: varias
+    categorias mezclan productos vendidos por peso/volumen (ej. yerba
+    suelta, precio por kg) con productos vendidos por saquito/unidad
+    (ej. yerba en saquitos, precio por unidad) - comparar $/kg contra
+    $/saquito en la misma estadistica no tiene sentido, dispara
+    outliers falsos (encontrado el 20/8/2026 con Yerba Mate: mezclar
+    ambos tipos daba un "precio minimo" de $50/kg cuando en realidad
+    eran $50 por SAQUITO, no por kg).
 
     Solo incluye productos que tienen categoria_ia Y
-    cantidad_normalizada validos (> 0) - sin esos dos datos no se
-    puede calcular un precio comparable.
+    cantidad_normalizada Y unidad_normalizada validos (> 0 para
+    cantidad) - sin esos tres datos no se puede calcular ni agrupar
+    un precio comparable.
 
     Devuelve:
         {
-            "Aceites": [("vtex_720108", 1611.67), ("anonima_2318246", 1400.0), ...],
-            "Gaseosas": [...],
+            "Aceites (l)": [("vtex_720108", 1611.67), ...],
+            "Yerba Mate (kg)": [...],
+            "Yerba Mate (unidad)": [...],
             ...
         }
     """
     with _conectar() as conn:
         filas = conn.execute(
             """
-            SELECT pm.categoria_ia, hc.codigo_producto,
+            SELECT pm.categoria_ia, pm.unidad_normalizada, hc.codigo_producto,
                    hc.precio / pm.cantidad_normalizada AS precio_normalizado
             FROM historico_catalogo_completo hc
             JOIN productos_maestro pm ON pm.codigo_producto = hc.codigo_producto
@@ -820,13 +832,15 @@ def obtener_precios_normalizados_del_dia(fecha: str) -> dict[str, list[tuple[str
               AND pm.categoria_ia IS NOT NULL
               AND pm.cantidad_normalizada IS NOT NULL
               AND pm.cantidad_normalizada > 0
+              AND pm.unidad_normalizada IS NOT NULL
             """,
             (fecha,),
         ).fetchall()
 
     por_categoria: dict[str, list[tuple[str, float]]] = {}
-    for categoria, codigo_producto, precio_normalizado in filas:
-        por_categoria.setdefault(categoria, []).append((codigo_producto, precio_normalizado))
+    for categoria, unidad, codigo_producto, precio_normalizado in filas:
+        clave = f"{categoria} ({unidad})"
+        por_categoria.setdefault(clave, []).append((codigo_producto, precio_normalizado))
 
     return por_categoria
 
