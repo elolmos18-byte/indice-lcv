@@ -130,25 +130,37 @@ no inventes una nueva):
 {lista_categorias}
 
 Ademas, calcula la cantidad normalizada y su unidad, para poder
-comparar precio por kg, por litro o por unidad segun corresponda:
-- Si el producto se vende por peso (ej. "500 g", "1 Kg", "2,25 Kg"):
-  unidad_normalizada = "kg", cantidad_normalizada = la cantidad
-  convertida a kilogramos (ej. "500 g" -> 0.5).
-- Si se vende por volumen (ej. "900 cc", "1,5 Lt", "2 L"):
-  unidad_normalizada = "l", cantidad_normalizada = la cantidad
-  convertida a litros (ej. "900 cc" -> 0.9).
-- Si se vende por unidad/bulto sin peso ni volumen claro en el
-  nombre (ej. "Huevos x 12 un.", "Papel Higienico x 4 rollos"):
-  unidad_normalizada = "unidad", cantidad_normalizada = la cantidad
-  de unidades/bultos (ej. 12, o 4).
-- EXCEPCION: si la categoria elegida es "Especias y Condimentos",
-  NO uses "kg" - estos productos se venden en frascos chicos (10 a
-  100 g) y nadie los compra por kilo, asi que "precio por kilo" no
-  sirve para compararlos. En su lugar usa base 100 GRAMOS:
-  unidad_normalizada = "100g", cantidad_normalizada = la cantidad
-  convertida a paquetes de 100g (ej. "Pimienta 35 g" -> 0.35,
-  "Oregano 100 g" -> 1.0, "Laurel 10 g" -> 0.1).
-- Si no se puede determinar la cantidad del nombre, cantidad_normalizada = null.
+comparar precio por kg, por litro o por unidad segun corresponda.
+Aplica estas reglas EN ORDEN - la primera que aplique gana, no sigas
+evaluando las siguientes:
+
+1. PRIORIDAD MAXIMA - si el nombre menciona una cantidad de piezas
+   individuales vendidas juntas (capsulas, sobres, saquitos, rollos,
+   unidades, bultos - ej. "x 12 Un.", "x 10 capsulas", "x 4 rollos",
+   "x 25 saquitos"), usa SIEMPRE unidad_normalizada = "unidad" y
+   cantidad_normalizada = esa cantidad de piezas (ej. 12, 10, 4, 25).
+   Esto aplica AUNQUE el nombre tambien mencione un peso o volumen
+   total (ej. "Cafe en Capsula Starbucks x 12 Un." son 12 unidades,
+   NO importa cuantos gramos pesen las 12 juntas - normalizar por
+   peso en este caso da un precio por kilo sin sentido real, porque
+   nadie compra cafe en capsulas por kilo).
+2. Si NO aplica la regla 1, y el producto se vende por peso (ej.
+   "500 g", "1 Kg", "2,25 Kg"): unidad_normalizada = "kg",
+   cantidad_normalizada = la cantidad convertida a kilogramos
+   (ej. "500 g" -> 0.5).
+3. Si NO aplica la regla 1, y se vende por volumen (ej. "900 cc",
+   "1,5 Lt", "2 L"): unidad_normalizada = "l", cantidad_normalizada
+   = la cantidad convertida a litros (ej. "900 cc" -> 0.9).
+4. Si no se puede determinar ninguna cantidad del nombre,
+   cantidad_normalizada = null.
+5. EXCEPCION a las reglas 2 y 3 (no a la 1): si la categoria elegida
+   es "Especias y Condimentos", NO uses "kg" - estos productos se
+   venden en frascos chicos (10 a 100 g) y nadie los compra por
+   kilo, asi que "precio por kilo" no sirve para compararlos. En su
+   lugar usa base 100 GRAMOS: unidad_normalizada = "100g",
+   cantidad_normalizada = la cantidad convertida a paquetes de 100g
+   (ej. "Pimienta 35 g" -> 0.35, "Oregano 100 g" -> 1.0, "Laurel
+   10 g" -> 0.1).
 
 Respondé SOLO un JSON con este formato exacto, sin texto antes ni
 despues, sin backticks de markdown:
