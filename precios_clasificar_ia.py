@@ -92,7 +92,8 @@ CATEGORIAS_VALIDAS = [
     "Huevos",
     "Atun y Pescado en Lata",
     "Salsas y Pure de Tomate",
-    "Sal y Especias",
+    "Sal",
+    "Especias y Condimentos",
     "Vinagre y Limon",
     "Mayonesa",
     "Ketchup",
@@ -118,7 +119,7 @@ CATEGORIAS_VALIDAS = [
     "Otros / Sin Categoria",
 ]
 
-UNIDADES_VALIDAS = ["kg", "l", "unidad"]
+UNIDADES_VALIDAS = ["kg", "l", "unidad", "100g"]
 
 PROMPT_TEMPLATE = """Sos un clasificador de productos de supermercado argentino.
 
@@ -140,6 +141,13 @@ comparar precio por kg, por litro o por unidad segun corresponda:
   nombre (ej. "Huevos x 12 un.", "Papel Higienico x 4 rollos"):
   unidad_normalizada = "unidad", cantidad_normalizada = la cantidad
   de unidades/bultos (ej. 12, o 4).
+- EXCEPCION: si la categoria elegida es "Especias y Condimentos",
+  NO uses "kg" - estos productos se venden en frascos chicos (10 a
+  100 g) y nadie los compra por kilo, asi que "precio por kilo" no
+  sirve para compararlos. En su lugar usa base 100 GRAMOS:
+  unidad_normalizada = "100g", cantidad_normalizada = la cantidad
+  convertida a paquetes de 100g (ej. "Pimienta 35 g" -> 0.35,
+  "Oregano 100 g" -> 1.0, "Laurel 10 g" -> 0.1).
 - Si no se puede determinar la cantidad del nombre, cantidad_normalizada = null.
 
 Respondé SOLO un JSON con este formato exacto, sin texto antes ni
@@ -212,6 +220,13 @@ def clasificar_producto(cliente: "genai.Client", nombre_producto: str) -> dict |
     # que sabemos que esta mal.
     if cantidad is not None and unidad is not None:
         if unidad in ("kg", "l") and not (0.01 <= cantidad <= 50):
+            print(f"    Cantidad normalizada fuera de rango ({cantidad} {unidad}) - se descarta.")
+            cantidad = None
+            unidad = None
+        elif unidad == "100g" and not (0.05 <= cantidad <= 20):
+            # Base 100g: un frasco de especias real pesa entre 5 g
+            # (0.05 * 100g) y 2 kg (20 * 100g) - fuera de eso, se
+            # descarta.
             print(f"    Cantidad normalizada fuera de rango ({cantidad} {unidad}) - se descarta.")
             cantidad = None
             unidad = None
