@@ -232,6 +232,21 @@ def clasificar_producto(cliente: "genai.Client", nombre_producto: str) -> dict |
     if not isinstance(cantidad, (int, float)):
         cantidad = None
 
+    # Correccion automatica por codigo [agregado 20/8/2026]: para
+    # "Desodorante de Ambientes", cualquier producto con menos de
+    # 150 ml es casi seguro un frasco de un solo uso (repuesto,
+    # difusor, minispray, aromatizante de placard/calzado, etc.) que
+    # no se compra "a granel" - extrapolar su precio a 1 litro entero
+    # da un numero sin sentido real. En vez de confiar en que Gemini
+    # reconozca todas las formas posibles de nombrar esto (regla 1.5
+    # del prompt ayuda pero no cubre todos los casos, ej. "Difusor de
+    # Aromas 100 Ml" no dice "repuesto" ni "aparato"), se fuerza esta
+    # conversion siempre, de forma determinista, sin depender del
+    # criterio de Gemini.
+    if categoria == "Desodorante de Ambientes" and unidad == "l" and cantidad is not None and cantidad < 0.15:
+        unidad = "unidad"
+        cantidad = 1.0
+
     # Filtro de sanidad [agregado 20/8/2026, tras encontrar casos
     # reales rotos]: Gemini a veces devuelve una cantidad absurda
     # (ej. 0.0001 en vez de 200 para "x 200 Un.") - eso dispara el
