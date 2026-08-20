@@ -201,6 +201,25 @@ def clasificar_producto(cliente: "genai.Client", nombre_producto: str) -> dict |
     if not isinstance(cantidad, (int, float)):
         cantidad = None
 
+    # Filtro de sanidad [agregado 20/8/2026, tras encontrar casos
+    # reales rotos]: Gemini a veces devuelve una cantidad absurda
+    # (ej. 0.0001 en vez de 200 para "x 200 Un.") - eso dispara el
+    # precio_normalizado a millones y arruina las estadisticas de
+    # toda la categoria. Ningun producto de supermercado pesa menos
+    # de 10 gramos (0.01 kg) ni mas de 50 kg/L, y ningun bulto tiene
+    # menos de 1 o mas de 1000 unidades - fuera de esos rangos,
+    # descartamos el valor (queda None) en vez de guardar un numero
+    # que sabemos que esta mal.
+    if cantidad is not None and unidad is not None:
+        if unidad in ("kg", "l") and not (0.01 <= cantidad <= 50):
+            print(f"    Cantidad normalizada fuera de rango ({cantidad} {unidad}) - se descarta.")
+            cantidad = None
+            unidad = None
+        elif unidad == "unidad" and not (1 <= cantidad <= 1000):
+            print(f"    Cantidad normalizada fuera de rango ({cantidad} {unidad}) - se descarta.")
+            cantidad = None
+            unidad = None
+
     return {
         "categoria": categoria,
         "cantidad_normalizada": cantidad,
