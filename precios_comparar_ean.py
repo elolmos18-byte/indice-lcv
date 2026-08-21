@@ -13,6 +13,22 @@ Blancaflor" vs "Blancaflor 1kg."). El EAN es el mismo codigo de
 barras real del fabricante, no cambia entre tiendas - permite
 identificar con certeza que es EXACTAMENTE el mismo producto fisico.
 
+DETECTOR AUTOMATICO DE INCONSISTENCIAS [agregado 20/8/2026]: al usar
+esta herramienta se encontraron varios casos reales donde el mismo
+EAN (mismo producto fisico) tenia unidad_normalizada distinta entre
+tiendas (ej. "kg" en una, "unidad" en otra) - eso es matematicamente
+imposible que sea correcto, siempre es un bug de normalizacion en
+alguna de las tiendas. En vez de perseguir cada palabra nueva del
+nombre a mano (ya se encontraron "saq", "Un.", "N Grs x N Un" en la
+misma sesion), este script detecta la inconsistencia solo: si un EAN
+tiene mas de una unidad_normalizada distinta entre tiendas, se queda
+con la unidad MAYORITARIA para la comparacion de precios, y resetea
+automaticamente (via precios_db.resetear_producto_para_reclasificar)
+los productos que quedaron en minoria, para que la proxima corrida
+de precios_clasificar_ia.py los reintente. Sistema auto-correctivo:
+cuantas mas veces se corra este script despues de clasificar, mas
+prolijo va quedando el catalogo, sin trabajo manual por cada caso.
+
 Requiere que productos_maestro ya tenga ean Y cantidad_normalizada
 cargados para poder comparar (ver precios_armar_catalogo_vtex.py
 para VTEX, precios_scrapear_ean_anonima.py para La Anonima, y
@@ -26,9 +42,46 @@ Para una fecha puntual:
 """
 
 import argparse
+from collections import Counter
 from datetime import date
 
 import precios_db
+
+
+def separar_consistentes_e_inconsistentes(
+    precios: list[dict],
+) -> tuple[list[dict], list[dict]]:
+    """
+    Recibe la lista de precios de UN EAN (varias tiendas) y separa
+    en dos grupos:
+    - consistentes: los que tienen la unidad_normalizada MAYORITARIA
+      (la que mas se repite entre las tiendas para ese EAN)
+    - inconsistentes: los que tienen una unidad distinta a la
+      mayoria - candidatos a estar mal normalizados
+
+    Si hay empate en la mayoria (ej. 2 tiendas dicen "kg" y 2 dicen
+    "unidad"), no hay forma de saber cual es la correcta - en ese
+    caso NINGUNO se marca como inconsistente (mejor no tocar nada
+    que arriesgar resetear el que en realidad estaba bien).
+    """
+    conteo_unidades = Counter(p["unidad_normalizada"] for p in precios)
+
+    if len(conteo_unidades) == 1:
+        # Todas las tiendas coinciden, no hay inconsistencia.
+        return precios, []
+
+    unidad_mas_comun, cantidad_mas_comun = conteo_unidades.most_common(1)[0]
+
+    # Chequear empate: si hay otra unidad con la misma cantidad de
+    # votos, no podemos decidir cual es la mayoria real.
+    empatado = sum(1 for _, c in conteo_unidades.items() if c == cantidad_mas_comun) > 1
+    if empatado:
+        return [], precios  # no comparar nada, pero tampoco resetear nada
+
+    consistentes = [p for p in precios if p["unidad_normalizada"] == unidad_mas_comun]
+    inconsistentes = [p for p in precios if p["unidad_normalizada"] != unidad_mas_comun]
+
+    return consistentes, inconsistentes
 
 
 def correr(fecha: str) -> None:
@@ -47,9 +100,24 @@ def correr(fecha: str) -> None:
     print(f"{len(comparables)} productos con EAN comparables entre tiendas.\n")
 
     guardados = 0
+    reseteados = 0
     mayor_diferencia = None
 
-    for ean, precios in comparables.items():
+    for ean, precios_originales in comparables.items():
+        consistentes, inconsistentes = separar_consistentes_e_inconsistentes(precios_originales)
+
+        # Resetear los inconsistentes para que se reclasifiquen solos
+        # en la proxima corrida de precios_clasificar_ia.py.
+        for p in inconsistentes:
+            precios_db.resetear_producto_para_reclasificar(p["codigo_producto"])
+            reseteados += 1
+
+        # Con solo 1 tienda consistente (o 0, si hubo empate) no hay
+        # nada que comparar ese dia - se salta, sin guardar nada raro.
+        if len(consistentes) < 2:
+            continue
+
+        precios = consistentes
         precio_min_info = min(precios, key=lambda p: p["precio_normalizado"])
         precio_max_info = max(precios, key=lambda p: p["precio_normalizado"])
 
@@ -85,12 +153,35 @@ def correr(fecha: str) -> None:
             mayor_diferencia = (diferencia_pct, con_marca["nombre"], precio_min_info["tienda"], precio_max_info["tienda"])
 
     print(f"Listo: {guardados} comparaciones guardadas.")
+    if reseteados:
+        print(f"Detectadas {reseteados} inconsistencias de normalizacion entre tiendas "
+              f"(mismo EAN, distinta unidad) - reseteadas para reclasificar en la proxima corrida.")
 
     if mayor_diferencia:
         pct, nombre, tienda_barata, tienda_cara = mayor_diferencia
         print(f"\nMayor diferencia encontrada hoy ({pct:.1f}%):")
         print(f"  {nombre}")
         print(f"  Mas barato en {tienda_barata}, mas caro en {tienda_cara}")
+
+
+def main():
+    parser = argparse.ArgumentParser(
+        description="Compara precios del mismo producto (por EAN) entre supermercados."
+    )
+    parser.add_argument(
+        "--fecha",
+        type=str,
+        default=date.today().isoformat(),
+        help="Fecha a comparar, formato YYYY-MM-DD (default: hoy).",
+    )
+    args = parser.parse_args()
+
+    correr(args.fecha)
+
+
+if __name__ == "__main__":
+    main()
+
 
 
 def main():
