@@ -326,22 +326,32 @@ def clasificar_producto(cliente: "genai.Client", nombre_producto: str) -> dict |
             cantidad = 1.0
 
     # Correccion determinista para "Limpieza del Hogar" [agregado
-    # 20/8/2026]: encontrado el mismo patron que aromatizantes/aceite
-    # en spray - productos chicos de un solo uso (discos adhesivos
-    # para inodoro, canastas en gel, pastillas, pomada de calzado)
-    # normalizados por kg/l daban precios absurdos (ej. un disco de
-    # 12g a $484.083/kg). Se combinan 2 señales: cualquier producto
-    # de esta categoria con menos de 100g/100ml pasa a unidad
-    # (umbral general), y ademas cualquiera con esas palabras clave
-    # (son casi siempre de un solo uso, aunque a veces pesen algo
-    # mas de 100g) pasa a unidad hasta 200g/200ml.
+    # 20/8/2026, ajustado en la misma sesion]: mismo patron que
+    # aromatizantes/aceite en spray - productos chicos de un solo uso
+    # (discos adhesivos, canastas en gel, pastillas/tabletas,
+    # capsulas de lavavajillas, quitamanchas en gel/stick, repelentes
+    # en crema, bloques para inodoro, hormiguicidas/insecticidas)
+    # normalizados por kg/l daban precios absurdos.
+    #
+    # OJO: el umbral general se mantiene en 100g/100ml (NO se subio a
+    # 250g) porque se encontraron ~30 limpiadores CONCENTRADOS
+    # legitimos de 100ml (ej. "Limpiador Concentrado Baño Procenex
+    # 100ml, rinde 300ml al diluir") que son productos normales de
+    # compra repetida, no de un solo uso - convertirlos a unidad les
+    # haria perder el precio por litro del concentrado, que sigue
+    # siendo un dato util. Las palabras clave especificas si llegan
+    # hasta 400g, porque esos SI son siempre de un solo uso sin
+    # importar el peso exacto.
     if categoria == "Limpieza del Hogar" and unidad in ("kg", "l") and cantidad is not None:
         palabras_un_solo_uso = (
             "disco" in nombre_sin_acentos or "pastilla" in nombre_sin_acentos
             or "canasta" in nombre_sin_acentos or "pomada" in nombre_sin_acentos
-            or "brillo magico" in nombre_sin_acentos
+            or "brillo magico" in nombre_sin_acentos or "capsula" in nombre_sin_acentos
+            or "tableta" in nombre_sin_acentos or "bloque" in nombre_sin_acentos
+            or "hormiguicida" in nombre_sin_acentos or "repelente" in nombre_sin_acentos
+            or "quitamanchas" in nombre_sin_acentos
         )
-        if cantidad < 0.1 or (palabras_un_solo_uso and cantidad < 0.2):
+        if cantidad < 0.1 or (palabras_un_solo_uso and cantidad < 0.4):
             unidad = "unidad"
             cantidad = 1.0
 
