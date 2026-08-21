@@ -371,19 +371,26 @@ def clasificar_producto(cliente: "genai.Client", nombre_producto: str) -> dict |
             unidad = "unidad"
             cantidad = 1.0
 
-    # Red de seguridad generica [agregado 20/8/2026]: la Regla 1 del
-    # prompt le pide a Gemini que priorice "unidad" cuando el nombre
-    # menciona una cantidad de piezas (ej. "x 12 Un."), pero se
-    # encontro un caso real donde Gemini no la aplico ("Jabon En
-    # Capsulas... 3 En 1 20 U 400 G" quedo en kg en vez de 20
-    # unidad). En vez de confiar solo en que Gemini la aplique
-    # siempre, se agrega este chequeo determinista: si el nombre
-    # tiene un patron "numero + U" (ej. "20 U", "12 Un.") Y todavia
-    # no quedo en "unidad", se fuerza la conversion.
+    # Red de seguridad generica [agregado 20/8/2026, ampliada tras
+    # el caso del Te Taragui 50 Saquitos]: la Regla 1 del prompt le
+    # pide a Gemini que priorice "unidad" cuando el nombre menciona
+    # una cantidad de piezas (ej. "x 12 Un."), pero se encontraron 2
+    # casos reales donde Gemini no la aplico:
+    # - "Jabon En Capsulas... 3 En 1 20 U 400 G" quedo en kg
+    # - "Te Sin Filtro Diamantado Taragui 50 Saquitos" quedo en kg
+    #   (0.05 kg en vez de 50 unidad) - este bug NO se notaba dentro
+    #   de la categoria (el precio/kg no parecia absurdo), recien se
+    #   detecto al comparar el mismo EAN entre tiendas: Vea daba
+    #   $42.400/"kg" contra $36-41/saquito en las otras 2 tiendas.
+    # En vez de confiar solo en que Gemini aplique la regla siempre,
+    # se agrega este chequeo determinista con 2 patrones: "numero+U"
+    # (20 U, 12 Un.) y "numero+Saquito/s" (50 Saquitos).
     if unidad != "unidad":
         match_unidades = re.search(r"\b(\d+)\s*[Uu]n?\.?\b", nombre_producto)
-        if match_unidades:
-            cantidad_detectada = float(match_unidades.group(1))
+        match_saquitos = re.search(r"\b(\d+)\s*[Ss]aquitos?\b", nombre_producto)
+        match = match_unidades or match_saquitos
+        if match:
+            cantidad_detectada = float(match.group(1))
             if 1 <= cantidad_detectada <= 1000:
                 unidad = "unidad"
                 cantidad = cantidad_detectada
