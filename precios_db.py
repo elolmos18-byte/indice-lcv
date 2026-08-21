@@ -910,11 +910,18 @@ def obtener_precios_por_ean_del_dia(fecha: str) -> dict[str, list[dict]]:
     validos - sin esos dos datos no se puede comparar de forma
     confiable entre tiendas.
 
+    Incluye codigo_producto y unidad_normalizada [agregado 20/8/2026]
+    para poder detectar inconsistencias: si el mismo EAN (mismo
+    producto fisico real) aparece con unidad_normalizada distinta
+    entre tiendas (ej. "kg" en una, "unidad" en otra), es
+    practicamente seguro que una de las dos esta mal normalizada -
+    ver precios_comparar_ean.py para la logica de deteccion y
+    autocorreccion.
+
     Devuelve:
         {
             "7790070562180": [
-                {"tienda": "Changomas", "precio_normalizado": 1599.0, "nombre": "...", "marca": "Blancaflor", "categoria_ia": "Harinas"},
-                {"tienda": "La Anonima", "precio_normalizado": 1950.0, "nombre": "...", "marca": None, "categoria_ia": "Harinas"},
+                {"tienda": "Changomas", "codigo_producto": "vtex_111", "precio_normalizado": 1599.0, "nombre": "...", "marca": "Blancaflor", "categoria_ia": "Harinas", "unidad_normalizada": "kg"},
                 ...
             ],
             ...
@@ -924,7 +931,8 @@ def obtener_precios_por_ean_del_dia(fecha: str) -> dict[str, list[dict]]:
         conn.row_factory = sqlite3.Row
         filas = conn.execute(
             """
-            SELECT pm.ean, t.nombre AS tienda, hc.nombre, pm.marca, pm.categoria_ia,
+            SELECT pm.ean, t.nombre AS tienda, hc.codigo_producto, hc.nombre,
+                   pm.marca, pm.categoria_ia, pm.unidad_normalizada,
                    hc.precio / pm.cantidad_normalizada AS precio_normalizado
             FROM historico_catalogo_completo hc
             JOIN productos_maestro pm ON pm.codigo_producto = hc.codigo_producto
@@ -985,5 +993,29 @@ def guardar_comparacion_ean_diaria(
                 cantidad_tiendas, precio_min, tienda_mas_barata,
                 precio_max, tienda_mas_cara, diferencia_pct,
             ),
+        )
+        conn.commit()
+
+
+def resetear_producto_para_reclasificar(codigo_producto: str) -> None:
+    """
+    Borra la categoria_ia/cantidad_normalizada/unidad_normalizada de
+    UN producto puntual, para que la proxima corrida de
+    precios_clasificar_ia.py lo tome como pendiente y lo vuelva a
+    clasificar desde cero. [Agregado 20/8/2026] Pensado para el
+    detector automatico de inconsistencias entre tiendas por EAN
+    (ver precios_comparar_ean.py) - en vez de ir cazando cada palabra
+    nueva a mano, se detecta la inconsistencia (mismo EAN, unidades
+    de venta distintas entre tiendas) y se resetea automaticamente
+    el que esta en minoria, dejando que Gemini lo reintente.
+    """
+    with _conectar() as conn:
+        conn.execute(
+            """
+            UPDATE productos_maestro
+            SET categoria_ia = NULL, cantidad_normalizada = NULL, unidad_normalizada = NULL
+            WHERE codigo_producto = ?
+            """,
+            (codigo_producto,),
         )
         conn.commit()
