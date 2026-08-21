@@ -129,6 +129,17 @@ Elegi la categoria MAS CERCANA de esta lista (copia el texto EXACTO,
 no inventes una nueva):
 {lista_categorias}
 
+ACLARACION IMPORTANTE - dos categorias que se confunden facil:
+- "Legumbres Secas" es SOLO semillas de leguminosas: lentejas,
+  garbanzos, porotos (alubias), arvejas secas, soja. NO incluye
+  almendras, nueces, castañas, pistachos, avellanas, mani, ni
+  semillas de girasol/zapallo/chia/lino - esos van en "Frutos Secos
+  y Semillas", son un grupo de alimentos totalmente distinto (mucho
+  mas caros por kilo, no son legumbres botanicamente).
+- Los hongos secos (ej. "Hongos Secos", "Boletus", "Portobello
+  deshidratado") no son legumbre ni fruto seco - van en "Otros /
+  Sin Categoria" si no calzan mejor en otra categoria de la lista.
+
 Ademas, calcula la cantidad normalizada y su unidad, para poder
 comparar precio por kg, por litro o por unidad segun corresponda.
 Aplica estas reglas EN ORDEN - la primera que aplique gana, no sigas
