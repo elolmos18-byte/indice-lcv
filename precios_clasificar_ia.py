@@ -129,16 +129,31 @@ Elegi la categoria MAS CERCANA de esta lista (copia el texto EXACTO,
 no inventes una nueva):
 {lista_categorias}
 
-ACLARACION IMPORTANTE - dos categorias que se confunden facil:
-- "Legumbres Secas" es SOLO semillas de leguminosas: lentejas,
-  garbanzos, porotos (alubias), arvejas secas, soja. NO incluye
-  almendras, nueces, castañas, pistachos, avellanas, mani, ni
-  semillas de girasol/zapallo/chia/lino - esos van en "Frutos Secos
-  y Semillas", son un grupo de alimentos totalmente distinto (mucho
-  mas caros por kilo, no son legumbres botanicamente).
-- Los hongos secos (ej. "Hongos Secos", "Boletus", "Portobello
-  deshidratado") no son legumbre ni fruto seco - van en "Otros /
-  Sin Categoria" si no calzan mejor en otra categoria de la lista.
+ACLARACION IMPORTANTE - "Legumbres Secas" es una categoria MUY
+especifica, se confunde facil con otras:
+
+"Legumbres Secas" = SOLO estas 5 cosas: lentejas, garbanzos,
+porotos (alubias), arvejas secas, soja en grano. NADA MAS entra
+aca. Si el producto no es exactamente uno de esos 5, NO es
+"Legumbres Secas", sin importar que tambien sea una semilla chica
+o se venda de forma parecida (a granel, en bolsa, por kg).
+
+Van en "Frutos Secos y Semillas" en cambio (NUNCA en Legumbres
+Secas), estos casos frecuentes:
+- Almendras, nueces, castañas, pistachos, avellanas, mani (cualquier
+  fruto seco)
+- Semillas sueltas de girasol (tambien llamadas "pipas" en
+  Argentina), zapallo/calabaza, chia, lino, sesamo
+- Quinoa (blanca, roja, o pop) - es una semilla, no una legumbre
+- Cualquier "Mix" o "Mezcla" que combine frutos secos y/o semillas
+  (ej. "Mix Fitness", "Mix Patagonico", "Mix Europeo", "Mix Vital",
+  "Mix de Frutas Secas") - estos productos son SIEMPRE frutos secos/
+  semillas mezclados, nunca legumbres, aunque el nombre no lo diga
+  explicitamente.
+
+Los hongos secos (ej. "Hongos Secos", "Boletus", "Portobello
+deshidratado") tampoco son legumbre ni fruto seco - van en "Otros /
+Sin Categoria" si no calzan mejor en otra categoria de la lista.
 
 Ademas, calcula la cantidad normalizada y su unidad, para poder
 comparar precio por kg, por litro o por unidad segun corresponda.
