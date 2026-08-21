@@ -243,9 +243,27 @@ def clasificar_producto(cliente: "genai.Client", nombre_producto: str) -> dict |
     # Aromas 100 Ml" no dice "repuesto" ni "aparato"), se fuerza esta
     # conversion siempre, de forma determinista, sin depender del
     # criterio de Gemini.
-    if categoria == "Desodorante de Ambientes" and unidad == "l" and cantidad is not None and cantidad < 0.15:
-        unidad = "unidad"
-        cantidad = 1.0
+    #
+    # [Ampliado 20/8/2026] Ademas del umbral de volumen, se suma un
+    # chequeo por palabra clave: productos "repuesto" o "automatico"
+    # de hasta 300 ml (ej. "Air Wick Freshmatic aparato + repuesto
+    # 250 ml") tambien son de un solo uso/recambio, aunque su volumen
+    # sea mayor a 150ml - el volumen solo no alcanza para detectarlos
+    # sin arriesgar convertir por error un aerosol grande comun.
+    #
+    # Se quitan los acentos antes de comparar (unicodedata) porque
+    # "automatico" sin tilde NO matcheaba contra "automático" con
+    # tilde letra por letra - bug real encontrado y corregido en la
+    # verificacion de este mismo cambio.
+    import unicodedata
+    nombre_sin_acentos = unicodedata.normalize("NFKD", nombre_producto.lower())
+    nombre_sin_acentos = "".join(c for c in nombre_sin_acentos if not unicodedata.combining(c))
+    es_repuesto_o_automatico = "repuesto" in nombre_sin_acentos or "automat" in nombre_sin_acentos
+
+    if categoria == "Desodorante de Ambientes" and unidad == "l" and cantidad is not None:
+        if cantidad < 0.15 or (es_repuesto_o_automatico and cantidad < 0.3):
+            unidad = "unidad"
+            cantidad = 1.0
 
     # Filtro de sanidad [agregado 20/8/2026, tras encontrar casos
     # reales rotos]: Gemini a veces devuelve una cantidad absurda
