@@ -155,6 +155,11 @@ Los hongos secos (ej. "Hongos Secos", "Boletus", "Portobello
 deshidratado") tampoco son legumbre ni fruto seco - van en "Otros /
 Sin Categoria" si no calzan mejor en otra categoria de la lista.
 
+La grasa animal para cocinar (ej. "Grasa Bovina", "Grasa de Cerdo",
+"Grasa Vacuna Refinada") NO es "Aceites" - va en "Manteca y
+Margarina" (son todas grasas solidas/semisolidas para cocinar,
+distintas del aceite liquido vegetal).
+
 Ademas, calcula la cantidad normalizada y su unidad, para poder
 comparar precio por kg, por litro o por unidad segun corresponda.
 Aplica estas reglas EN ORDEN - la primera que aplique gana, no sigas
@@ -288,6 +293,16 @@ def clasificar_producto(cliente: "genai.Client", nombre_producto: str) -> dict |
 
     if categoria == "Desodorante de Ambientes" and unidad == "l" and cantidad is not None:
         if cantidad < 0.15 or (es_repuesto_o_automatico and cantidad < 0.3):
+            unidad = "unidad"
+            cantidad = 1.0
+
+    # Correccion determinista para "Aceite en Spray" / "Rocio Vegetal"
+    # [agregado 20/8/2026]: son aerosoles de cocina en frascos chicos
+    # (100-120g), un producto totalmente distinto al aceite liquido
+    # comun en botella - no se compra "a granel" ni se compara bien
+    # por kilo (mismo patron que los repuestos de aromatizantes).
+    if categoria == "Aceites" and unidad in ("kg", "l") and cantidad is not None:
+        if "spray" in nombre_sin_acentos or "rocio" in nombre_sin_acentos:
             unidad = "unidad"
             cantidad = 1.0
 
