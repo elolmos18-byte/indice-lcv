@@ -172,6 +172,13 @@ Si tenes dudas de si algo es "premium", el precio por kg suele ser
 la pista: si ronda o supera los $50.000/kg, probablemente es
 Delicatessen.
 
+"Limpieza del Hogar" es para productos que limpian la CASA
+(pisos, baños, ropa, cocina, superficies). Los jabones/geles/
+productos de HIGIENE PERSONAL (ej. "Gel de Limpieza Dermaglos",
+jabon facial, gel corporal) NO van aca aunque digan "limpieza" en
+el nombre - van en "Otros / Sin Categoria" si no hay una categoria
+mas especifica en la lista.
+
 Ademas, calcula la cantidad normalizada y su unidad, para poder
 comparar precio por kg, por litro o por unidad segun corresponda.
 Aplica estas reglas EN ORDEN - la primera que aplique gana, no sigas
@@ -315,6 +322,26 @@ def clasificar_producto(cliente: "genai.Client", nombre_producto: str) -> dict |
     # por kilo (mismo patron que los repuestos de aromatizantes).
     if categoria == "Aceites" and unidad in ("kg", "l") and cantidad is not None:
         if "spray" in nombre_sin_acentos or "rocio" in nombre_sin_acentos:
+            unidad = "unidad"
+            cantidad = 1.0
+
+    # Correccion determinista para "Limpieza del Hogar" [agregado
+    # 20/8/2026]: encontrado el mismo patron que aromatizantes/aceite
+    # en spray - productos chicos de un solo uso (discos adhesivos
+    # para inodoro, canastas en gel, pastillas, pomada de calzado)
+    # normalizados por kg/l daban precios absurdos (ej. un disco de
+    # 12g a $484.083/kg). Se combinan 2 señales: cualquier producto
+    # de esta categoria con menos de 100g/100ml pasa a unidad
+    # (umbral general), y ademas cualquiera con esas palabras clave
+    # (son casi siempre de un solo uso, aunque a veces pesen algo
+    # mas de 100g) pasa a unidad hasta 200g/200ml.
+    if categoria == "Limpieza del Hogar" and unidad in ("kg", "l") and cantidad is not None:
+        palabras_un_solo_uso = (
+            "disco" in nombre_sin_acentos or "pastilla" in nombre_sin_acentos
+            or "canasta" in nombre_sin_acentos or "pomada" in nombre_sin_acentos
+            or "brillo magico" in nombre_sin_acentos
+        )
+        if cantidad < 0.1 or (palabras_un_solo_uso and cantidad < 0.2):
             unidad = "unidad"
             cantidad = 1.0
 
