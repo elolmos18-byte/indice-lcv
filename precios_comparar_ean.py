@@ -53,33 +53,58 @@ def separar_consistentes_e_inconsistentes(
 ) -> tuple[list[dict], list[dict]]:
     """
     Recibe la lista de precios de UN EAN (varias tiendas) y separa
-    en dos grupos:
-    - consistentes: los que tienen la unidad_normalizada MAYORITARIA
-      (la que mas se repite entre las tiendas para ese EAN)
-    - inconsistentes: los que tienen una unidad distinta a la
-      mayoria - candidatos a estar mal normalizados
+    en dos grupos, aplicando 2 chequeos en orden:
+
+    CHEQUEO 1 - unidad_normalizada distinta entre tiendas (ej. "kg"
+    en una, "unidad" en otra) - matematicamente imposible que sea
+    correcto para el mismo producto fisico. Se queda con la unidad
+    MAYORITARIA; los que no coinciden pasan a inconsistentes.
 
     Si hay empate en la mayoria (ej. 2 tiendas dicen "kg" y 2 dicen
     "unidad"), no hay forma de saber cual es la correcta - en ese
-    caso NINGUNO se marca como inconsistente (mejor no tocar nada
-    que arriesgar resetear el que en realidad estaba bien).
+    caso NINGUNO se marca como inconsistente en este chequeo (mejor
+    no tocar nada que arriesgar resetear el que en realidad estaba
+    bien).
+
+    CHEQUEO 2 [agregado 20/8/2026, tras el caso "Rollo de Cocina
+    Felpita 200 Paños 1 U"] - dentro del grupo que ya coincide en
+    unidad, la CANTIDAD puede seguir estando mal (una tienda
+    interpreto "1 rollo" y otra "200 unidades", confundiendo la
+    cantidad de paños con la cantidad de rollos - las unidades
+    coinciden, pero el precio normalizado resultante es absurdo).
+    Se descarta cualquier producto cuyo precio normalizado sea mas
+    de 10 veces distinto a la mediana del grupo - es matematicamente
+    imposible que sea el mismo producto real con esa diferencia.
     """
     conteo_unidades = Counter(p["unidad_normalizada"] for p in precios)
+    unidad_mas_comun, cantidad_mas_comun = conteo_unidades.most_common(1)[0]
+    empatado = sum(1 for _, c in conteo_unidades.items() if c == cantidad_mas_comun) > 1
 
     if len(conteo_unidades) == 1:
-        # Todas las tiendas coinciden, no hay inconsistencia.
-        return precios, []
+        consistentes, inconsistentes = list(precios), []
+    elif empatado:
+        # No hay forma de decidir la mayoria de unidad - no tocar
+        # nada, ni siquiera el chequeo 2 (comparar precio_normalizado
+        # entre unidades distintas -ej. "por kg" vs "por unidad"- no
+        # tiene sentido, son escalas distintas por definicion).
+        return list(precios), []
+    else:
+        consistentes = [p for p in precios if p["unidad_normalizada"] == unidad_mas_comun]
+        inconsistentes = [p for p in precios if p["unidad_normalizada"] != unidad_mas_comun]
 
-    unidad_mas_comun, cantidad_mas_comun = conteo_unidades.most_common(1)[0]
+    # CHEQUEO 2: outliers de precio dentro del grupo consistente.
+    if len(consistentes) >= 2:
+        precios_normalizados = sorted(p["precio_normalizado"] for p in consistentes)
+        mediana = precios_normalizados[len(precios_normalizados) // 2]
 
-    # Chequear empate: si hay otra unidad con la misma cantidad de
-    # votos, no podemos decidir cual es la mayoria real.
-    empatado = sum(1 for _, c in conteo_unidades.items() if c == cantidad_mas_comun) > 1
-    if empatado:
-        return [], precios  # no comparar nada, pero tampoco resetear nada
-
-    consistentes = [p for p in precios if p["unidad_normalizada"] == unidad_mas_comun]
-    inconsistentes = [p for p in precios if p["unidad_normalizada"] != unidad_mas_comun]
+        aun_consistentes = []
+        for p in consistentes:
+            ratio = p["precio_normalizado"] / mediana if mediana > 0 else 1
+            if ratio > 10 or ratio < 0.1:
+                inconsistentes.append(p)
+            else:
+                aun_consistentes.append(p)
+        consistentes = aun_consistentes
 
     return consistentes, inconsistentes
 
