@@ -115,6 +115,7 @@ CATEGORIAS_VALIDAS = [
     "Frutos Secos y Semillas",
     "Bebidas Vegetales",
     "Pescados y Mariscos",
+    "Delicatessen",
     "Carbon y Elementos para Fuego",
     "Otros / Sin Categoria",
 ]
@@ -159,6 +160,17 @@ La grasa animal para cocinar (ej. "Grasa Bovina", "Grasa de Cerdo",
 "Grasa Vacuna Refinada") NO es "Aceites" - va en "Manteca y
 Margarina" (son todas grasas solidas/semisolidas para cocinar,
 distintas del aceite liquido vegetal).
+
+"Atun y Pescado en Lata" es SOLO conservas comunes y economicas:
+atun (cualquier marca/presentacion), sardinas, caballa. Los
+pescados/mariscos DELICATESSEN o premium (mucho mas caros, en latas
+chicas de 90-190g) van en "Delicatessen" en cambio: anchoas,
+boquerones, pulpitos, vieiras, langostinos, mejillones, calamares,
+choritos/mejillones en escabeche, salmon ahumado, jibias, berberechos
+- cualquier marisco o pescado que no sea atun/sardina/caballa comun.
+Si tenes dudas de si algo es "premium", el precio por kg suele ser
+la pista: si ronda o supera los $50.000/kg, probablemente es
+Delicatessen.
 
 Ademas, calcula la cantidad normalizada y su unidad, para poder
 comparar precio por kg, por litro o por unidad segun corresponda.
