@@ -49,6 +49,7 @@ Corrida normal:
 import argparse
 import json
 import os
+import re
 import time
 
 from dotenv import load_dotenv
@@ -175,9 +176,13 @@ Delicatessen.
 "Limpieza del Hogar" es para productos que limpian la CASA
 (pisos, baños, ropa, cocina, superficies). Los jabones/geles/
 productos de HIGIENE PERSONAL (ej. "Gel de Limpieza Dermaglos",
-jabon facial, gel corporal) NO van aca aunque digan "limpieza" en
-el nombre - van en "Otros / Sin Categoria" si no hay una categoria
-mas especifica en la lista.
+"Crema de Limpieza Pond's", jabon facial, gel corporal) NO van aca
+aunque digan "limpieza" en el nombre - van en "Otros / Sin
+Categoria" si no hay una categoria mas especifica en la lista.
+
+Los productos de CUIDADO DE CALZADO (ej. "Renovador de Gamuza y
+Nobuck", pomada para zapatos, impermeabilizante de calzado) tampoco
+son "Limpieza del Hogar" - van en "Otros / Sin Categoria".
 
 Ademas, calcula la cantidad normalizada y su unidad, para poder
 comparar precio por kg, por litro o por unidad segun corresponda.
@@ -347,6 +352,7 @@ def clasificar_producto(cliente: "genai.Client", nombre_producto: str) -> dict |
             "disco" in nombre_sin_acentos or "pastilla" in nombre_sin_acentos
             or "canasta" in nombre_sin_acentos or "pomada" in nombre_sin_acentos
             or "brillo magico" in nombre_sin_acentos or "capsula" in nombre_sin_acentos
+            or "antihumedad" in nombre_sin_acentos
             or "tableta" in nombre_sin_acentos or "bloque" in nombre_sin_acentos
             or "hormiguicida" in nombre_sin_acentos or "repelente" in nombre_sin_acentos
             or "quitamanchas" in nombre_sin_acentos
@@ -354,6 +360,23 @@ def clasificar_producto(cliente: "genai.Client", nombre_producto: str) -> dict |
         if cantidad < 0.1 or (palabras_un_solo_uso and cantidad < 0.4):
             unidad = "unidad"
             cantidad = 1.0
+
+    # Red de seguridad generica [agregado 20/8/2026]: la Regla 1 del
+    # prompt le pide a Gemini que priorice "unidad" cuando el nombre
+    # menciona una cantidad de piezas (ej. "x 12 Un."), pero se
+    # encontro un caso real donde Gemini no la aplico ("Jabon En
+    # Capsulas... 3 En 1 20 U 400 G" quedo en kg en vez de 20
+    # unidad). En vez de confiar solo en que Gemini la aplique
+    # siempre, se agrega este chequeo determinista: si el nombre
+    # tiene un patron "numero + U" (ej. "20 U", "12 Un.") Y todavia
+    # no quedo en "unidad", se fuerza la conversion.
+    if unidad != "unidad":
+        match_unidades = re.search(r"\b(\d+)\s*[Uu]n?\.?\b", nombre_producto)
+        if match_unidades:
+            cantidad_detectada = float(match_unidades.group(1))
+            if 1 <= cantidad_detectada <= 1000:
+                unidad = "unidad"
+                cantidad = cantidad_detectada
 
     # Filtro de sanidad [agregado 20/8/2026, tras encontrar casos
     # reales rotos]: Gemini a veces devuelve una cantidad absurda
