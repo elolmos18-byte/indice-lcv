@@ -199,6 +199,11 @@ evaluando las siguientes:
    NO importa cuantos gramos pesen las 12 juntas - normalizar por
    peso en este caso da un precio por kilo sin sentido real, porque
    nadie compra cafe en capsulas por kilo).
+   CASO CONFLICTIVO REAL: "Te Negro 100 Grs x 50 Un La Virginia"
+   menciona DOS cantidades (100 gramos totales Y 50 saquitos) - en
+   este caso SIEMPRE gana la cantidad de piezas (50 unidad), NUNCA
+   el peso total (100 g), aunque el peso aparezca primero en el
+   nombre.
 1.5. Si el producto es un REPUESTO o RECAMBIO chico de un solo uso
    que se compra como pieza unica y NO se compra "a granel" ni se
    escala a litros/kilos (ej. "Repuesto de Aromatizante 21 cc",
@@ -387,7 +392,7 @@ def clasificar_producto(cliente: "genai.Client", nombre_producto: str) -> dict |
     # (20 U, 12 Un.) y "numero+Saquito/s" (50 Saquitos).
     if unidad != "unidad":
         match_unidades = re.search(r"\b(\d+)\s*[Uu]n?\.?\b", nombre_producto)
-        match_saquitos = re.search(r"\b(\d+)\s*[Ss]aquitos?\b", nombre_producto)
+        match_saquitos = re.search(r"\b(\d+)\s*[Ss]aq(?:uitos?)?\b", nombre_producto)
         match = match_unidades or match_saquitos
         if match:
             cantidad_detectada = float(match.group(1))
