@@ -890,3 +890,100 @@ def guardar_estadisticas_categoria_diaria(
             ),
         )
         conn.commit()
+
+
+# ============================================================
+# comparacion_ean_diaria: por cada EAN que aparece en 2+ tiendas el
+# mismo dia, guarda cual es la mas barata y cual la mas cara. Ver
+# precios_schema.sql para el porque de esta tabla.
+# [NUEVO - sesion 20/8/2026]
+# ============================================================
+
+def obtener_precios_por_ean_del_dia(fecha: str) -> dict[str, list[dict]]:
+    """
+    Para una fecha dada, cruza historico_catalogo_completo (precio
+    de ese dia) con productos_maestro (ean, marca, categoria_ia,
+    normalizacion) y tiendas, y devuelve el precio normalizado de
+    cada producto agrupado por EAN.
+
+    Solo incluye productos que tienen ean Y cantidad_normalizada
+    validos - sin esos dos datos no se puede comparar de forma
+    confiable entre tiendas.
+
+    Devuelve:
+        {
+            "7790070562180": [
+                {"tienda": "Changomas", "precio_normalizado": 1599.0, "nombre": "...", "marca": "Blancaflor", "categoria_ia": "Harinas"},
+                {"tienda": "La Anonima", "precio_normalizado": 1950.0, "nombre": "...", "marca": None, "categoria_ia": "Harinas"},
+                ...
+            ],
+            ...
+        }
+    """
+    with _conectar() as conn:
+        conn.row_factory = sqlite3.Row
+        filas = conn.execute(
+            """
+            SELECT pm.ean, t.nombre AS tienda, hc.nombre, pm.marca, pm.categoria_ia,
+                   hc.precio / pm.cantidad_normalizada AS precio_normalizado
+            FROM historico_catalogo_completo hc
+            JOIN productos_maestro pm ON pm.codigo_producto = hc.codigo_producto
+            JOIN tiendas t ON t.id = hc.tienda_id
+            WHERE hc.fecha = ?
+              AND pm.ean IS NOT NULL AND pm.ean != ''
+              AND pm.cantidad_normalizada IS NOT NULL
+              AND pm.cantidad_normalizada > 0
+            """,
+            (fecha,),
+        ).fetchall()
+
+    por_ean: dict[str, list[dict]] = {}
+    for fila in filas:
+        por_ean.setdefault(fila["ean"], []).append(dict(fila))
+
+    return por_ean
+
+
+def guardar_comparacion_ean_diaria(
+    fecha: str,
+    ean: str,
+    nombre_referencia: str,
+    marca: str | None,
+    categoria_ia: str | None,
+    cantidad_tiendas: int,
+    precio_min: float,
+    tienda_mas_barata: str,
+    precio_max: float,
+    tienda_mas_cara: str,
+    diferencia_pct: float,
+) -> None:
+    """
+    Guarda (o actualiza, si se corre 2 veces el mismo dia) la
+    comparacion de precios de un EAN puntual para una fecha.
+    """
+    with _conectar() as conn:
+        conn.execute(
+            """
+            INSERT INTO comparacion_ean_diaria
+                (fecha, ean, nombre_referencia, marca, categoria_ia,
+                 cantidad_tiendas, precio_min, tienda_mas_barata,
+                 precio_max, tienda_mas_cara, diferencia_pct)
+            VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+            ON CONFLICT(fecha, ean) DO UPDATE SET
+                nombre_referencia = excluded.nombre_referencia,
+                marca = excluded.marca,
+                categoria_ia = excluded.categoria_ia,
+                cantidad_tiendas = excluded.cantidad_tiendas,
+                precio_min = excluded.precio_min,
+                tienda_mas_barata = excluded.tienda_mas_barata,
+                precio_max = excluded.precio_max,
+                tienda_mas_cara = excluded.tienda_mas_cara,
+                diferencia_pct = excluded.diferencia_pct
+            """,
+            (
+                fecha, ean, nombre_referencia, marca, categoria_ia,
+                cantidad_tiendas, precio_min, tienda_mas_barata,
+                precio_max, tienda_mas_cara, diferencia_pct,
+            ),
+        )
+        conn.commit()

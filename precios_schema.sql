@@ -223,6 +223,48 @@ CREATE INDEX IF NOT EXISTS idx_estadisticas_categoria_fecha
 
 
 -- ============================================================
+-- Tabla: comparacion_ean_diaria   [NUEVA - sesion 20/8/2026]
+-- Una fila por (ean, fecha): para cada codigo de barras que aparece
+-- en 2 o mas tiendas el mismo dia, guarda cual es la mas barata y
+-- cual la mas cara, y el % de diferencia entre ambas.
+--
+-- Por que esto y no calcular al vuelo: es la version automatizada
+-- de la comparacion manual que se hizo con la Harina Blancaflor
+-- (mismo EAN, 22% mas cara en La Anonima que en Changomas). Con
+-- miles de productos, recalcular esto cada vez que alguien abre el
+-- dashboard seria lento - se calcula una vez por dia y se guarda.
+--
+-- Solo entran los EAN que aparecen en 2+ tiendas ese dia - si un
+-- producto solo esta en una tienda, no hay nada que comparar.
+-- ============================================================
+CREATE TABLE IF NOT EXISTS comparacion_ean_diaria (
+    id                  INTEGER PRIMARY KEY AUTOINCREMENT,
+    fecha               DATE NOT NULL,
+    ean                 TEXT NOT NULL,
+    nombre_referencia   TEXT,               -- un nombre de ejemplo, de cualquiera de las tiendas
+    marca               TEXT,
+    categoria_ia        TEXT,
+    cantidad_tiendas    INTEGER NOT NULL,   -- en cuantas tiendas aparecio este EAN ese dia
+    precio_min          REAL NOT NULL,
+    tienda_mas_barata    TEXT NOT NULL,
+    precio_max          REAL NOT NULL,
+    tienda_mas_cara     TEXT NOT NULL,
+    diferencia_pct      REAL NOT NULL,      -- (precio_max - precio_min) / precio_min * 100
+    creado_en           TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+
+    -- Idempotente: si se corre 2 veces el mismo dia, actualiza en
+    -- vez de duplicar (mismo criterio que el resto de las tablas).
+    UNIQUE(fecha, ean)
+);
+
+CREATE INDEX IF NOT EXISTS idx_comparacion_ean_fecha
+    ON comparacion_ean_diaria(fecha, diferencia_pct);
+
+CREATE INDEX IF NOT EXISTS idx_comparacion_ean_ean
+    ON comparacion_ean_diaria(ean, fecha);
+
+
+-- ============================================================
 INSERT OR IGNORE INTO tiendas (nombre) VALUES ('La Anonima');
 INSERT OR IGNORE INTO tiendas (nombre) VALUES ('Carrefour');
 INSERT OR IGNORE INTO tiendas (nombre) VALUES ('Changomas');
