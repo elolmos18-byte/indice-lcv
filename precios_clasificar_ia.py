@@ -361,6 +361,16 @@ def clasificar_producto(cliente: "genai.Client", nombre_producto: str) -> dict |
             unidad = "unidad"
             cantidad = 1.0
 
+        # Los AEROSOLES se compran "por lata", no a granel - sin
+        # importar el tamano (una lata de 500ml sigue siendo UNA
+        # lata que se compra entera). Sin limite de cantidad, a
+        # diferencia de las palabras clave de arriba.
+        if unidad in ("kg", "l") and (
+            "aerosol" in nombre_sin_acentos or "insecticida" in nombre_sin_acentos
+        ):
+            unidad = "unidad"
+            cantidad = 1.0
+
     # Red de seguridad generica [agregado 20/8/2026]: la Regla 1 del
     # prompt le pide a Gemini que priorice "unidad" cuando el nombre
     # menciona una cantidad de piezas (ej. "x 12 Un."), pero se
